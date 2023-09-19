@@ -9,7 +9,7 @@
   <meta name="description" content="场景有一个根据create_time排序的分页接口，在第二页会出现第一页出现过的重复记录 排查过程首先怀疑接口入参处理有问题，结果没问题 然后怀疑 sql 的入参有问题，发现也没有问题 再看有没有新数据进来，也没有 最后想到，这批数据是利用脚本跑出，难免会有create_time重复的数据，通过 group by create_time 后验证了这一猜想 解决方案用具有唯一性的主键 id 替换掉">
 <meta property="og:type" content="article">
 <meta property="og:title" content="问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据">
-<meta property="og:url" content="http://example.com/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/index.html">
+<meta property="og:url" content="http://qingxuan.com/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="场景有一个根据create_time排序的分页接口，在第二页会出现第一页出现过的重复记录 排查过程首先怀疑接口入参处理有问题，结果没问题 然后怀疑 sql 的入参有问题，发现也没有问题 再看有没有新数据进来，也没有 最后想到，这批数据是利用脚本跑出，难免会有create_time重复的数据，通过 group by create_time 后验证了这一猜想 解决方案用具有唯一性的主键 id 替换掉">
 <meta property="og:locale" content="zh_CN">
@@ -68,7 +68,7 @@
         <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
       </nav>
       <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://qingxuan.com"></form>
       </div>
     </div>
   </div>
@@ -109,7 +109,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/" data-id="clmqgw42p00007r9k2kbpgou1" data-title="问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/" data-id="clmqh8swq0000da9kbbo2cii9" data-title="问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
