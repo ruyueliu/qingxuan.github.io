@@ -73,6 +73,51 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/" class="article-date">
+  <time class="dt-published" datetime="2023-09-19T13:27:51.171Z" itemprop="datePublished">2023-09-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/">问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h1><p>有一个根据create_time排序的分页接口，在第二页会出现第一页出现过的重复记录</p>
+<h1 id="排查过程"><a href="#排查过程" class="headerlink" title="排查过程"></a>排查过程</h1><p>首先怀疑接口入参处理有问题，结果没问题</p>
+<p>然后怀疑 sql 的入参有问题，发现也没有问题</p>
+<p>最后想到，这批数据是利用脚本跑出，难免会有create_time重复的数据，通过 group by create_time 后验证了这一猜想</p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>用具有唯一性的主键 id 替换掉 create_time，问题解决</p>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>当 order by 字段不唯一时，会出现数据排序不稳定的情况，然后再用 limit 分页就会出现不同页存在数据重复的现象</p>
+<p>我不是第一个踩此坑的，肯定也不会是最后一个踩此坑的，简单记录，帮助有缘人</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/" data-id="clmqcsas000012l9k3cjq4xgo" data-title="问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-问题复盘｜在使用 gson 时，数字被自动转为 double 类型" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2023/09/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20gson%20%E6%97%B6%EF%BC%8C%E6%95%B0%E5%AD%97%E8%A2%AB%E8%87%AA%E5%8A%A8%E8%BD%AC%E4%B8%BA%20double%20%E7%B1%BB%E5%9E%8B/" class="article-date">
@@ -118,7 +163,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/09/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20gson%20%E6%97%B6%EF%BC%8C%E6%95%B0%E5%AD%97%E8%A2%AB%E8%87%AA%E5%8A%A8%E8%BD%AC%E4%B8%BA%20double%20%E7%B1%BB%E5%9E%8B/" data-id="clmhvsz6v0001si9k70382v4u" data-title="问题复盘｜在使用 gson 时，数字被自动转为 double 类型" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://example.com/2023/09/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20gson%20%E6%97%B6%EF%BC%8C%E6%95%B0%E5%AD%97%E8%A2%AB%E8%87%AA%E5%8A%A8%E8%BD%AC%E4%B8%BA%20double%20%E7%B1%BB%E5%9E%8B/" data-id="clmqcsas100022l9kfygn7lbl" data-title="问题复盘｜在使用 gson 时，数字被自动转为 double 类型" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -169,7 +214,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/09/09/hello-world/" data-id="clmhvsz6t0000si9k13ledsv0" data-title="Hello World" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://example.com/2023/09/09/hello-world/" data-id="clmqcsary00002l9k4qc5frva" data-title="Hello World" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -210,6 +255,10 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/">问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据</a>
+          </li>
         
           <li>
             <a href="/2023/09/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20gson%20%E6%97%B6%EF%BC%8C%E6%95%B0%E5%AD%97%E8%A2%AB%E8%87%AA%E5%8A%A8%E8%BD%AC%E4%B8%BA%20double%20%E7%B1%BB%E5%9E%8B/">问题复盘｜在使用 gson 时，数字被自动转为 double 类型</a>
