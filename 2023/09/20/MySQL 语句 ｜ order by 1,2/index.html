@@ -6,15 +6,15 @@
   
   <title>MySQL 语句｜order by 1,2 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="在祖传代码中发现了一条 MySQL 语句，排序用到了order by 1，2 1select id,name,age from user order by 1,2;  第一次见到这种写法，通过搜索后，了解到这条sql的意思等同于 1select id,name,age from user order by id,name;  order by  意思是按照 select 后的第 n 列数据进行排序">
+  <meta name="description" content="在祖传代码中发现了一条 MySQL 语句，排序用到了order by 1，2 1select id,name,age from user order by 1,2;  第一次见到这种写法，通过搜索后，了解到这条语句的意思等同于 1select id,name,age from user order by id,name;  order by  意思是按照 select 后的第 n 列数据进行排序,">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL 语句｜order by 1,2">
 <meta property="og:url" content="http://qingxuan.com/2023/09/20/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20order%20by%201,2/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="在祖传代码中发现了一条 MySQL 语句，排序用到了order by 1，2 1select id,name,age from user order by 1,2;  第一次见到这种写法，通过搜索后，了解到这条sql的意思等同于 1select id,name,age from user order by id,name;  order by  意思是按照 select 后的第 n 列数据进行排序">
+<meta property="og:description" content="在祖传代码中发现了一条 MySQL 语句，排序用到了order by 1，2 1select id,name,age from user order by 1,2;  第一次见到这种写法，通过搜索后，了解到这条语句的意思等同于 1select id,name,age from user order by id,name;  order by  意思是按照 select 后的第 n 列数据进行排序,">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-09-20T13:23:18.582Z">
-<meta property="article:modified_time" content="2023-09-20T13:42:53.775Z">
+<meta property="article:modified_time" content="2023-09-20T13:56:54.956Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -100,7 +100,7 @@
         <p>在祖传代码中发现了一条 MySQL 语句，排序用到了order by 1，2</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select id,name,age from user order by 1,2;</span><br></pre></td></tr></table></figure>
 
-<p>第一次见到这种写法，通过搜索后，了解到这条sql的意思等同于</p>
+<p>第一次见到这种写法，通过搜索后，了解到这条语句的意思等同于</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select id,name,age from user order by id,name;</span><br></pre></td></tr></table></figure>
 
 <p>order by <n> 意思是按照 select 后的第 n 列数据进行排序,如果想按照 age 倒叙排列的话，可以使用如下语句</p>

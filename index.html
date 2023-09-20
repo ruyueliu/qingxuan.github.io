@@ -98,7 +98,7 @@
         <p>在祖传代码中发现了一条 MySQL 语句，排序用到了order by 1，2</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select id,name,age from user order by 1,2;</span><br></pre></td></tr></table></figure>
 
-<p>第一次见到这种写法，通过搜索后，了解到这条sql的意思等同于</p>
+<p>第一次见到这种写法，通过搜索后，了解到这条语句的意思等同于</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select id,name,age from user order by id,name;</span><br></pre></td></tr></table></figure>
 
 <p>order by <n> 意思是按照 select 后的第 n 列数据进行排序,如果想按照 age 倒叙排列的话，可以使用如下语句</p>
