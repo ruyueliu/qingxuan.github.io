@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>MongoTemplate多条件查询 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="MongoTemplate查询123456789@Resourceprivate MongoTemplate mongoTemplate;public &lt;T&gt; List&lt;T&gt; getDataList(String param1, Long param2, Class&lt;T&gt; clazz) &amp;#123;    &#x2F;&#x2F; 构建query    Query query &#x3D;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoTemplate多条件查询">
+<meta property="og:url" content="http://qingxuan.com/2023/09/20/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="MongoTemplate查询123456789@Resourceprivate MongoTemplate mongoTemplate;public &lt;T&gt; List&lt;T&gt; getDataList(String param1, Long param2, Class&lt;T&gt; clazz) &amp;#123;    &#x2F;&#x2F; 构建query    Query query &#x3D;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-09-20T14:08:06.706Z">
+<meta property="article:modified_time" content="2023-10-08T14:15:32.751Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://qingxuan.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-MongoDB｜MongoTemplate多条件查询" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/09/20/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/" class="article-date">
+  <time class="dt-published" datetime="2023-09-20T14:08:06.706Z" itemprop="datePublished">2023-09-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      MongoTemplate多条件查询
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="MongoTemplate查询"><a href="#MongoTemplate查询" class="headerlink" title="MongoTemplate查询"></a>MongoTemplate查询</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Resource</span></span><br><span class="line"><span class="keyword">private</span> MongoTemplate mongoTemplate;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> &lt;T&gt; List&lt;T&gt; <span class="title function_">getDataList</span><span class="params">(String param1, Long param2, Class&lt;T&gt; clazz)</span> &#123;</span><br><span class="line">    <span class="comment">// 构建query</span></span><br><span class="line">    <span class="type">Query</span> <span class="variable">query</span> <span class="operator">=</span> constructQuery(param1, param2);</span><br><span class="line">    <span class="comment">// 查询</span></span><br><span class="line">    <span class="keyword">return</span> mongoTemplate.find(query, clazz);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="关系且"><a href="#关系且" class="headerlink" title="关系且"></a>关系且</h2><p>构建 Query</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Query <span class="title function_">constructQuery</span><span class="params">(String param1, String param2, String param3)</span> &#123;</span><br><span class="line">    <span class="type">Query</span> <span class="variable">query</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Query</span>();</span><br><span class="line">    <span class="keyword">if</span>(!Strings.isBlank(param1))&#123;</span><br><span class="line">        query.addCriteria(Criteria.where(<span class="string">&quot;field1&quot;</span>).is(param1));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!Strings.isBlank(param2))&#123;</span><br><span class="line">        query.addCriteria(Criteria.where(<span class="string">&quot;field2&quot;</span>).is(param2));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!Strings.isBlank(param3))&#123;</span><br><span class="line">        query.addCriteria(Criteria.where(<span class="string">&quot;field3&quot;</span>).is(param3));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> query;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="关系或"><a href="#关系或" class="headerlink" title="关系或"></a>关系或</h2><p>构建 Query</p>
+<p>将所有的查询条件添加到一个 List<Criteria> 中，然后将其转换为一个数组，并将数组传递给 Criteria.orOperator 方法。这样，所有的查询条件将被组合成一个或条件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Query <span class="title function_">constructQuery</span><span class="params">(String param1, String param2, String param3)</span> &#123;</span><br><span class="line">        List&lt;Criteria&gt; criteriaList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        <span class="keyword">if</span>(!Strings.isBlank(param1))&#123;</span><br><span class="line">            criteriaList.add(Criteria.where(<span class="string">&quot;field1&quot;</span>).is(param1));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!Strings.isBlank(param2))&#123;</span><br><span class="line">            criteriaList.add(Criteria.where(<span class="string">&quot;field2&quot;</span>).is(param2));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!Strings.isBlank(param3))&#123;</span><br><span class="line">            criteriaList.add(Criteria.where(<span class="string">&quot;field3&quot;</span>).is(param3));</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        Criteria[] criteriaArray = <span class="keyword">new</span> <span class="title class_">Criteria</span>[criteriaList.size()];</span><br><span class="line">        criteriaList.toArray(criteriaArray);</span><br><span class="line">        </span><br><span class="line">        <span class="type">Criteria</span> <span class="variable">orCriteria</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Criteria</span>().orOperator(criteriaArray);</span><br><span class="line">        <span class="type">Query</span> <span class="variable">query</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Query</span>(orCriteria);</span><br><span class="line">        <span class="keyword">return</span> query;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2023/09/20/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/" data-id="clnhjr9u70002f19k8b0tcts0" data-title="MongoTemplate多条件查询" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2023/09/20/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20order%20by%201,2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">MySQL 语句｜order by 1,2</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/09/20/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/">MongoTemplate多条件查询</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/20/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20order%20by%201,2/">MySQL 语句｜order by 1,2</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/">问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20gson%20%E6%97%B6%EF%BC%8C%E6%95%B0%E5%AD%97%E8%A2%AB%E8%87%AA%E5%8A%A8%E8%BD%AC%E4%B8%BA%20double%20%E7%B1%BB%E5%9E%8B/">问题复盘｜在使用 gson 时，数字被自动转为 double 类型</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
