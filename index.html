@@ -73,6 +73,51 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-问题复盘｜MySQL 数据记录中明明有值，使用 concat() 后得到的却一直是 null" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/11/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMySQL%20%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95%E4%B8%AD%E6%98%8E%E6%98%8E%E6%9C%89%E5%80%BC%EF%BC%8C%E4%BD%BF%E7%94%A8%20concat()%20%E5%90%8E%E5%BE%97%E5%88%B0%E7%9A%84%E5%8D%B4%E4%B8%80%E7%9B%B4%E6%98%AF%20null/" class="article-date">
+  <time class="dt-published" datetime="2023-11-13T13:38:58.306Z" itemprop="datePublished">2023-11-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/11/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMySQL%20%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95%E4%B8%AD%E6%98%8E%E6%98%8E%E6%9C%89%E5%80%BC%EF%BC%8C%E4%BD%BF%E7%94%A8%20concat()%20%E5%90%8E%E5%BE%97%E5%88%B0%E7%9A%84%E5%8D%B4%E4%B8%80%E7%9B%B4%E6%98%AF%20null/">问题复盘｜MySQL 数据记录中明明有值，使用 concat() 后得到的却一直是 null</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>MySQL 的数据数据记录中明明有值，在使用 concat() 查询时却一直得到 null</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT CONCAT(first_name, &#x27; &#x27;, last_name) FROM users;</span><br></pre></td></tr></table></figure>
+<h1 id="排查后发现"><a href="#排查后发现" class="headerlink" title="排查后发现"></a>排查后发现</h1><p>MySQL 的 concat 函数拼接规则是 当多个拼接的字段的字段值中存在 null 时，返回的一定是 null</p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>利用函数 IFNULL() 函数处理 null 值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT CONCAT(IFNULL(first_name, &#x27;&#x27;), &#x27; &#x27;, IFNULL(last_name, &#x27;&#x27;)) FROM users;</span><br></pre></td></tr></table></figure>
+<p>这样就相当于用空字符串替换 null 值，从而避免 concat() 函数返回 null</p>
+<p>我不是第一个踩此坑的，肯定也不会是最后一个踩此坑的，简单记录，等待有缘人</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2023/11/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMySQL%20%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95%E4%B8%AD%E6%98%8E%E6%98%8E%E6%9C%89%E5%80%BC%EF%BC%8C%E4%BD%BF%E7%94%A8%20concat()%20%E5%90%8E%E5%BE%97%E5%88%B0%E7%9A%84%E5%8D%B4%E4%B8%80%E7%9B%B4%E6%98%AF%20null/" data-id="clowyy15a0002zh9k54823biv" data-title="问题复盘｜MySQL 数据记录中明明有值，使用 concat() 后得到的却一直是 null" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-MongoDB｜MongoTemplate多条件查询" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2023/10/08/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/" class="article-date">
@@ -105,7 +150,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/10/08/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/" data-id="clnhl7plz0000n29k4z3995ia" data-title="MongoDB｜MongoTemplate多条件查询" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/10/08/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/" data-id="clowyy1590001zh9k9s03e1nw" data-title="MongoDB｜MongoTemplate多条件查询" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -150,7 +195,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/09/20/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20order%20by%201,2/" data-id="clnhl7pm40001n29khk84cavs" data-title="MySQL 语句｜order by 1,2" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/09/20/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20order%20by%201,2/" data-id="clowyy1570000zh9keyv4amz7" data-title="MySQL 语句｜order by 1,2" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -196,7 +241,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/" data-id="clnhl7pm50003n29k4det99hg" data-title="问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/" data-id="clowyy15a0003zh9k39pw8kme" data-title="问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -253,7 +298,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/09/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20gson%20%E6%97%B6%EF%BC%8C%E6%95%B0%E5%AD%97%E8%A2%AB%E8%87%AA%E5%8A%A8%E8%BD%AC%E4%B8%BA%20double%20%E7%B1%BB%E5%9E%8B/" data-id="clnhl7pm50002n29k01c3czke" data-title="问题复盘｜在使用 gson 时，数字被自动转为 double 类型" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/09/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20gson%20%E6%97%B6%EF%BC%8C%E6%95%B0%E5%AD%97%E8%A2%AB%E8%87%AA%E5%8A%A8%E8%BD%AC%E4%B8%BA%20double%20%E7%B1%BB%E5%9E%8B/" data-id="clowyy15c0004zh9kc23n6nxt" data-title="问题复盘｜在使用 gson 时，数字被自动转为 double 类型" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -283,7 +328,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">十一月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a></li></ul>
     </div>
   </div>
 
@@ -294,6 +339,10 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2023/11/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMySQL%20%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95%E4%B8%AD%E6%98%8E%E6%98%8E%E6%9C%89%E5%80%BC%EF%BC%8C%E4%BD%BF%E7%94%A8%20concat()%20%E5%90%8E%E5%BE%97%E5%88%B0%E7%9A%84%E5%8D%B4%E4%B8%80%E7%9B%B4%E6%98%AF%20null/">问题复盘｜MySQL 数据记录中明明有值，使用 concat() 后得到的却一直是 null</a>
+          </li>
         
           <li>
             <a href="/2023/10/08/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/">MongoDB｜MongoTemplate多条件查询</a>
