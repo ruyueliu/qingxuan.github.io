@@ -6,15 +6,15 @@
   
   <title>问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="背景在使用 gson 进行数据解析的时候，报了 Failed to parse date [“”] 错误 原代码 123456789public void test() &amp;#123;        JsonObject jsonObject &#x3D; new JsonObject();        jsonObject.addProperty(&quot;name&quot;, &quot;小红&amp;qu">
+  <meta name="description" content="背景在使用 Gson 进行数据解析的时候，报了 Failed to parse date [“”] 错误 原代码 123456789public void test() &amp;#123;        JsonObject jsonObject &#x3D; new JsonObject();        jsonObject.addProperty(&quot;name&quot;, &quot;小红&amp;qu">
 <meta property="og:type" content="article">
 <meta property="og:title" content="问题复盘｜在使用 Gson 时，报 Failed to parse date [&quot;&quot;] 错误">
 <meta property="og:url" content="http://qingxuan.com/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20[%22%22]%20%E9%94%99%E8%AF%AF/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="背景在使用 gson 进行数据解析的时候，报了 Failed to parse date [“”] 错误 原代码 123456789public void test() &amp;#123;        JsonObject jsonObject &#x3D; new JsonObject();        jsonObject.addProperty(&quot;name&quot;, &quot;小红&amp;qu">
+<meta property="og:description" content="背景在使用 Gson 进行数据解析的时候，报了 Failed to parse date [“”] 错误 原代码 123456789public void test() &amp;#123;        JsonObject jsonObject &#x3D; new JsonObject();        jsonObject.addProperty(&quot;name&quot;, &quot;小红&amp;qu">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-11-15T14:07:21.355Z">
-<meta property="article:modified_time" content="2023-11-15T14:16:45.328Z">
+<meta property="article:modified_time" content="2023-11-15T14:22:28.654Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -97,7 +97,7 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在使用 gson 进行数据解析的时候，报了 Failed to parse date [“”] 错误</p>
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在使用 Gson 进行数据解析的时候，报了 Failed to parse date [“”] 错误</p>
 <p>原代码</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">JsonObject</span> <span class="variable">jsonObject</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">JsonObject</span>();</span><br><span class="line">        jsonObject.addProperty(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;小红&quot;</span>);</span><br><span class="line">        jsonObject.addProperty(<span class="string">&quot;birthday&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">        <span class="type">Gson</span> <span class="variable">gson</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">GsonBuilder</span>().create();</span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> gson.fromJson(jsonObject, <span class="keyword">new</span> <span class="title class_">TypeToken</span>&lt;User&gt;() &#123;</span><br><span class="line">        &#125;.getType());</span><br><span class="line">        System.out.println(<span class="string">&quot;user is:\n&quot;</span> + user);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>报错 </p>
@@ -112,7 +112,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20[%22%22]%20%E9%94%99%E8%AF%AF/" data-id="clozuka040004bb9k1a1913ye" data-title="问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20[%22%22]%20%E9%94%99%E8%AF%AF/" data-id="clozuqbg40004db9kb7t1h47h" data-title="问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
