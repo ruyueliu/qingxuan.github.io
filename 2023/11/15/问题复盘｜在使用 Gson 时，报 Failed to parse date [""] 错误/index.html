@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="背景在使用 gson 进行数据解析的时候，报了 Failed to parse date [“”] 错误 原代码 123456789public void test() &amp;#123;        JsonObject jsonObject &#x3D; new JsonObject();        jsonObject.addProperty(&quot;name&quot;, &quot;小红&amp;qu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="问题复盘｜在使用 Gson 时，报 Failed to parse date [&quot;&quot;] 错误">
+<meta property="og:url" content="http://qingxuan.com/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20[%22%22]%20%E9%94%99%E8%AF%AF/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="背景在使用 gson 进行数据解析的时候，报了 Failed to parse date [“”] 错误 原代码 123456789public void test() &amp;#123;        JsonObject jsonObject &#x3D; new JsonObject();        jsonObject.addProperty(&quot;name&quot;, &quot;小红&amp;qu">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-15T14:07:21.355Z">
+<meta property="article:modified_time" content="2023-11-15T14:16:45.328Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://qingxuan.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20%5B%22%22%5D%20%E9%94%99%E8%AF%AF/" class="article-date">
+  <time class="dt-published" datetime="2023-11-15T14:07:21.355Z" itemprop="datePublished">2023-11-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在使用 gson 进行数据解析的时候，报了 Failed to parse date [“”] 错误</p>
+<p>原代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">JsonObject</span> <span class="variable">jsonObject</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">JsonObject</span>();</span><br><span class="line">        jsonObject.addProperty(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;小红&quot;</span>);</span><br><span class="line">        jsonObject.addProperty(<span class="string">&quot;birthday&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">        <span class="type">Gson</span> <span class="variable">gson</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">GsonBuilder</span>().create();</span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> gson.fromJson(jsonObject, <span class="keyword">new</span> <span class="title class_">TypeToken</span>&lt;User&gt;() &#123;</span><br><span class="line">        &#125;.getType());</span><br><span class="line">        System.out.println(<span class="string">&quot;user is:\n&quot;</span> + user);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>报错 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">com.google.gson.JsonSyntaxException: </span><br><span class="line">	at com.google.gson.internal.bind.DateTypeAdapter.deserializeToDate(DateTypeAdapter.java:<span class="number">87</span>)</span><br><span class="line">	at com.google.gson.internal.bind.DateTypeAdapter.read(DateTypeAdapter.java:<span class="number">75</span>)</span><br><span class="line">	at com.google.gson.internal.bind.DateTypeAdapter.read(DateTypeAdapter.java:<span class="number">46</span>)</span><br><span class="line">	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$<span class="number">1.</span>read(ReflectiveTypeAdapterFactory.java:<span class="number">131</span>)</span><br><span class="line">	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:<span class="number">222</span>)</span><br><span class="line">	at com.google.gson.Gson.fromJson(Gson.java:<span class="number">963</span>)</span><br><span class="line">	at com.google.gson.Gson.fromJson(Gson.java:<span class="number">1034</span>)</span><br><span class="line">        ...</span><br><span class="line">Caused by: java.text.ParseException: Failed to parse date [<span class="string">&quot;&quot;</span>]: (java.lang.NumberFormatException)</span><br><span class="line">	at com.google.gson.internal.bind.util.ISO8601Utils.parse(ISO8601Utils.java:<span class="number">274</span>)</span><br><span class="line">	at com.google.gson.internal.bind.DateTypeAdapter.deserializeToDate(DateTypeAdapter.java:<span class="number">85</span>)</span><br><span class="line">	... <span class="number">34</span> more</span><br><span class="line">Caused by: java.lang.NumberFormatException: </span><br><span class="line">	at com.google.gson.internal.bind.util.ISO8601Utils.parseInt(ISO8601Utils.java:<span class="number">302</span>)</span><br><span class="line">	at com.google.gson.internal.bind.util.ISO8601Utils.parse(ISO8601Utils.java:<span class="number">129</span>)</span><br><span class="line">	... <span class="number">35</span> more</span><br></pre></td></tr></table></figure>
+<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>Gson 默认的 Date 类型转换器无法处理空字符串</p>
+<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>通过自定义 Gson 的 Date 类型转换器来解决这个问题</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Gson</span> <span class="variable">gson</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">GsonBuilder</span>().registerTypeAdapter(Date.class, <span class="keyword">new</span> <span class="title class_">JsonDeserializer</span>&lt;Date&gt;() &#123;</span><br><span class="line">    <span class="keyword">public</span> Date <span class="title function_">deserialize</span><span class="params">(JsonElement json, Type typeOfT, JsonDeserializationContext context)</span> <span class="keyword">throws</span> JsonParseException &#123;</span><br><span class="line">        <span class="keyword">if</span> (json.getAsJsonPrimitive().getAsString().equals(<span class="string">&quot;&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">SimpleDateFormat</span> <span class="variable">format</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SimpleDateFormat</span>(<span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> format.parse(json.getAsJsonPrimitive().getAsString());</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ParseException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">JsonParseException</span>(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;).create();</span><br></pre></td></tr></table></figure>
+<h1 id="新代码"><a href="#新代码" class="headerlink" title="新代码"></a>新代码</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * user is:</span></span><br><span class="line"><span class="comment"> * User(id=null, name=小红, birthday=null)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">JsonObject</span> <span class="variable">jsonObject</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">JsonObject</span>();</span><br><span class="line">        jsonObject.addProperty(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;小红&quot;</span>);</span><br><span class="line">        jsonObject.addProperty(<span class="string">&quot;birthday&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">        <span class="type">Gson</span> <span class="variable">gson</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">GsonBuilder</span>().registerTypeAdapter(Date.class, <span class="keyword">new</span> <span class="title class_">JsonDeserializer</span>&lt;Date&gt;() &#123;</span><br><span class="line">            <span class="keyword">public</span> Date <span class="title function_">deserialize</span><span class="params">(JsonElement json, Type typeOfT, JsonDeserializationContext context)</span> <span class="keyword">throws</span> JsonParseException &#123;</span><br><span class="line">                <span class="keyword">if</span> (json.getAsJsonPrimitive().getAsString().equals(<span class="string">&quot;&quot;</span>)) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="type">SimpleDateFormat</span> <span class="variable">format</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SimpleDateFormat</span>(<span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> format.parse(json.getAsJsonPrimitive().getAsString());</span><br><span class="line">                &#125; <span class="keyword">catch</span> (ParseException e) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">JsonParseException</span>(e);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).create();</span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> gson.fromJson(jsonObject, <span class="keyword">new</span> <span class="title class_">TypeToken</span>&lt;User&gt;() &#123;</span><br><span class="line">        &#125;.getType());</span><br><span class="line">        System.out.println(<span class="string">&quot;user is:\n&quot;</span> + user);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>我不是第一个踩此坑的，肯定也不会是最后一个踩此坑的，简单记录，等待有缘人</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20[%22%22]%20%E9%94%99%E8%AF%AF/" data-id="clozuka040004bb9k1a1913ye" data-title="问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2023/11/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMySQL%20%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95%E4%B8%AD%E6%98%8E%E6%98%8E%E6%9C%89%E5%80%BC%EF%BC%8C%E4%BD%BF%E7%94%A8%20concat()%20%E5%90%8E%E5%BE%97%E5%88%B0%E7%9A%84%E5%8D%B4%E4%B8%80%E7%9B%B4%E6%98%AF%20null/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">问题复盘｜MySQL 数据记录中明明有值，使用 concat() 后得到的却一直是 null</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">十一月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20%5B%22%22%5D%20%E9%94%99%E8%AF%AF/">问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMySQL%20%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95%E4%B8%AD%E6%98%8E%E6%98%8E%E6%9C%89%E5%80%BC%EF%BC%8C%E4%BD%BF%E7%94%A8%20concat()%20%E5%90%8E%E5%BE%97%E5%88%B0%E7%9A%84%E5%8D%B4%E4%B8%80%E7%9B%B4%E6%98%AF%20null/">问题复盘｜MySQL 数据记录中明明有值，使用 concat() 后得到的却一直是 null</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/08/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/">MongoDB｜MongoTemplate多条件查询</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/20/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20order%20by%201,2/">MySQL 语句｜order by 1,2</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/">问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
