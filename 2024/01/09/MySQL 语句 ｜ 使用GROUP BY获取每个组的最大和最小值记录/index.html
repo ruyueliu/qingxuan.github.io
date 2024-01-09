@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>MySQL 语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="在 MySQL 中，可以使用 GROUP BY 语句结合聚合函数和子查询来获取每个组中的最大和最小值对应的记录 举个通用示例假设有一个名为 your_table 的表，其中包含两列：group_column 和 value_column。要分别获取每个组中的最大和最小值对应的记录，可使用两条独立的 SQL 查询 获取最大值的记录：1234567SELECT t1.*FROM your_table">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL 语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录">
+<meta property="og:url" content="http://qingxuan.com/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在 MySQL 中，可以使用 GROUP BY 语句结合聚合函数和子查询来获取每个组中的最大和最小值对应的记录 举个通用示例假设有一个名为 your_table 的表，其中包含两列：group_column 和 value_column。要分别获取每个组中的最大和最小值对应的记录，可使用两条独立的 SQL 查询 获取最大值的记录：1234567SELECT t1.*FROM your_table">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-01-09T13:35:47.440Z">
+<meta property="article:modified_time" content="2024-01-09T13:49:28.003Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://qingxuan.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-MySQL 语句 ｜ 使用GROUP BY获取每个组的最大和最小值记录" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/" class="article-date">
+  <time class="dt-published" datetime="2024-01-09T13:35:47.440Z" itemprop="datePublished">2024-01-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      MySQL 语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>在 MySQL 中，可以使用 GROUP BY 语句结合聚合函数和子查询来获取每个组中的最大和最小值对应的记录</p>
+<h1 id="举个通用示例"><a href="#举个通用示例" class="headerlink" title="举个通用示例"></a>举个通用示例</h1><p>假设有一个名为 your_table 的表，其中包含两列：group_column 和 value_column。<br>要分别获取每个组中的最大和最小值对应的记录，可使用两条独立的 SQL 查询</p>
+<h2 id="获取最大值的记录："><a href="#获取最大值的记录：" class="headerlink" title="获取最大值的记录："></a>获取最大值的记录：</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> t1.<span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> your_table t1</span><br><span class="line"><span class="keyword">JOIN</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> group_column, <span class="built_in">MAX</span>(value_column) <span class="keyword">AS</span> max_value</span><br><span class="line">    <span class="keyword">FROM</span> your_table</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> group_column</span><br><span class="line">) t2 <span class="keyword">ON</span> t1.group_column <span class="operator">=</span> t2.group_column <span class="keyword">AND</span> t1.value_column <span class="operator">=</span> t2.max_value;</span><br></pre></td></tr></table></figure>
+<h2 id="获取最小值的记录："><a href="#获取最小值的记录：" class="headerlink" title="获取最小值的记录："></a>获取最小值的记录：</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> t1.<span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> your_table t1</span><br><span class="line"><span class="keyword">JOIN</span> (</span><br><span class="line"><span class="keyword">SELECT</span> group_column, <span class="built_in">MIN</span>(value_column) <span class="keyword">AS</span> min_value</span><br><span class="line"><span class="keyword">FROM</span> your_table</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> group_column</span><br><span class="line">) t2 <span class="keyword">ON</span> t1.group_column <span class="operator">=</span> t2.group_column <span class="keyword">AND</span> t1.value_column <span class="operator">=</span> t2.min_value;</span><br></pre></td></tr></table></figure>
+<p>这两个查询分别使用了子查询来获取每个组的最大和最小值，然后通过连接操作获取相应的记录。可根据自己的实际需求和表结构调整表名和列名。</p>
+<h1 id="举个实际的例子"><a href="#举个实际的例子" class="headerlink" title="举个实际的例子"></a>举个实际的例子</h1><p>假设有一个名为 employees 的表，记录了不同部门员工的信息，包括部门名 (department)、员工名 (employee_name) 和工资 (salary)。我们想要分别获取每个部门中工资最高和最低的员工信息。<br>以下是一个简单的表格和数据记录：</p>
+<p><strong>employees 表格：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+------------+---------------+--------+</span><br><span class="line">| id | department | employee_name | salary |</span><br><span class="line">+----+------------+---------------+--------+</span><br><span class="line">| 1  | HR         | Alice         | 50000  |</span><br><span class="line">| 2  | HR         | Bob           | 55000  |</span><br><span class="line">| 3  | IT         | Charlie       | 60000  |</span><br><span class="line">| 4  | IT         | David         | 62000  |</span><br><span class="line">| 5  | Sales      | Emily         | 70000  |</span><br><span class="line">| 6  | Sales      | Frank         | 68000  |</span><br><span class="line">+----+------------+---------------+--------+</span><br></pre></td></tr></table></figure>
+
+<p><strong>获取每个部门中工资最高的员工：</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> e1.<span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> employees e1</span><br><span class="line"><span class="keyword">JOIN</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> department, <span class="built_in">MAX</span>(salary) <span class="keyword">AS</span> max_salary</span><br><span class="line">    <span class="keyword">FROM</span> employees</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> department</span><br><span class="line">) e2 <span class="keyword">ON</span> e1.department <span class="operator">=</span> e2.department <span class="keyword">AND</span> e1.salary <span class="operator">=</span> e2.max_salary;</span><br></pre></td></tr></table></figure>
+
+<p>这将返回每个部门中工资最高的员工记录：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+----+------------+---------------+--------+</span><br><span class="line">| id | department | employee_name | salary |</span><br><span class="line">+----+------------+---------------+--------+</span><br><span class="line">| 2  | HR         | Bob           | 55000  |</span><br><span class="line">| 4  | IT         | David         | 62000  |</span><br><span class="line">| 5  | Sales      | Emily         | 70000  |</span><br><span class="line">+----+------------+---------------+--------+</span><br></pre></td></tr></table></figure>
+
+<p><strong>获取每个部门中工资最低的员工：</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> e1.<span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> employees e1</span><br><span class="line"><span class="keyword">JOIN</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> department, <span class="built_in">MIN</span>(salary) <span class="keyword">AS</span> min_salary</span><br><span class="line">    <span class="keyword">FROM</span> employees</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> department</span><br><span class="line">) e2 <span class="keyword">ON</span> e1.department <span class="operator">=</span> e2.department <span class="keyword">AND</span> e1.salary <span class="operator">=</span> e2.min_salary;</span><br></pre></td></tr></table></figure>
+
+<p>这将返回每个部门中工资最低的员工记录：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+----+------------+---------------+--------+</span><br><span class="line">| id | department | employee_name | salary |</span><br><span class="line">+----+------------+---------------+--------+</span><br><span class="line">| 1  | HR         | Alice         | 50000  |</span><br><span class="line">| 3  | IT         | Charlie       | 60000  |</span><br><span class="line">| 6  | Sales      | Frank         | 68000  |</span><br><span class="line">+----+------------+---------------+--------+</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/" data-id="clr6ersfj0003bi9k103w0ln7" data-title="MySQL 语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">线程｜死锁条件及实现</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">一月 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">十二月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">十一月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/">MySQL 语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录</a>
+          </li>
+        
+          <li>
+            <a href="/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/">线程｜死锁条件及实现</a>
+          </li>
+        
+          <li>
+            <a href="/2024/01/04/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20find_in_set()/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/12/12/%E7%BA%BF%E7%A8%8B%EF%BD%9C%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B%EF%BC%9F/">线程｜如何实现守护线程？</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20%5B%22%22%5D%20%E9%94%99%E8%AF%AF/">问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

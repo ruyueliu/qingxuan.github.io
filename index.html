@@ -73,6 +73,64 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-MySQL 语句 ｜ 使用GROUP BY获取每个组的最大和最小值记录" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/" class="article-date">
+  <time class="dt-published" datetime="2024-01-09T13:35:47.440Z" itemprop="datePublished">2024-01-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/">MySQL 语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>在 MySQL 中，可以使用 GROUP BY 语句结合聚合函数和子查询来获取每个组中的最大和最小值对应的记录</p>
+<h1 id="举个通用示例"><a href="#举个通用示例" class="headerlink" title="举个通用示例"></a>举个通用示例</h1><p>假设有一个名为 your_table 的表，其中包含两列：group_column 和 value_column。<br>要分别获取每个组中的最大和最小值对应的记录，可使用两条独立的 SQL 查询</p>
+<h2 id="获取最大值的记录："><a href="#获取最大值的记录：" class="headerlink" title="获取最大值的记录："></a>获取最大值的记录：</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> t1.<span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> your_table t1</span><br><span class="line"><span class="keyword">JOIN</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> group_column, <span class="built_in">MAX</span>(value_column) <span class="keyword">AS</span> max_value</span><br><span class="line">    <span class="keyword">FROM</span> your_table</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> group_column</span><br><span class="line">) t2 <span class="keyword">ON</span> t1.group_column <span class="operator">=</span> t2.group_column <span class="keyword">AND</span> t1.value_column <span class="operator">=</span> t2.max_value;</span><br></pre></td></tr></table></figure>
+<h2 id="获取最小值的记录："><a href="#获取最小值的记录：" class="headerlink" title="获取最小值的记录："></a>获取最小值的记录：</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> t1.<span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> your_table t1</span><br><span class="line"><span class="keyword">JOIN</span> (</span><br><span class="line"><span class="keyword">SELECT</span> group_column, <span class="built_in">MIN</span>(value_column) <span class="keyword">AS</span> min_value</span><br><span class="line"><span class="keyword">FROM</span> your_table</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> group_column</span><br><span class="line">) t2 <span class="keyword">ON</span> t1.group_column <span class="operator">=</span> t2.group_column <span class="keyword">AND</span> t1.value_column <span class="operator">=</span> t2.min_value;</span><br></pre></td></tr></table></figure>
+<p>这两个查询分别使用了子查询来获取每个组的最大和最小值，然后通过连接操作获取相应的记录。可根据自己的实际需求和表结构调整表名和列名。</p>
+<h1 id="举个实际的例子"><a href="#举个实际的例子" class="headerlink" title="举个实际的例子"></a>举个实际的例子</h1><p>假设有一个名为 employees 的表，记录了不同部门员工的信息，包括部门名 (department)、员工名 (employee_name) 和工资 (salary)。我们想要分别获取每个部门中工资最高和最低的员工信息。<br>以下是一个简单的表格和数据记录：</p>
+<p><strong>employees 表格：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+------------+---------------+--------+</span><br><span class="line">| id | department | employee_name | salary |</span><br><span class="line">+----+------------+---------------+--------+</span><br><span class="line">| 1  | HR         | Alice         | 50000  |</span><br><span class="line">| 2  | HR         | Bob           | 55000  |</span><br><span class="line">| 3  | IT         | Charlie       | 60000  |</span><br><span class="line">| 4  | IT         | David         | 62000  |</span><br><span class="line">| 5  | Sales      | Emily         | 70000  |</span><br><span class="line">| 6  | Sales      | Frank         | 68000  |</span><br><span class="line">+----+------------+---------------+--------+</span><br></pre></td></tr></table></figure>
+
+<p><strong>获取每个部门中工资最高的员工：</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> e1.<span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> employees e1</span><br><span class="line"><span class="keyword">JOIN</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> department, <span class="built_in">MAX</span>(salary) <span class="keyword">AS</span> max_salary</span><br><span class="line">    <span class="keyword">FROM</span> employees</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> department</span><br><span class="line">) e2 <span class="keyword">ON</span> e1.department <span class="operator">=</span> e2.department <span class="keyword">AND</span> e1.salary <span class="operator">=</span> e2.max_salary;</span><br></pre></td></tr></table></figure>
+
+<p>这将返回每个部门中工资最高的员工记录：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+----+------------+---------------+--------+</span><br><span class="line">| id | department | employee_name | salary |</span><br><span class="line">+----+------------+---------------+--------+</span><br><span class="line">| 2  | HR         | Bob           | 55000  |</span><br><span class="line">| 4  | IT         | David         | 62000  |</span><br><span class="line">| 5  | Sales      | Emily         | 70000  |</span><br><span class="line">+----+------------+---------------+--------+</span><br></pre></td></tr></table></figure>
+
+<p><strong>获取每个部门中工资最低的员工：</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> e1.<span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> employees e1</span><br><span class="line"><span class="keyword">JOIN</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> department, <span class="built_in">MIN</span>(salary) <span class="keyword">AS</span> min_salary</span><br><span class="line">    <span class="keyword">FROM</span> employees</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> department</span><br><span class="line">) e2 <span class="keyword">ON</span> e1.department <span class="operator">=</span> e2.department <span class="keyword">AND</span> e1.salary <span class="operator">=</span> e2.min_salary;</span><br></pre></td></tr></table></figure>
+
+<p>这将返回每个部门中工资最低的员工记录：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+----+------------+---------------+--------+</span><br><span class="line">| id | department | employee_name | salary |</span><br><span class="line">+----+------------+---------------+--------+</span><br><span class="line">| 1  | HR         | Alice         | 50000  |</span><br><span class="line">| 3  | IT         | Charlie       | 60000  |</span><br><span class="line">| 6  | Sales      | Frank         | 68000  |</span><br><span class="line">+----+------------+---------------+--------+</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/" data-id="clr6ersfj0003bi9k103w0ln7" data-title="MySQL 语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-线程 ｜死锁条件及实现" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/" class="article-date">
@@ -113,7 +171,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/" data-id="clr4ytsjs0003d99k9yjgd8lc" data-title="线程｜死锁条件及实现" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/" data-id="clr6ersfk0004bi9k6b9f8a9h" data-title="线程｜死锁条件及实现" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -163,7 +221,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/04/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20find_in_set()/" data-id="clr4ytsjq0001d99k72579iuu" data-title="" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/04/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20find_in_set()/" data-id="clr6ersfi0001bi9k3rhba38s" data-title="" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -218,7 +276,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/12/12/%E7%BA%BF%E7%A8%8B%EF%BD%9C%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B%EF%BC%9F/" data-id="clr4ytsjs0004d99k463y3co3" data-title="线程｜如何实现守护线程？" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/12/12/%E7%BA%BF%E7%A8%8B%EF%BD%9C%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B%EF%BC%9F/" data-id="clr6ersfk0005bi9k20rmd0jo" data-title="线程｜如何实现守护线程？" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -268,7 +326,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20[%22%22]%20%E9%94%99%E8%AF%AF/" data-id="clr4ytsjt0007d99kfd6s7skf" data-title="问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20[%22%22]%20%E9%94%99%E8%AF%AF/" data-id="clr6ersfl0008bi9ka2vogcbc" data-title="问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -313,7 +371,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/11/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMySQL%20%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95%E4%B8%AD%E6%98%8E%E6%98%8E%E6%9C%89%E5%80%BC%EF%BC%8C%E4%BD%BF%E7%94%A8%20concat()%20%E5%90%8E%E5%BE%97%E5%88%B0%E7%9A%84%E5%8D%B4%E4%B8%80%E7%9B%B4%E6%98%AF%20null/" data-id="clr4ytsjs0005d99khc6ca103" data-title="问题复盘｜MySQL 数据记录中明明有值，使用 concat() 后得到的却一直是 null" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/11/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMySQL%20%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95%E4%B8%AD%E6%98%8E%E6%98%8E%E6%9C%89%E5%80%BC%EF%BC%8C%E4%BD%BF%E7%94%A8%20concat()%20%E5%90%8E%E5%BE%97%E5%88%B0%E7%9A%84%E5%8D%B4%E4%B8%80%E7%9B%B4%E6%98%AF%20null/" data-id="clr6ersfk0006bi9k5mv5atyo" data-title="问题复盘｜MySQL 数据记录中明明有值，使用 concat() 后得到的却一直是 null" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -357,7 +415,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/10/08/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/" data-id="clr4ytsjn0000d99k1ai2bpex" data-title="MongoDB｜MongoTemplate多条件查询" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/10/08/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/" data-id="clr6ersfc0000bi9kgpmddbo3" data-title="MongoDB｜MongoTemplate多条件查询" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -402,7 +460,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/09/20/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20order%20by%201,2/" data-id="clr4ytsjr0002d99k1859ep5f" data-title="MySQL 语句｜order by 1,2" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/09/20/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20order%20by%201,2/" data-id="clr6ersfj0002bi9k19bua9ge" data-title="MySQL 语句｜order by 1,2" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -448,7 +506,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/" data-id="clr4ytsjt0006d99k8fuo0nd7" data-title="问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/" data-id="clr6ersfl0007bi9k8rf688i3" data-title="问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -505,7 +563,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/09/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%95%B0%E5%AD%97%E8%A2%AB%E8%87%AA%E5%8A%A8%E8%BD%AC%E4%B8%BA%20double%20%E7%B1%BB%E5%9E%8B/" data-id="clr4ytsjt0008d99kaeo04pbm" data-title="问题复盘｜在使用 Gson 时，数字被自动转为 double 类型" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/09/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%95%B0%E5%AD%97%E8%A2%AB%E8%87%AA%E5%8A%A8%E8%BD%AC%E4%B8%BA%20double%20%E7%B1%BB%E5%9E%8B/" data-id="clr6ersfl0009bi9k2tcugnu4" data-title="问题复盘｜在使用 Gson 时，数字被自动转为 double 类型" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -548,6 +606,10 @@
       <ul>
         
           <li>
+            <a href="/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/">MySQL 语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录</a>
+          </li>
+        
+          <li>
             <a href="/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/">线程｜死锁条件及实现</a>
           </li>
         
@@ -561,10 +623,6 @@
         
           <li>
             <a href="/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20%5B%22%22%5D%20%E9%94%99%E8%AF%AF/">问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误</a>
-          </li>
-        
-          <li>
-            <a href="/2023/11/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMySQL%20%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95%E4%B8%AD%E6%98%8E%E6%98%8E%E6%9C%89%E5%80%BC%EF%BC%8C%E4%BD%BF%E7%94%A8%20concat()%20%E5%90%8E%E5%BE%97%E5%88%B0%E7%9A%84%E5%8D%B4%E4%B8%80%E7%9B%B4%E6%98%AF%20null/">问题复盘｜MySQL 数据记录中明明有值，使用 concat() 后得到的却一直是 null</a>
           </li>
         
       </ul>
