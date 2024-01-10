@@ -73,6 +73,63 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/" class="article-date">
+  <time class="dt-published" datetime="2024-01-10T14:04:05.730Z" itemprop="datePublished">2024-01-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/">MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列.md</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>在MySQL中，可以使用<code>GROUP_CONCAT</code>函数将查询到的一列数据合并为一个字符串</p>
+<h1 id="举个通用的例子"><a href="#举个通用的例子" class="headerlink" title="举个通用的例子"></a>举个通用的例子</h1><p>假设有一个表 <code>example_table</code>，其中包含一个列 <code>column_to_concat</code>，若将这一列的数据合并为一个字符串，可使用如下查询：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> GROUP_CONCAT(column_to_concat SEPARATOR <span class="string">&#x27;, &#x27;</span>) <span class="keyword">AS</span> concatenated_string</span><br><span class="line"><span class="keyword">FROM</span> example_table;</span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中，<code>column_to_concat</code>是要合并的列的名称，<code>SEPARATOR</code>是用于分隔合并后值的字符串，这里使用的是逗号和空格，可根据需要选择合适的分隔符。</p>
+<p>如果需要根据某个条件进行合并，可使用 <code>GROUP BY</code> 子句。</p>
+<p>假设有一个表 <code>example_table</code> 包含两列 <code>group_column</code> 和 <code>column_to_concat</code>，可按照 <code>group_column</code> 进行分组并合并数据：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> group_column, GROUP_CONCAT(column_to_concat SEPARATOR <span class="string">&#x27;, &#x27;</span>) <span class="keyword">AS</span> concatenated_string</span><br><span class="line"><span class="keyword">FROM</span> example_table</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> group_column;</span><br></pre></td></tr></table></figure>
+<p>这将返回每个 <code>group_column</code> 值对应的合并后的字符串。</p>
+<h1 id="举个实际的例子"><a href="#举个实际的例子" class="headerlink" title="举个实际的例子"></a>举个实际的例子</h1><p>假设有一个名为 <code>employees</code> 的表，其中包含员工的信息，其中包括 <code>department</code> 列和 <code>employee_name</code> 列。现在，需要按照部门将员工姓名合并为一个字符串。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> employees (</span><br><span class="line">    id <span class="type">INT</span> <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    department <span class="type">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">    employee_name <span class="type">VARCHAR</span>(<span class="number">50</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> employees (id, department, employee_name) <span class="keyword">VALUES</span></span><br><span class="line">(<span class="number">1</span>, <span class="string">&#x27;HR&#x27;</span>, <span class="string">&#x27;Alice&#x27;</span>),</span><br><span class="line">(<span class="number">2</span>, <span class="string">&#x27;HR&#x27;</span>, <span class="string">&#x27;Bob&#x27;</span>),</span><br><span class="line">(<span class="number">3</span>, <span class="string">&#x27;IT&#x27;</span>, <span class="string">&#x27;Charlie&#x27;</span>),</span><br><span class="line">(<span class="number">4</span>, <span class="string">&#x27;IT&#x27;</span>, <span class="string">&#x27;David&#x27;</span>),</span><br><span class="line">(<span class="number">5</span>, <span class="string">&#x27;IT&#x27;</span>, <span class="string">&#x27;Eve&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>现在，使用 <code>GROUP_CONCAT</code> 将每个部门的员工姓名合并为一个字符串：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> department, GROUP_CONCAT(employee_name SEPARATOR <span class="string">&#x27;, &#x27;</span>) <span class="keyword">AS</span> employee_list</span><br><span class="line"><span class="keyword">FROM</span> employees</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> department;</span><br></pre></td></tr></table></figure>
+
+<p>这将返回一个结果集，其中包含每个部门及其相应的员工姓名合并后的字符串：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+------------+---------------------+</span><br><span class="line">| department | employee_list       |</span><br><span class="line">+------------+---------------------+</span><br><span class="line">| HR         | Alice, Bob          |</span><br><span class="line">| IT         | Charlie, David, Eve |</span><br><span class="line">+------------+---------------------+</span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中，<code>GROUP BY department</code> 用于按照部门分组，并使用 <code>GROUP_CONCAT(employee_name SEPARATOR &#39;, &#39;)</code> 将每个部门的员工姓名合并为一个逗号分隔的字符串。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/" data-id="clr7v9kya00048a9k4o5k9uxo" data-title="MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列.md" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-MySQL 语句 ｜ 使用GROUP BY获取每个组的最大和最小值记录" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/" class="article-date">
@@ -121,7 +178,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/" data-id="clr6ey4mr0003dh9k956q4id5" data-title="MySQL 语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/" data-id="clr7v9kya00038a9k97l8ajg2" data-title="MySQL 语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -173,7 +230,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/" data-id="clr6ey4mr0004dh9k59iv69gz" data-title="线程｜死锁条件及实现" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/" data-id="clr7v9kya00058a9kfy4d49nz" data-title="线程｜死锁条件及实现" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -223,7 +280,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/04/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20find_in_set()/" data-id="clr6ey4mq0001dh9k1cjhfrz9" data-title="" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/04/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20find_in_set()/" data-id="clr7v9ky800018a9kab2taftl" data-title="" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -278,7 +335,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/12/12/%E7%BA%BF%E7%A8%8B%EF%BD%9C%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B%EF%BC%9F/" data-id="clr6ey4ms0005dh9k33aadoal" data-title="线程｜如何实现守护线程？" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/12/12/%E7%BA%BF%E7%A8%8B%EF%BD%9C%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B%EF%BC%9F/" data-id="clr7v9kyb00068a9kh95i0cvd" data-title="线程｜如何实现守护线程？" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -328,7 +385,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20[%22%22]%20%E9%94%99%E8%AF%AF/" data-id="clr6ey4mt0008dh9k0466h2qn" data-title="问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20[%22%22]%20%E9%94%99%E8%AF%AF/" data-id="clr7v9kyb00098a9k04prb3xz" data-title="问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -373,7 +430,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/11/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMySQL%20%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95%E4%B8%AD%E6%98%8E%E6%98%8E%E6%9C%89%E5%80%BC%EF%BC%8C%E4%BD%BF%E7%94%A8%20concat()%20%E5%90%8E%E5%BE%97%E5%88%B0%E7%9A%84%E5%8D%B4%E4%B8%80%E7%9B%B4%E6%98%AF%20null/" data-id="clr6ey4ms0006dh9kbppd6awg" data-title="问题复盘｜MySQL 数据记录中明明有值，使用 concat() 后得到的却一直是 null" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/11/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMySQL%20%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95%E4%B8%AD%E6%98%8E%E6%98%8E%E6%9C%89%E5%80%BC%EF%BC%8C%E4%BD%BF%E7%94%A8%20concat()%20%E5%90%8E%E5%BE%97%E5%88%B0%E7%9A%84%E5%8D%B4%E4%B8%80%E7%9B%B4%E6%98%AF%20null/" data-id="clr7v9kyb00078a9kcar4f15a" data-title="问题复盘｜MySQL 数据记录中明明有值，使用 concat() 后得到的却一直是 null" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -417,7 +474,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/10/08/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/" data-id="clr6ey4mm0000dh9k0mbr1k6o" data-title="MongoDB｜MongoTemplate多条件查询" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/10/08/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/" data-id="clr7v9ky600008a9kbcv9dwdq" data-title="MongoDB｜MongoTemplate多条件查询" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -462,7 +519,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/09/20/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20order%20by%201,2/" data-id="clr6ey4mr0002dh9kasti9kri" data-title="MySQL 语句｜order by 1,2" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/09/20/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20order%20by%201,2/" data-id="clr7v9ky900028a9kaiysadc4" data-title="MySQL 语句｜order by 1,2" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -508,64 +565,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/" data-id="clr6ey4ms0007dh9kayhycap2" data-title="问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-问题复盘｜在使用 Gson 时，数字被自动转为 double 类型" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2023/09/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%95%B0%E5%AD%97%E8%A2%AB%E8%87%AA%E5%8A%A8%E8%BD%AC%E4%B8%BA%20double%20%E7%B1%BB%E5%9E%8B/" class="article-date">
-  <time class="dt-published" datetime="2023-09-13T15:04:44.463Z" itemprop="datePublished">2023-09-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2023/09/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%95%B0%E5%AD%97%E8%A2%AB%E8%87%AA%E5%8A%A8%E8%BD%AC%E4%B8%BA%20double%20%E7%B1%BB%E5%9E%8B/">问题复盘｜在使用 Gson 时，数字被自动转为 double 类型</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在将一个 JsonObject 转成 Map&lt;String, Object&gt; 的时候，数字全部被转成了 double 类型，<br>如下所示，年龄从 2 变成了 2.0，身高正常显示 98.2，登记时间成了 1.694533284627E12</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * name=小红</span></span><br><span class="line"><span class="comment"> * record_time=1.694533284627E12</span></span><br><span class="line"><span class="comment"> * age=2.0</span></span><br><span class="line"><span class="comment"> * height=98.2</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">     <span class="type">JsonObject</span> <span class="variable">jsonObject</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">JsonObject</span>();</span><br><span class="line">     jsonObject.addProperty(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;小红&quot;</span>);</span><br><span class="line">     jsonObject.addProperty(<span class="string">&quot;age&quot;</span>, <span class="number">2</span>);</span><br><span class="line">     jsonObject.addProperty(<span class="string">&quot;height&quot;</span>,<span class="number">98.2</span>);</span><br><span class="line">     jsonObject.addProperty(<span class="string">&quot;record_time&quot;</span>, System.currentTimeMillis());</span><br><span class="line">     Map&lt;String, Object&gt; result = <span class="keyword">new</span> <span class="title class_">Gson</span>().fromJson(jsonObject, <span class="keyword">new</span> <span class="title class_">TypeToken</span>&lt;HashMap&lt;String, Object&gt;&gt;() &#123;</span><br><span class="line">     &#125;.getType());</span><br><span class="line">     <span class="keyword">for</span> (Map.Entry entrySet : result.entrySet())&#123;</span><br><span class="line">         System.out.println(entrySet.getKey()+<span class="string">&quot;=&quot;</span>+entrySet.getValue());</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<h1 id="排查过程"><a href="#排查过程" class="headerlink" title="排查过程"></a>排查过程</h1><p>面对搜索引擎编程，我肯定不是第一个踩坑的，果不其然</p>
-<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/15507997/how-to-prevent-gson-from-expressing-integers-as-floats">https://stackoverflow.com/questions/15507997/how-to-prevent-gson-from-expressing-integers-as-floats</a></p>
-<p>从解释中可以看出，gson 默认将 number 类型的数据解析成了 double 类型</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> NUMBER:</span><br><span class="line">  <span class="keyword">return</span> in.nextDouble();</span><br></pre></td></tr></table></figure>
-<p>并且提到此问题已在版本 2.8.9 中修复</p>
-<blockquote>
-<p>google fixed issue<br><a target="_blank" rel="noopener" href="https://github.com/google/gson/commit/fe30b85224316cabf19f5dd3223843437c297802#diff-9bf510cca1fa5b32b008e7daa417abf15602571dbc87f5436d9f3558ded492a5">https://github.com/google/gson/commit/fe30b85224316cabf19f5dd3223843437c297802#diff-9bf510cca1fa5b32b008e7daa417abf15602571dbc87f5436d9f3558ded492a5</a> please update gson version to 2.8.9</p>
-</blockquote>
-<p>查看自己的版本号为 2.8.6 低于 2.8.9，且也有相同情况</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.google.code.gson<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>gson<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.8.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>问题已定位，就比较好解决<br>首先将 gson 版本升到 2.8.9，然后在创建 gson 对象的时候手动设置数字类型的转换策略，问题解决，如下</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.google.code.gson<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>gson<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.8.9<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * name=小红</span></span><br><span class="line"><span class="comment"> * record_time=1694534362190</span></span><br><span class="line"><span class="comment"> * age=2</span></span><br><span class="line"><span class="comment"> * height=98.2</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="type">JsonObject</span> <span class="variable">jsonObject</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">JsonObject</span>();</span><br><span class="line">    jsonObject.addProperty(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;小红&quot;</span>);</span><br><span class="line">    jsonObject.addProperty(<span class="string">&quot;age&quot;</span>, <span class="number">2</span>);</span><br><span class="line">    jsonObject.addProperty(<span class="string">&quot;height&quot;</span>,<span class="number">98.2</span>);</span><br><span class="line">    jsonObject.addProperty(<span class="string">&quot;record_time&quot;</span>, System.currentTimeMillis());</span><br><span class="line">    <span class="comment">// 手动设置数字类型数据的转换策略</span></span><br><span class="line">    <span class="type">GsonBuilder</span> <span class="variable">gson</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">GsonBuilder</span>().setNumberToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)</span><br><span class="line">            .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE);</span><br><span class="line">    Map&lt;String, Object&gt; result = gson.create().fromJson(jsonObject, <span class="keyword">new</span> <span class="title class_">TypeToken</span>&lt;HashMap&lt;String, Object&gt;&gt;() &#123;</span><br><span class="line">    &#125;.getType());</span><br><span class="line">    <span class="keyword">for</span> (Map.Entry entrySet : result.entrySet())&#123;</span><br><span class="line">        System.out.println(entrySet.getKey()+<span class="string">&quot;=&quot;</span>+entrySet.getValue());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>我不是第一个踩此坑的，肯定也不会是最后一个踩此坑的，简单记录，等待有缘人</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/09/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%95%B0%E5%AD%97%E8%A2%AB%E8%87%AA%E5%8A%A8%E8%BD%AC%E4%B8%BA%20double%20%E7%B1%BB%E5%9E%8B/" data-id="clr6ey4mt0009dh9k0xmd9spi" data-title="问题复盘｜在使用 Gson 时，数字被自动转为 double 类型" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/" data-id="clr7v9kyb00088a9k38ch73fa" data-title="问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -578,6 +578,11 @@
 
   
 
+
+  <nav id="page-nav">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">下一页 &raquo;</a>
+  </nav>
 
 </section>
         
@@ -608,6 +613,10 @@
       <ul>
         
           <li>
+            <a href="/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/">MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列.md</a>
+          </li>
+        
+          <li>
             <a href="/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/">MySQL 语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录</a>
           </li>
         
@@ -621,10 +630,6 @@
         
           <li>
             <a href="/2023/12/12/%E7%BA%BF%E7%A8%8B%EF%BD%9C%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B%EF%BC%9F/">线程｜如何实现守护线程？</a>
-          </li>
-        
-          <li>
-            <a href="/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20%5B%22%22%5D%20%E9%94%99%E8%AF%AF/">问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误</a>
           </li>
         
       </ul>
