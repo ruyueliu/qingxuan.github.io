@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="MySQL提供了一系列的JSON函数来处理JSON数据，包括从JSON字符串中提取值和将表中字段值合并为JSON等。 在MySQL中解析JSON可使用JSON_EXTRACT函数提取JSON字符串中指定字段的值，使用JSON_UNQUOTE函数去除提取的字符串值周围的引号，以得到原始的非引号包裹的值。 举个例子 假设你有一个包含JSON数据的表 my_table： 12345678CREATE T">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON">
+<meta property="og:url" content="http://qingxuan.com/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="MySQL提供了一系列的JSON函数来处理JSON数据，包括从JSON字符串中提取值和将表中字段值合并为JSON等。 在MySQL中解析JSON可使用JSON_EXTRACT函数提取JSON字符串中指定字段的值，使用JSON_UNQUOTE函数去除提取的字符串值周围的引号，以得到原始的非引号包裹的值。 举个例子 假设你有一个包含JSON数据的表 my_table： 12345678CREATE T">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-01-16T13:38:28.620Z">
+<meta property="article:modified_time" content="2024-01-16T13:39:39.003Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://qingxuan.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/" class="article-date">
+  <time class="dt-published" datetime="2024-01-16T13:38:28.620Z" itemprop="datePublished">2024-01-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>MySQL提供了一系列的JSON函数来处理JSON数据，包括从JSON字符串中提取值和将表中字段值合并为JSON等。</p>
+<h1 id="在MySQL中解析JSON"><a href="#在MySQL中解析JSON" class="headerlink" title="在MySQL中解析JSON"></a>在MySQL中解析JSON</h1><p>可使用<code>JSON_EXTRACT</code>函数提取JSON字符串中指定字段的值，使用<code>JSON_UNQUOTE</code>函数去除提取的字符串值周围的引号，以得到原始的非引号包裹的值。</p>
+<p><strong>举个例子</strong></p>
+<p>假设你有一个包含JSON数据的表 <code>my_table</code>：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> my_table (</span><br><span class="line">    id <span class="type">INT</span> <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    json_data JSON</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> my_table (id, json_data) <span class="keyword">VALUES</span></span><br><span class="line">(<span class="number">1</span>, <span class="string">&#x27;&#123;&quot;name&quot;: &quot;John&quot;, &quot;age&quot;: 25, &quot;city&quot;: &quot;New York&quot;&#125;&#x27;</span>),</span><br><span class="line">(<span class="number">2</span>, <span class="string">&#x27;&#123;&quot;name&quot;: &quot;Alice&quot;, &quot;age&quot;: 30, &quot;city&quot;: &quot;Los Angeles&quot;&#125;&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>使用JSON函数从<code>json_data</code>字段中提取数据：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 提取name字段的值</span></span><br><span class="line"><span class="keyword">SELECT</span> id, JSON_UNQUOTE(JSON_EXTRACT(json_data, <span class="string">&#x27;$.name&#x27;</span>)) <span class="keyword">AS</span> name</span><br><span class="line"><span class="keyword">FROM</span> my_table;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 提取age字段的值</span></span><br><span class="line"><span class="keyword">SELECT</span> id, JSON_EXTRACT(json_data, <span class="string">&#x27;$.age&#x27;</span>) <span class="keyword">AS</span> age</span><br><span class="line"><span class="keyword">FROM</span> my_table;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 提取city字段的值</span></span><br><span class="line"><span class="keyword">SELECT</span> id, JSON_UNQUOTE(JSON_EXTRACT(json_data, <span class="string">&#x27;$.city&#x27;</span>)) <span class="keyword">AS</span> city</span><br><span class="line"><span class="keyword">FROM</span> my_table;</span><br></pre></td></tr></table></figure>
+<p>如果MySQL版本较新（MySQL 8.0及以上），可使用<code>-&gt;</code>运算符来进行JSON字段的访问：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 提取name字段的值</span></span><br><span class="line"><span class="keyword">SELECT</span> id, json_data<span class="operator">-</span><span class="operator">&gt;</span><span class="string">&#x27;$.name&#x27;</span> <span class="keyword">AS</span> name</span><br><span class="line"><span class="keyword">FROM</span> my_table;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 提取age字段的值</span></span><br><span class="line"><span class="keyword">SELECT</span> id, json_data<span class="operator">-</span><span class="operator">&gt;</span><span class="string">&#x27;$.age&#x27;</span> <span class="keyword">AS</span> age</span><br><span class="line"><span class="keyword">FROM</span> my_table;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 提取city字段的值</span></span><br><span class="line"><span class="keyword">SELECT</span> id, json_data<span class="operator">-</span><span class="operator">&gt;</span><span class="string">&#x27;$.city&#x27;</span> <span class="keyword">AS</span> city</span><br><span class="line"><span class="keyword">FROM</span> my_table;</span><br></pre></td></tr></table></figure>
+<p>上面例子展示了如何从JSON字符串中提取值的基本方法，在实际应用中可按需结合其他JSON函数来执行更复杂的操作。</p>
+<h1 id="将表中字段值合并为JSON"><a href="#将表中字段值合并为JSON" class="headerlink" title="将表中字段值合并为JSON"></a>将表中字段值合并为JSON</h1><p>可使用<code>JSON_OBJECT</code>函数将查询到的字段值合并为JSON字符串。</p>
+<p><strong>举个例子</strong></p>
+<p>假设你有一个包含个人信息的表<code>person</code>：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> person (</span><br><span class="line">    id <span class="type">INT</span> <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">    age <span class="type">INT</span>,</span><br><span class="line">    city <span class="type">VARCHAR</span>(<span class="number">50</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> person (id, name, age, city) <span class="keyword">VALUES</span></span><br><span class="line">(<span class="number">1</span>, <span class="string">&#x27;John&#x27;</span>, <span class="number">25</span>, <span class="string">&#x27;New York&#x27;</span>),</span><br><span class="line">(<span class="number">2</span>, <span class="string">&#x27;Alice&#x27;</span>, <span class="number">30</span>, <span class="string">&#x27;Los Angeles&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>可使用<code>JSON_OBJECT</code>函数来将表中的字段转换为JSON字符串：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 将id、name、age、city字段合并为JSON字符串</span></span><br><span class="line"><span class="keyword">SELECT</span> id, <span class="built_in">JSON_OBJECT</span>(<span class="string">&#x27;name&#x27;</span>, name, <span class="string">&#x27;age&#x27;</span>, age, <span class="string">&#x27;city&#x27;</span>, city) <span class="keyword">AS</span> json_data</span><br><span class="line"><span class="keyword">FROM</span> person;</span><br></pre></td></tr></table></figure>
+<p>上述查询将返回一个包含JSON字符串的结果集，其中每行都包含一个由<code>id</code>、<code>name</code>、<code>age</code>、<code>city</code>字段构成的JSON对象。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+----+---------------------------------------------+</span><br><span class="line">| id | json_data                                   |</span><br><span class="line">+----+---------------------------------------------+</span><br><span class="line">|  1 | &#123;&quot;name&quot;: &quot;John&quot;, &quot;age&quot;: 25, &quot;city&quot;: &quot;New York&quot;&#125; |</span><br><span class="line">|  2 | &#123;&quot;name&quot;: &quot;Alice&quot;, &quot;age&quot;: 30, &quot;city&quot;: &quot;Los Angeles&quot;&#125; |</span><br><span class="line">+----+---------------------------------------------+</span><br></pre></td></tr></table></figure>
+<p>在实际应用中，可按需调整字段和JSON对象的构建方式。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/" data-id="clrgei2gn0005kx9k0m044fzn" data-title="MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2024/01/15/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8DATE_FORMAT()%E5%AF%B9%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E6%8C%89%E6%97%A5%E3%80%81%E5%91%A8%E3%80%81%E6%9C%88%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">MySQL语句 | 使用DATE_FORMAT()对查询结果按日、周、月分组统计</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">一月 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">十二月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">十一月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/">MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON</a>
+          </li>
+        
+          <li>
+            <a href="/2024/01/15/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8DATE_FORMAT()%E5%AF%B9%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E6%8C%89%E6%97%A5%E3%80%81%E5%91%A8%E3%80%81%E6%9C%88%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/">MySQL语句 | 使用DATE_FORMAT()对查询结果按日、周、月分组统计</a>
+          </li>
+        
+          <li>
+            <a href="/2024/01/14/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8UNION%E5%92%8CUNION%20ALL%E5%90%88%E5%B9%B6%E5%A4%9A%E6%AC%A1%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C/">MySQL语句｜使用UNION和UNION ALL合并多次查询结果</a>
+          </li>
+        
+          <li>
+            <a href="/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/">MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列</a>
+          </li>
+        
+          <li>
+            <a href="/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/">MySQL语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

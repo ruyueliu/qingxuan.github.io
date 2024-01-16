@@ -73,6 +73,63 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/" class="article-date">
+  <time class="dt-published" datetime="2024-01-16T13:38:28.620Z" itemprop="datePublished">2024-01-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/">MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>MySQL提供了一系列的JSON函数来处理JSON数据，包括从JSON字符串中提取值和将表中字段值合并为JSON等。</p>
+<h1 id="在MySQL中解析JSON"><a href="#在MySQL中解析JSON" class="headerlink" title="在MySQL中解析JSON"></a>在MySQL中解析JSON</h1><p>可使用<code>JSON_EXTRACT</code>函数提取JSON字符串中指定字段的值，使用<code>JSON_UNQUOTE</code>函数去除提取的字符串值周围的引号，以得到原始的非引号包裹的值。</p>
+<p><strong>举个例子</strong></p>
+<p>假设你有一个包含JSON数据的表 <code>my_table</code>：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> my_table (</span><br><span class="line">    id <span class="type">INT</span> <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    json_data JSON</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> my_table (id, json_data) <span class="keyword">VALUES</span></span><br><span class="line">(<span class="number">1</span>, <span class="string">&#x27;&#123;&quot;name&quot;: &quot;John&quot;, &quot;age&quot;: 25, &quot;city&quot;: &quot;New York&quot;&#125;&#x27;</span>),</span><br><span class="line">(<span class="number">2</span>, <span class="string">&#x27;&#123;&quot;name&quot;: &quot;Alice&quot;, &quot;age&quot;: 30, &quot;city&quot;: &quot;Los Angeles&quot;&#125;&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>使用JSON函数从<code>json_data</code>字段中提取数据：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 提取name字段的值</span></span><br><span class="line"><span class="keyword">SELECT</span> id, JSON_UNQUOTE(JSON_EXTRACT(json_data, <span class="string">&#x27;$.name&#x27;</span>)) <span class="keyword">AS</span> name</span><br><span class="line"><span class="keyword">FROM</span> my_table;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 提取age字段的值</span></span><br><span class="line"><span class="keyword">SELECT</span> id, JSON_EXTRACT(json_data, <span class="string">&#x27;$.age&#x27;</span>) <span class="keyword">AS</span> age</span><br><span class="line"><span class="keyword">FROM</span> my_table;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 提取city字段的值</span></span><br><span class="line"><span class="keyword">SELECT</span> id, JSON_UNQUOTE(JSON_EXTRACT(json_data, <span class="string">&#x27;$.city&#x27;</span>)) <span class="keyword">AS</span> city</span><br><span class="line"><span class="keyword">FROM</span> my_table;</span><br></pre></td></tr></table></figure>
+<p>如果MySQL版本较新（MySQL 8.0及以上），可使用<code>-&gt;</code>运算符来进行JSON字段的访问：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 提取name字段的值</span></span><br><span class="line"><span class="keyword">SELECT</span> id, json_data<span class="operator">-</span><span class="operator">&gt;</span><span class="string">&#x27;$.name&#x27;</span> <span class="keyword">AS</span> name</span><br><span class="line"><span class="keyword">FROM</span> my_table;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 提取age字段的值</span></span><br><span class="line"><span class="keyword">SELECT</span> id, json_data<span class="operator">-</span><span class="operator">&gt;</span><span class="string">&#x27;$.age&#x27;</span> <span class="keyword">AS</span> age</span><br><span class="line"><span class="keyword">FROM</span> my_table;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 提取city字段的值</span></span><br><span class="line"><span class="keyword">SELECT</span> id, json_data<span class="operator">-</span><span class="operator">&gt;</span><span class="string">&#x27;$.city&#x27;</span> <span class="keyword">AS</span> city</span><br><span class="line"><span class="keyword">FROM</span> my_table;</span><br></pre></td></tr></table></figure>
+<p>上面例子展示了如何从JSON字符串中提取值的基本方法，在实际应用中可按需结合其他JSON函数来执行更复杂的操作。</p>
+<h1 id="将表中字段值合并为JSON"><a href="#将表中字段值合并为JSON" class="headerlink" title="将表中字段值合并为JSON"></a>将表中字段值合并为JSON</h1><p>可使用<code>JSON_OBJECT</code>函数将查询到的字段值合并为JSON字符串。</p>
+<p><strong>举个例子</strong></p>
+<p>假设你有一个包含个人信息的表<code>person</code>：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> person (</span><br><span class="line">    id <span class="type">INT</span> <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">    age <span class="type">INT</span>,</span><br><span class="line">    city <span class="type">VARCHAR</span>(<span class="number">50</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> person (id, name, age, city) <span class="keyword">VALUES</span></span><br><span class="line">(<span class="number">1</span>, <span class="string">&#x27;John&#x27;</span>, <span class="number">25</span>, <span class="string">&#x27;New York&#x27;</span>),</span><br><span class="line">(<span class="number">2</span>, <span class="string">&#x27;Alice&#x27;</span>, <span class="number">30</span>, <span class="string">&#x27;Los Angeles&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>可使用<code>JSON_OBJECT</code>函数来将表中的字段转换为JSON字符串：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 将id、name、age、city字段合并为JSON字符串</span></span><br><span class="line"><span class="keyword">SELECT</span> id, <span class="built_in">JSON_OBJECT</span>(<span class="string">&#x27;name&#x27;</span>, name, <span class="string">&#x27;age&#x27;</span>, age, <span class="string">&#x27;city&#x27;</span>, city) <span class="keyword">AS</span> json_data</span><br><span class="line"><span class="keyword">FROM</span> person;</span><br></pre></td></tr></table></figure>
+<p>上述查询将返回一个包含JSON字符串的结果集，其中每行都包含一个由<code>id</code>、<code>name</code>、<code>age</code>、<code>city</code>字段构成的JSON对象。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+----+---------------------------------------------+</span><br><span class="line">| id | json_data                                   |</span><br><span class="line">+----+---------------------------------------------+</span><br><span class="line">|  1 | &#123;&quot;name&quot;: &quot;John&quot;, &quot;age&quot;: 25, &quot;city&quot;: &quot;New York&quot;&#125; |</span><br><span class="line">|  2 | &#123;&quot;name&quot;: &quot;Alice&quot;, &quot;age&quot;: 30, &quot;city&quot;: &quot;Los Angeles&quot;&#125; |</span><br><span class="line">+----+---------------------------------------------+</span><br></pre></td></tr></table></figure>
+<p>在实际应用中，可按需调整字段和JSON对象的构建方式。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/" data-id="clrgei2gn0005kx9k0m044fzn" data-title="MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-MySQL语句 | 使用DATE_FORMAT()对查询结果按日、周、月分组统计" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2024/01/15/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8DATE_FORMAT()%E5%AF%B9%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E6%8C%89%E6%97%A5%E3%80%81%E5%91%A8%E3%80%81%E6%9C%88%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/" class="article-date">
@@ -141,7 +198,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/15/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8DATE_FORMAT()%E5%AF%B9%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E6%8C%89%E6%97%A5%E3%80%81%E5%91%A8%E3%80%81%E6%9C%88%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/" data-id="clrez2irf0004q79kek5d61a8" data-title="MySQL语句 | 使用DATE_FORMAT()对查询结果按日、周、月分组统计" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/15/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8DATE_FORMAT()%E5%AF%B9%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E6%8C%89%E6%97%A5%E3%80%81%E5%91%A8%E3%80%81%E6%9C%88%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/" data-id="clrgei2gn0004kx9k9dmu9orq" data-title="MySQL语句 | 使用DATE_FORMAT()对查询结果按日、周、月分组统计" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -210,7 +267,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/14/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8UNION%E5%92%8CUNION%20ALL%E5%90%88%E5%B9%B6%E5%A4%9A%E6%AC%A1%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C/" data-id="clrez2irf0005q79k6y960wra" data-title="MySQL语句｜使用UNION和UNION ALL合并多次查询结果" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/14/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8UNION%E5%92%8CUNION%20ALL%E5%90%88%E5%B9%B6%E5%A4%9A%E6%AC%A1%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C/" data-id="clrgei2go0007kx9ke823ex1g" data-title="MySQL语句｜使用UNION和UNION ALL合并多次查询结果" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -267,7 +324,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/" data-id="clrez2irg0006q79k71645hyv" data-title="MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/" data-id="clrgei2go0006kx9k25hj3dus" data-title="MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -327,7 +384,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/" data-id="clrez2irf0003q79khspa1td8" data-title="MySQL语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/" data-id="clrgei2gn0003kx9kbcywhml5" data-title="MySQL语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -379,7 +436,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/" data-id="clrez2irg0007q79k2s5q41u7" data-title="线程｜死锁条件及实现" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/" data-id="clrgei2go0008kx9kfwif2e94" data-title="线程｜死锁条件及实现" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -438,7 +495,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/04/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20find_in_set()/" data-id="clrez2ire0002q79kf2nt1hy0" data-title="MySQL 语句 ｜ find_in_set()" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/04/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20find_in_set()/" data-id="clrgei2gl0001kx9kg2r961kk" data-title="MySQL 语句 ｜ find_in_set()" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -493,7 +550,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/12/12/%E7%BA%BF%E7%A8%8B%EF%BD%9C%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B%EF%BC%9F/" data-id="clrez2irg0008q79k0jtbfk1p" data-title="线程｜如何实现守护线程？" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/12/12/%E7%BA%BF%E7%A8%8B%EF%BD%9C%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B%EF%BC%9F/" data-id="clrgei2gp0009kx9k4n8w7j0v" data-title="线程｜如何实现守护线程？" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -543,7 +600,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20[%22%22]%20%E9%94%99%E8%AF%AF/" data-id="clrez2irh000bq79k7brm5jk8" data-title="问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20[%22%22]%20%E9%94%99%E8%AF%AF/" data-id="clrgei2gp000ckx9ka2gb3cw7" data-title="问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -588,51 +645,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/11/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMySQL%20%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95%E4%B8%AD%E6%98%8E%E6%98%8E%E6%9C%89%E5%80%BC%EF%BC%8C%E4%BD%BF%E7%94%A8%20concat()%20%E5%90%8E%E5%BE%97%E5%88%B0%E7%9A%84%E5%8D%B4%E4%B8%80%E7%9B%B4%E6%98%AF%20null/" data-id="clrez2irg0009q79kgymm1an5" data-title="问题复盘｜MySQL 数据记录中明明有值，使用 concat() 后得到的却一直是 null" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-MongoDB｜MongoTemplate多条件查询" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2023/10/08/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/" class="article-date">
-  <time class="dt-published" datetime="2023-10-08T14:18:30.788Z" itemprop="datePublished">2023-10-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2023/10/08/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/">MongoDB｜MongoTemplate多条件查询</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h2 id="MongoTemplate查询"><a href="#MongoTemplate查询" class="headerlink" title="MongoTemplate查询"></a>MongoTemplate查询</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Resource</span></span><br><span class="line"><span class="keyword">private</span> MongoTemplate mongoTemplate;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> &lt;T&gt; List&lt;T&gt; <span class="title function_">getDataList</span><span class="params">(String param1, Long param2, Class&lt;T&gt; clazz)</span> &#123;</span><br><span class="line">    <span class="comment">// 构建query</span></span><br><span class="line">    <span class="type">Query</span> <span class="variable">query</span> <span class="operator">=</span> constructQuery(param1, param2);</span><br><span class="line">    <span class="comment">// 查询</span></span><br><span class="line">    <span class="keyword">return</span> mongoTemplate.find(query, clazz);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="关系且"><a href="#关系且" class="headerlink" title="关系且"></a>关系且</h2><p>构建 Query</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Query <span class="title function_">constructQuery</span><span class="params">(String param1, String param2, String param3)</span> &#123;</span><br><span class="line">    <span class="type">Query</span> <span class="variable">query</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Query</span>();</span><br><span class="line">    <span class="keyword">if</span>(!Strings.isBlank(param1))&#123;</span><br><span class="line">        query.addCriteria(Criteria.where(<span class="string">&quot;field1&quot;</span>).is(param1));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!Strings.isBlank(param2))&#123;</span><br><span class="line">        query.addCriteria(Criteria.where(<span class="string">&quot;field2&quot;</span>).is(param2));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!Strings.isBlank(param3))&#123;</span><br><span class="line">        query.addCriteria(Criteria.where(<span class="string">&quot;field3&quot;</span>).is(param3));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> query;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="关系或"><a href="#关系或" class="headerlink" title="关系或"></a>关系或</h2><p>构建 Query</p>
-<p>将所有的查询条件添加到一个 List<Criteria> 中，然后将其转换为一个数组，并将数组传递给 Criteria.orOperator 方法。这样，所有的查询条件将被组合成一个或条件</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Query <span class="title function_">constructQuery</span><span class="params">(String param1, String param2, String param3)</span> &#123;</span><br><span class="line">        List&lt;Criteria&gt; criteriaList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        <span class="keyword">if</span>(!Strings.isBlank(param1))&#123;</span><br><span class="line">            criteriaList.add(Criteria.where(<span class="string">&quot;field1&quot;</span>).is(param1));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!Strings.isBlank(param2))&#123;</span><br><span class="line">            criteriaList.add(Criteria.where(<span class="string">&quot;field2&quot;</span>).is(param2));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!Strings.isBlank(param3))&#123;</span><br><span class="line">            criteriaList.add(Criteria.where(<span class="string">&quot;field3&quot;</span>).is(param3));</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        Criteria[] criteriaArray = <span class="keyword">new</span> <span class="title class_">Criteria</span>[criteriaList.size()];</span><br><span class="line">        criteriaList.toArray(criteriaArray);</span><br><span class="line">        </span><br><span class="line">        <span class="type">Criteria</span> <span class="variable">orCriteria</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Criteria</span>().orOperator(criteriaArray);</span><br><span class="line">        <span class="type">Query</span> <span class="variable">query</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Query</span>(orCriteria);</span><br><span class="line">        <span class="keyword">return</span> query;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/10/08/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/" data-id="clrez2ir80000q79k9407050w" data-title="MongoDB｜MongoTemplate多条件查询" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/11/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMySQL%20%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95%E4%B8%AD%E6%98%8E%E6%98%8E%E6%9C%89%E5%80%BC%EF%BC%8C%E4%BD%BF%E7%94%A8%20concat()%20%E5%90%8E%E5%BE%97%E5%88%B0%E7%9A%84%E5%8D%B4%E4%B8%80%E7%9B%B4%E6%98%AF%20null/" data-id="clrgei2gp000akx9kev6edm18" data-title="问题复盘｜MySQL 数据记录中明明有值，使用 concat() 后得到的却一直是 null" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -680,6 +693,10 @@
       <ul>
         
           <li>
+            <a href="/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/">MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON</a>
+          </li>
+        
+          <li>
             <a href="/2024/01/15/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8DATE_FORMAT()%E5%AF%B9%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E6%8C%89%E6%97%A5%E3%80%81%E5%91%A8%E3%80%81%E6%9C%88%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/">MySQL语句 | 使用DATE_FORMAT()对查询结果按日、周、月分组统计</a>
           </li>
         
@@ -693,10 +710,6 @@
         
           <li>
             <a href="/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/">MySQL语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录</a>
-          </li>
-        
-          <li>
-            <a href="/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/">线程｜死锁条件及实现</a>
           </li>
         
       </ul>
