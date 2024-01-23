@@ -73,6 +73,126 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-MySQL语句 | 使用BETWEEN对数据结果过滤" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4/" class="article-date">
+  <time class="dt-published" datetime="2024-01-23T13:21:59.310Z" itemprop="datePublished">2024-01-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4/">MySQL语句 | 使用BETWEEN对数据结果过滤</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>在MySQL中，<code>BETWEEN</code>是一个用于过滤范围的条件操作符，可以用来筛选在指定范围内（左闭右闭）的数据。</p>
+<h1 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> column_name(s)</span><br><span class="line"><span class="keyword">FROM</span> table_name</span><br><span class="line"><span class="keyword">WHERE</span> column_name <span class="keyword">BETWEEN</span> value1 <span class="keyword">AND</span> value2;</span><br></pre></td></tr></table></figure>
+<p>其中，<code>column_name</code>是要筛选的列名，<code>table_name</code>是表名，<code>value1</code>和<code>value2</code>是范围的边界值。<br><code>BETWEEN</code>是包含边界值的，满足条件的行将包括等于<code>value1</code>和<code>value2</code>的行。<br>若需排除边界值，则可使用比较运算符，例如<code>&gt;</code>和<code>&lt;</code>。</p>
+<h1 id="举个实际例子"><a href="#举个实际例子" class="headerlink" title="举个实际例子"></a>举个实际例子</h1><p>假设有如下的 <code>orders</code> 表：</p>
+<table>
+<thead>
+<tr>
+<th>order_id</th>
+<th>amount</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>80</td>
+</tr>
+<tr>
+<td>2</td>
+<td>150</td>
+</tr>
+<tr>
+<td>3</td>
+<td>300</td>
+</tr>
+<tr>
+<td>4</td>
+<td>500</td>
+</tr>
+<tr>
+<td>5</td>
+<td>600</td>
+</tr>
+<tr>
+<td>6</td>
+<td>100</td>
+</tr>
+</tbody></table>
+<p>获取订单金额在100到500之间的订单：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> order_id, amount</span><br><span class="line"><span class="keyword">FROM</span> orders</span><br><span class="line"><span class="keyword">WHERE</span> amount <span class="keyword">BETWEEN</span> <span class="number">100</span> <span class="keyword">AND</span> <span class="number">500</span>;</span><br></pre></td></tr></table></figure>
+<p>输出为：</p>
+<table>
+<thead>
+<tr>
+<th>order_id</th>
+<th>amount</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2</td>
+<td>150</td>
+</tr>
+<tr>
+<td>3</td>
+<td>300</td>
+</tr>
+<tr>
+<td>4</td>
+<td>500</td>
+</tr>
+<tr>
+<td>6</td>
+<td>100</td>
+</tr>
+</tbody></table>
+<p>若需订单金额在100到500之间但不包括100和500本身的订单，则可使用以下查询：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> order_id, amount</span><br><span class="line"><span class="keyword">FROM</span> orders</span><br><span class="line"><span class="keyword">WHERE</span> amount <span class="operator">&gt;</span> <span class="number">100</span> <span class="keyword">AND</span> amount <span class="operator">&lt;</span> <span class="number">500</span>;</span><br></pre></td></tr></table></figure>
+<p>输出为：</p>
+<table>
+<thead>
+<tr>
+<th>order_id</th>
+<th>amount</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2</td>
+<td>150</td>
+</tr>
+<tr>
+<td>3</td>
+<td>300</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4/" data-id="clrqe0yvr0004zv9k9rrn3r7h" data-title="MySQL语句 | 使用BETWEEN对数据结果过滤" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-MySQL语句 | 使用WITH子句和临时表达式进行数据分析和筛选" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2024/01/17/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8WITH%E5%AD%90%E5%8F%A5%E5%92%8C%E4%B8%B4%E6%97%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%92%8C%E7%AD%9B%E9%80%89/" class="article-date">
@@ -110,7 +230,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/17/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8WITH%E5%AD%90%E5%8F%A5%E5%92%8C%E4%B8%B4%E6%97%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%92%8C%E7%AD%9B%E9%80%89/" data-id="clrhvzj8t00058q9kd8mi7bcq" data-title="MySQL语句 | 使用WITH子句和临时表达式进行数据分析和筛选" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/17/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8WITH%E5%AD%90%E5%8F%A5%E5%92%8C%E4%B8%B4%E6%97%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%92%8C%E7%AD%9B%E9%80%89/" data-id="clrqe0yvr0006zv9k0pqqa8r4" data-title="MySQL语句 | 使用WITH子句和临时表达式进行数据分析和筛选" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -167,7 +287,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/" data-id="clrhvzj8t00068q9kb4lu5vmw" data-title="MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/" data-id="clrqe0yvs0007zv9k2tdi731r" data-title="MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -247,7 +367,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/15/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8DATE_FORMAT()%E5%AF%B9%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E6%8C%89%E6%97%A5%E3%80%81%E5%91%A8%E3%80%81%E6%9C%88%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/" data-id="clrhvzj8s00048q9kdiwb4bjz" data-title="MySQL语句 | 使用DATE_FORMAT()对查询结果按日、周、月分组统计" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/15/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8DATE_FORMAT()%E5%AF%B9%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E6%8C%89%E6%97%A5%E3%80%81%E5%91%A8%E3%80%81%E6%9C%88%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/" data-id="clrqe0yvr0005zv9k1p4agzug" data-title="MySQL语句 | 使用DATE_FORMAT()对查询结果按日、周、月分组统计" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -316,7 +436,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/14/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8UNION%E5%92%8CUNION%20ALL%E5%90%88%E5%B9%B6%E5%A4%9A%E6%AC%A1%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C/" data-id="clrhvzj8t00088q9k1jie686q" data-title="MySQL语句｜使用UNION和UNION ALL合并多次查询结果" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/14/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8UNION%E5%92%8CUNION%20ALL%E5%90%88%E5%B9%B6%E5%A4%9A%E6%AC%A1%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C/" data-id="clrqe0yvt000azv9kej1s91lg" data-title="MySQL语句｜使用UNION和UNION ALL合并多次查询结果" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -373,7 +493,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/" data-id="clrhvzj8t00078q9k26c5g7u5" data-title="MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/" data-id="clrqe0yvs0008zv9k3d4eh26v" data-title="MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -433,7 +553,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/" data-id="clrhvzj8s00038q9kaoctgkd7" data-title="MySQL语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/" data-id="clrqe0yvr0003zv9k7di6geog" data-title="MySQL语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -485,7 +605,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/" data-id="clrhvzj8u00098q9k46sv8us6" data-title="线程｜死锁条件及实现" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/" data-id="clrqe0yvs0009zv9khvcr90qk" data-title="线程｜死锁条件及实现" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -544,7 +664,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/04/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20find_in_set()/" data-id="clrhvzj8r00018q9kct6x5vgf" data-title="MySQL 语句 ｜ find_in_set()" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/04/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20find_in_set()/" data-id="clrqe0yvp0001zv9kfvjf3zsh" data-title="MySQL 语句 ｜ find_in_set()" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -599,57 +719,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/12/12/%E7%BA%BF%E7%A8%8B%EF%BD%9C%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B%EF%BC%9F/" data-id="clrhvzj8u000b8q9k45rb6nhk" data-title="线程｜如何实现守护线程？" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20%5B%22%22%5D%20%E9%94%99%E8%AF%AF/" class="article-date">
-  <time class="dt-published" datetime="2023-11-15T14:07:21.355Z" itemprop="datePublished">2023-11-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20%5B%22%22%5D%20%E9%94%99%E8%AF%AF/">问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在使用 Gson 进行数据解析的时候，报了 Failed to parse date [“”] 错误</p>
-<p>原代码</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">JsonObject</span> <span class="variable">jsonObject</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">JsonObject</span>();</span><br><span class="line">        jsonObject.addProperty(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;小红&quot;</span>);</span><br><span class="line">        jsonObject.addProperty(<span class="string">&quot;birthday&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">        <span class="type">Gson</span> <span class="variable">gson</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">GsonBuilder</span>().create();</span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> gson.fromJson(jsonObject, <span class="keyword">new</span> <span class="title class_">TypeToken</span>&lt;User&gt;() &#123;</span><br><span class="line">        &#125;.getType());</span><br><span class="line">        System.out.println(<span class="string">&quot;user is:\n&quot;</span> + user);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>报错 </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">com.google.gson.JsonSyntaxException: </span><br><span class="line">	at com.google.gson.internal.bind.DateTypeAdapter.deserializeToDate(DateTypeAdapter.java:<span class="number">87</span>)</span><br><span class="line">	at com.google.gson.internal.bind.DateTypeAdapter.read(DateTypeAdapter.java:<span class="number">75</span>)</span><br><span class="line">	at com.google.gson.internal.bind.DateTypeAdapter.read(DateTypeAdapter.java:<span class="number">46</span>)</span><br><span class="line">	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$<span class="number">1.</span>read(ReflectiveTypeAdapterFactory.java:<span class="number">131</span>)</span><br><span class="line">	at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:<span class="number">222</span>)</span><br><span class="line">	at com.google.gson.Gson.fromJson(Gson.java:<span class="number">963</span>)</span><br><span class="line">	at com.google.gson.Gson.fromJson(Gson.java:<span class="number">1034</span>)</span><br><span class="line">        ...</span><br><span class="line">Caused by: java.text.ParseException: Failed to parse date [<span class="string">&quot;&quot;</span>]: (java.lang.NumberFormatException)</span><br><span class="line">	at com.google.gson.internal.bind.util.ISO8601Utils.parse(ISO8601Utils.java:<span class="number">274</span>)</span><br><span class="line">	at com.google.gson.internal.bind.DateTypeAdapter.deserializeToDate(DateTypeAdapter.java:<span class="number">85</span>)</span><br><span class="line">	... <span class="number">34</span> more</span><br><span class="line">Caused by: java.lang.NumberFormatException: </span><br><span class="line">	at com.google.gson.internal.bind.util.ISO8601Utils.parseInt(ISO8601Utils.java:<span class="number">302</span>)</span><br><span class="line">	at com.google.gson.internal.bind.util.ISO8601Utils.parse(ISO8601Utils.java:<span class="number">129</span>)</span><br><span class="line">	... <span class="number">35</span> more</span><br></pre></td></tr></table></figure>
-<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>Gson 默认的 Date 类型转换器无法处理空字符串</p>
-<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>通过自定义 Gson 的 Date 类型转换器来解决这个问题</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Gson</span> <span class="variable">gson</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">GsonBuilder</span>().registerTypeAdapter(Date.class, <span class="keyword">new</span> <span class="title class_">JsonDeserializer</span>&lt;Date&gt;() &#123;</span><br><span class="line">    <span class="keyword">public</span> Date <span class="title function_">deserialize</span><span class="params">(JsonElement json, Type typeOfT, JsonDeserializationContext context)</span> <span class="keyword">throws</span> JsonParseException &#123;</span><br><span class="line">        <span class="keyword">if</span> (json.getAsJsonPrimitive().getAsString().equals(<span class="string">&quot;&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">SimpleDateFormat</span> <span class="variable">format</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SimpleDateFormat</span>(<span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> format.parse(json.getAsJsonPrimitive().getAsString());</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ParseException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">JsonParseException</span>(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;).create();</span><br></pre></td></tr></table></figure>
-<p>新代码</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * user is:</span></span><br><span class="line"><span class="comment"> * User(id=null, name=小红, birthday=null)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">JsonObject</span> <span class="variable">jsonObject</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">JsonObject</span>();</span><br><span class="line">        jsonObject.addProperty(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;小红&quot;</span>);</span><br><span class="line">        jsonObject.addProperty(<span class="string">&quot;birthday&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">        <span class="type">Gson</span> <span class="variable">gson</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">GsonBuilder</span>().registerTypeAdapter(Date.class, <span class="keyword">new</span> <span class="title class_">JsonDeserializer</span>&lt;Date&gt;() &#123;</span><br><span class="line">            <span class="keyword">public</span> Date <span class="title function_">deserialize</span><span class="params">(JsonElement json, Type typeOfT, JsonDeserializationContext context)</span> <span class="keyword">throws</span> JsonParseException &#123;</span><br><span class="line">                <span class="keyword">if</span> (json.getAsJsonPrimitive().getAsString().equals(<span class="string">&quot;&quot;</span>)) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="type">SimpleDateFormat</span> <span class="variable">format</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SimpleDateFormat</span>(<span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span> format.parse(json.getAsJsonPrimitive().getAsString());</span><br><span class="line">                &#125; <span class="keyword">catch</span> (ParseException e) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">JsonParseException</span>(e);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).create();</span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> gson.fromJson(jsonObject, <span class="keyword">new</span> <span class="title class_">TypeToken</span>&lt;User&gt;() &#123;</span><br><span class="line">        &#125;.getType());</span><br><span class="line">        System.out.println(<span class="string">&quot;user is:\n&quot;</span> + user);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>我不是第一个踩此坑的，肯定也不会是最后一个踩此坑的，简单记录，等待有缘人</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20[%22%22]%20%E9%94%99%E8%AF%AF/" data-id="clrhvzj8v000d8q9kbzwihv4a" data-title="问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/12/12/%E7%BA%BF%E7%A8%8B%EF%BD%9C%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B%EF%BC%9F/" data-id="clrqe0yvt000bzv9k689kdj7o" data-title="线程｜如何实现守护线程？" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -697,6 +767,10 @@
       <ul>
         
           <li>
+            <a href="/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4/">MySQL语句 | 使用BETWEEN对数据结果过滤</a>
+          </li>
+        
+          <li>
             <a href="/2024/01/17/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8WITH%E5%AD%90%E5%8F%A5%E5%92%8C%E4%B8%B4%E6%97%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%92%8C%E7%AD%9B%E9%80%89/">MySQL语句 | 使用WITH子句和临时表达式进行数据分析和筛选</a>
           </li>
         
@@ -710,10 +784,6 @@
         
           <li>
             <a href="/2024/01/14/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8UNION%E5%92%8CUNION%20ALL%E5%90%88%E5%B9%B6%E5%A4%9A%E6%AC%A1%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C/">MySQL语句｜使用UNION和UNION ALL合并多次查询结果</a>
-          </li>
-        
-          <li>
-            <a href="/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/">MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列</a>
           </li>
         
       </ul>
