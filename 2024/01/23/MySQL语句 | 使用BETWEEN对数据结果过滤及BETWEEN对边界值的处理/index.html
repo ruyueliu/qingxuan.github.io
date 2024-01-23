@@ -4,17 +4,17 @@
   <meta charset="utf-8">
   
   
-  <title>MySQL语句 | 使用BETWEEN对数据结果过滤 | Hexo</title>
+  <title>MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="在MySQL中，BETWEEN是一个用于过滤范围的条件操作符，可以用来筛选在指定范围内（左闭右闭）的数据。 举个例子123SELECT column_name(s)FROM table_nameWHERE column_name BETWEEN value1 AND value2; 其中，column_name是要筛选的列名，table_name是表名，value1和value2是范围的边界值。B">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySQL语句 | 使用BETWEEN对数据结果过滤">
-<meta property="og:url" content="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4/index.html">
+<meta property="og:title" content="MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理">
+<meta property="og:url" content="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="在MySQL中，BETWEEN是一个用于过滤范围的条件操作符，可以用来筛选在指定范围内（左闭右闭）的数据。 举个例子123SELECT column_name(s)FROM table_nameWHERE column_name BETWEEN value1 AND value2; 其中，column_name是要筛选的列名，table_name是表名，value1和value2是范围的边界值。B">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-01-23T13:21:59.310Z">
-<meta property="article:modified_time" content="2024-01-23T13:23:43.974Z">
+<meta property="article:modified_time" content="2024-01-23T14:14:38.432Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -75,9 +75,9 @@
 </header>
 
       <div class="outer">
-        <section id="main"><article id="post-MySQL语句 | 使用BETWEEN对数据结果过滤" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+        <section id="main"><article id="post-MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
-    <a href="/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4/" class="article-date">
+    <a href="/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/" class="article-date">
   <time class="dt-published" datetime="2024-01-23T13:21:59.310Z" itemprop="datePublished">2024-01-23</time>
 </a>
     
@@ -89,7 +89,7 @@
         
   
     <h1 class="p-name article-title" itemprop="headline name">
-      MySQL语句 | 使用BETWEEN对数据结果过滤
+      MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理
     </h1>
   
 
@@ -183,7 +183,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4/" data-id="clrqfo2a20004829k7gz80wzs" data-title="MySQL语句 | 使用BETWEEN对数据结果过滤" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/" data-id="clrqfu4770005aa9kdjenad0c" data-title="MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -247,7 +247,7 @@
           </li>
         
           <li>
-            <a href="/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4/">MySQL语句 | 使用BETWEEN对数据结果过滤</a>
+            <a href="/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/">MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理</a>
           </li>
         
           <li>
