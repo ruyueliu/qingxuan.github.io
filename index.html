@@ -73,6 +73,72 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-MySQL语句 | MD5()的使用" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/01/30/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20MD5()%E7%9A%84%E4%BD%BF%E7%94%A8/" class="article-date">
+  <time class="dt-published" datetime="2024-01-30T13:50:06.984Z" itemprop="datePublished">2024-01-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/01/30/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20MD5()%E7%9A%84%E4%BD%BF%E7%94%A8/">MySQL语句 | MD5()的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>在MySQL中，<code>MD5()</code>是一个哈希函数，用于将给定的字符串转换为MD5哈希值。MD5哈希算法会将任意长度的输入数据转换为一个128位的哈希值，通常表示为32个十六进制数字。</p>
+<p>要在MySQL中使用<code>MD5()</code>函数，只需将要哈希的字符串作为参数传递给函数即可</p>
+<h1 id="举个通用的例子"><a href="#举个通用的例子" class="headerlink" title="举个通用的例子"></a>举个通用的例子</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> MD5(<span class="string">&#x27;your_string_here&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>在这个例子中，<code>&#39;your_string_here&#39;</code>是要进行哈希的字符串，<code>MD5()</code>函数将返回该字符串的MD5哈希值。</p>
+<p>也可以在INSERT或UPDATE语句中使用<code>MD5()</code>函数来对字段进行哈希，例如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> users (username, password) <span class="keyword">VALUES</span> (<span class="string">&#x27;john&#x27;</span>, MD5(<span class="string">&#x27;password123&#x27;</span>));</span><br></pre></td></tr></table></figure>
+<p>这将在<code>users</code>表中插入一个新的用户名和其对应密码的MD5哈希值。</p>
+<h1 id="举个实际的例子"><a href="#举个实际的例子" class="headerlink" title="举个实际的例子"></a>举个实际的例子</h1><p>假设有一个名为<code>users</code>的表，其中包含用户名和密码字段，将使用<code>MD5()</code>函数来存储用户的密码。首先，创建数据表：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> users (</span><br><span class="line">    id <span class="type">INT</span> AUTO_INCREMENT <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    username <span class="type">VARCHAR</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">    password <span class="type">VARCHAR</span>(<span class="number">32</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="comment">-- MD5 hash will be stored here</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>向表中插入一些示例数据，包括用户名和密码的明文：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> users (username, password) <span class="keyword">VALUES</span></span><br><span class="line">(<span class="string">&#x27;alice&#x27;</span>, MD5(<span class="string">&#x27;password123&#x27;</span>)),</span><br><span class="line">(<span class="string">&#x27;bob&#x27;</span>, MD5(<span class="string">&#x27;qwerty&#x27;</span>)),</span><br><span class="line">(<span class="string">&#x27;charlie&#x27;</span>, MD5(<span class="string">&#x27;letmein&#x27;</span>));</span><br></pre></td></tr></table></figure>
+<p>现在我们已经插入了数据，我们可以通过查询来查看密码字段中存储的MD5哈希值：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> username, password <span class="keyword">FROM</span> users;</span><br></pre></td></tr></table></figure>
+<p>输出将类似于以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+----------+----------------------------------+</span><br><span class="line">| username | password                         |</span><br><span class="line">+----------+----------------------------------+</span><br><span class="line">| alice    | 482c811da5d5b4bc6d497ffa98491e38 |</span><br><span class="line">| bob      | d8578edf8458ce06fbc5bb76a58c5ca4 |</span><br><span class="line">| charlie  | 0acf4539a14b96fecc5897b09e43b7c4 |</span><br><span class="line">+----------+----------------------------------+</span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中，使用<code>MD5()</code>函数对密码进行了哈希，并将哈希值存储在了<code>password</code>字段中。现在，实际存储在数据库中的密码已经是经过哈希处理的，这样可以增加安全性，即使数据库泄露，也不会直接暴露用户的密码。</p>
+<p>在常规情况下，MD5是一种单向哈希函数，意味着它是不可逆的，不能直接通过逆向运算来解密MD5哈希值以获得原始的明文密码。当存储密码时，只存储其哈希值，当用户登录时，将用户提供的密码进行哈希，然后将哈希值与数据库中存储的哈希值进行比较，如果两者匹配，则认为用户提供了正确的密码。</p>
+<p>然而，MD5已经被证明是不安全的哈希算法，并且存在多种预先计算好的彩虹表等技术，可以通过暴力破解等方式来尝试找到与特定MD5哈希值相对应的原始值。因此，不建议使用MD5来存储密码或其他敏感信息。</p>
+<p>为了增强安全性，推荐使用更安全的哈希算法，并在哈希过程中使用随机生成的“盐值”（salt），这可以增加密码的复杂度和安全性。在数据库存储密码时，应该尽量采用这种更安全的方法。</p>
+<h1 id="更多应用场景"><a href="#更多应用场景" class="headerlink" title="更多应用场景"></a>更多应用场景</h1><p><code>MD5()</code>函数在计算机科学和软件开发中有许多应用场景，尽管不建议将其用于安全相关的场景，但在其他方面仍然有其用途</p>
+<ol>
+<li><strong>数据完整性验证</strong>：MD5哈希函数可用于验证文件或数据的完整性。发送方可以计算文件的MD5哈希值并发送给接收方，接收方在接收文件后可以再次计算文件的MD5哈希值，然后将计算得到的哈希值与发送方提供的哈希值进行比较，以确保文件在传输过程中没有被篡改。</li>
+<li><strong>密码管理</strong>：尽管不推荐将MD5用于存储密码，但在某些非安全的环境下，仍然可能用于临时性质的密码哈希。例如，在开发测试中，可能会使用MD5哈希函数来快速处理密码，但在生产环境中不建议使用。</li>
+<li><strong>数据分区和数据分片</strong>：在分布式系统中，MD5哈希函数可以用来确定数据的分区或分片。通过将数据的唯一标识符（如键）传递给MD5哈希函数，并在哈希值的范围内确定数据所属的分区或分片。</li>
+<li><strong>生成唯一标识符</strong>：MD5哈希函数可以将任意长度的数据转换为固定长度的哈希值，因此在生成唯一标识符时可以使用MD5。例如，在分布式系统中生成全局唯一的标识符，可以使用数据的一些属性（如时间戳、随机数等）作为输入，然后对其进行MD5哈希处理以生成唯一标识符。</li>
+</ol>
+<p>虽然MD5在安全方面存在漏洞，并且不再适用于密码存储等安全领域，但在上述非安全的应用场景中，仍然可以使用MD5哈希函数。对于需要更高安全性的场景，应该考虑使用更安全的哈希算法。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2024/01/30/MySQL%E8%AF%AD%E5%8F%A5%20|%20MD5()%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="cls0f3nbm0009e39khvx092ln" data-title="MySQL语句 | MD5()的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-MySQL语句 ｜ FIELD()与ORDER BY()相结合实现对结果的自定义排序" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20FIELD()%E4%B8%8EORDER%20BY()%E7%9B%B8%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/" class="article-date">
@@ -110,7 +176,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20FIELD()%E4%B8%8EORDER%20BY()%E7%9B%B8%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/" data-id="clrqfu4770007aa9k015jgj3y" data-title="MySQL语句 ｜ FIELD()与ORDER BY()相结合实现对结果的自定义排序" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20FIELD()%E4%B8%8EORDER%20BY()%E7%9B%B8%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/" data-id="cls0f3nbl0007e39kbxq2cad1" data-title="MySQL语句 ｜ FIELD()与ORDER BY()相结合实现对结果的自定义排序" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -230,7 +296,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/" data-id="clrqfu4770005aa9kdjenad0c" data-title="MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/" data-id="cls0f3nbk0003e39k0mcr409x" data-title="MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -279,7 +345,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/17/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8WITH%E5%AD%90%E5%8F%A5%E5%92%8C%E4%B8%B4%E6%97%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%92%8C%E7%AD%9B%E9%80%89/" data-id="clrqfu4770006aa9kdznecfbk" data-title="MySQL语句 | 使用WITH子句和临时表达式进行数据分析和筛选" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/17/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8WITH%E5%AD%90%E5%8F%A5%E5%92%8C%E4%B8%B4%E6%97%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%92%8C%E7%AD%9B%E9%80%89/" data-id="cls0f3nbl0005e39ke3tg4j8x" data-title="MySQL语句 | 使用WITH子句和临时表达式进行数据分析和筛选" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -336,7 +402,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/" data-id="clrqfu4770008aa9k4paq8ydz" data-title="MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/" data-id="cls0f3nbm0008e39k3o7e994i" data-title="MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -416,7 +482,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/15/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8DATE_FORMAT()%E5%AF%B9%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E6%8C%89%E6%97%A5%E3%80%81%E5%91%A8%E3%80%81%E6%9C%88%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/" data-id="clrqfu4760004aa9k0b769jwa" data-title="MySQL语句 | 使用DATE_FORMAT()对查询结果按日、周、月分组统计" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/15/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8DATE_FORMAT()%E5%AF%B9%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E6%8C%89%E6%97%A5%E3%80%81%E5%91%A8%E3%80%81%E6%9C%88%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/" data-id="cls0f3nbl0004e39kcn22amh9" data-title="MySQL语句 | 使用DATE_FORMAT()对查询结果按日、周、月分组统计" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -485,7 +551,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/14/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8UNION%E5%92%8CUNION%20ALL%E5%90%88%E5%B9%B6%E5%A4%9A%E6%AC%A1%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C/" data-id="clrqfu479000daa9kbkdjejhh" data-title="MySQL语句｜使用UNION和UNION ALL合并多次查询结果" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/14/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8UNION%E5%92%8CUNION%20ALL%E5%90%88%E5%B9%B6%E5%A4%9A%E6%AC%A1%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C/" data-id="cls0f3nbn000be39keykeaiw7" data-title="MySQL语句｜使用UNION和UNION ALL合并多次查询结果" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -542,7 +608,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/" data-id="clrqfu4780009aa9k5did80q2" data-title="MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/" data-id="cls0f3nbm000ae39k3ont03j3" data-title="MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -602,7 +668,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/" data-id="clrqfu4760003aa9k83m509tj" data-title="MySQL语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/" data-id="cls0f3nbk0002e39k5lzgdcta" data-title="MySQL语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -654,66 +720,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/" data-id="clrqfu478000aaa9k8w7f1i2v" data-title="线程｜死锁条件及实现" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-MySQL 语句 ｜ find_in_set()" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2024/01/04/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20find_in_set()/" class="article-date">
-  <time class="dt-published" datetime="2024-01-04T15:03:27.133Z" itemprop="datePublished">2024-01-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2024/01/04/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20find_in_set()/">MySQL 语句 ｜ find_in_set()</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p><code>FIND_IN_SET()</code> 是 MySQL 中的一个字符串函数，用于在逗号分隔的字符串列表中查找指定字符串的位置。</p>
-<p>它的语法如下：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FIND_IN_SET(search_string, string_list)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>search_string</code>: 要搜索的字符串。</li>
-<li><code>string_list</code>: 逗号分隔的字符串列表。</li>
-</ul>
-<p>该函数返回一个整数值，表示在字符串列表中找到搜索字符串的位置。如果未找到，返回0。</p>
-<p>以下是一个简单的示例：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> FIND_IN_SET(<span class="string">&#x27;apple&#x27;</span>, <span class="string">&#x27;banana,apple,orange,mango&#x27;</span>);</span><br></pre></td></tr></table></figure>
-
-<p>这将返回 <code>2</code>，因为 ‘apple’ 在逗号分隔的字符串列表中的第二个位置。</p>
-<p>另一个示例：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> FIND_IN_SET(<span class="string">&#x27;grape&#x27;</span>, <span class="string">&#x27;banana,apple,orange,mango&#x27;</span>);</span><br></pre></td></tr></table></figure>
-
-<p>这将返回 <code>0</code>，因为 ‘grape’ 不在列表中。</p>
-<p>你还可以在 <code>WHERE</code> 子句中使用 <code>FIND_IN_SET()</code> 来进行条件过滤：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> fruits <span class="keyword">WHERE</span> FIND_IN_SET(<span class="string">&#x27;apple&#x27;</span>, fruit_list) <span class="operator">&gt;</span> <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
-
-<p>这将返回所有包含 ‘apple’ 的行，其中 <code>fruit_list</code> 是包含水果名称的逗号分隔字符串的列。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/04/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20find_in_set()/" data-id="clrqfu4750001aa9k6zox6q3c" data-title="MySQL 语句 ｜ find_in_set()" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/" data-id="cls0f3nbn000fe39kcjyr9kml" data-title="线程｜死锁条件及实现" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -761,6 +768,10 @@
       <ul>
         
           <li>
+            <a href="/2024/01/30/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20MD5()%E7%9A%84%E4%BD%BF%E7%94%A8/">MySQL语句 | MD5()的使用</a>
+          </li>
+        
+          <li>
             <a href="/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20FIELD()%E4%B8%8EORDER%20BY()%E7%9B%B8%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/">MySQL语句 ｜ FIELD()与ORDER BY()相结合实现对结果的自定义排序</a>
           </li>
         
@@ -774,10 +785,6 @@
         
           <li>
             <a href="/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/">MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON</a>
-          </li>
-        
-          <li>
-            <a href="/2024/01/15/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8DATE_FORMAT()%E5%AF%B9%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E6%8C%89%E6%97%A5%E3%80%81%E5%91%A8%E3%80%81%E6%9C%88%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/">MySQL语句 | 使用DATE_FORMAT()对查询结果按日、周、月分组统计</a>
           </li>
         
       </ul>
