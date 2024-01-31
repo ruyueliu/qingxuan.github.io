@@ -73,6 +73,60 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-MySQL语句 ｜ 条件函数IF/CASE/COALESCE的使用" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/01/31/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0IF/CASE/COALESCE%E7%9A%84%E4%BD%BF%E7%94%A8/" class="article-date">
+  <time class="dt-published" datetime="2024-01-31T13:15:58.303Z" itemprop="datePublished">2024-01-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/01/31/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0IF/CASE/COALESCE%E7%9A%84%E4%BD%BF%E7%94%A8/">MySQL语句 ｜ 条件函数IF/CASE/COALESCE的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>@[toc]<br>在MySQL中，条件函数用于在查询中根据特定条件来返回不同的结果。常见的条件函数包括 <code>IF()</code>、<code>CASE</code> 等</p>
+<h3 id="1-IF-函数"><a href="#1-IF-函数" class="headerlink" title="1. IF() 函数"></a>1. <code>IF()</code> 函数</h3><p><code>IF()</code> 函数用于在满足某个条件时返回一个值，否则返回另一个值。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> name, IF(score <span class="operator">&gt;</span> <span class="number">50</span>, <span class="string">&#x27;Pass&#x27;</span>, <span class="string">&#x27;Fail&#x27;</span>) <span class="keyword">AS</span> <span class="keyword">result</span></span><br><span class="line"><span class="keyword">FROM</span> students;</span><br></pre></td></tr></table></figure>
+<p>在上面的示例中，如果学生的分数大于50，则返回 ‘Pass’，否则返回 ‘Fail’。</p>
+<h3 id="2-CASE-表达式"><a href="#2-CASE-表达式" class="headerlink" title="2. CASE 表达式"></a>2. <code>CASE</code> 表达式</h3><p><code>CASE</code> 表达式允许在查询中实现更复杂的条件逻辑。</p>
+<h4 id="简单-CASE-表达式"><a href="#简单-CASE-表达式" class="headerlink" title="简单 CASE 表达式"></a>简单 CASE 表达式</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> name,</span><br><span class="line">       <span class="keyword">CASE</span> score</span><br><span class="line">           <span class="keyword">WHEN</span> <span class="number">100</span> <span class="keyword">THEN</span> <span class="string">&#x27;Perfect&#x27;</span></span><br><span class="line">           <span class="keyword">WHEN</span> <span class="number">90</span> <span class="keyword">THEN</span> <span class="string">&#x27;Excellent&#x27;</span></span><br><span class="line">           <span class="keyword">WHEN</span> <span class="number">80</span> <span class="keyword">THEN</span> <span class="string">&#x27;Very Good&#x27;</span></span><br><span class="line">           <span class="keyword">ELSE</span> <span class="string">&#x27;Pass&#x27;</span></span><br><span class="line">       <span class="keyword">END</span> <span class="keyword">AS</span> <span class="keyword">result</span></span><br><span class="line"><span class="keyword">FROM</span> students;</span><br></pre></td></tr></table></figure>
+
+<p>在上面的示例中，根据分数返回不同的结果。</p>
+<h4 id="搜索-CASE-表达式"><a href="#搜索-CASE-表达式" class="headerlink" title="搜索 CASE 表达式"></a>搜索 CASE 表达式</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> name,</span><br><span class="line">       <span class="keyword">CASE</span></span><br><span class="line">           <span class="keyword">WHEN</span> score <span class="operator">&gt;=</span> <span class="number">90</span> <span class="keyword">THEN</span> <span class="string">&#x27;A&#x27;</span></span><br><span class="line">           <span class="keyword">WHEN</span> score <span class="operator">&gt;=</span> <span class="number">80</span> <span class="keyword">THEN</span> <span class="string">&#x27;B&#x27;</span></span><br><span class="line">           <span class="keyword">WHEN</span> score <span class="operator">&gt;=</span> <span class="number">70</span> <span class="keyword">THEN</span> <span class="string">&#x27;C&#x27;</span></span><br><span class="line">           <span class="keyword">WHEN</span> score <span class="operator">&gt;=</span> <span class="number">60</span> <span class="keyword">THEN</span> <span class="string">&#x27;D&#x27;</span></span><br><span class="line">           <span class="keyword">ELSE</span> <span class="string">&#x27;F&#x27;</span></span><br><span class="line">       <span class="keyword">END</span> <span class="keyword">AS</span> grade</span><br><span class="line"><span class="keyword">FROM</span> students;</span><br></pre></td></tr></table></figure>
+
+<p>在上面的示例中，根据分数范围返回等级。</p>
+<h3 id="3-COALESCE-函数"><a href="#3-COALESCE-函数" class="headerlink" title="3. COALESCE() 函数"></a>3. <code>COALESCE()</code> 函数</h3><p><code>COALESCE()</code> 函数用于返回参数列表中的第一个非空值。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> name, <span class="built_in">COALESCE</span>(score, <span class="number">0</span>) <span class="keyword">AS</span> score</span><br><span class="line"><span class="keyword">FROM</span> students;</span><br></pre></td></tr></table></figure>
+
+<p>在上面的示例中，如果分数为空，则返回0。</p>
+<p>这些是一些常见的条件函数和表达式，在MySQL中可用于根据特定条件返回不同的结果。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2024/01/31/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0IF/CASE/COALESCE%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="cls1tamjm000iil9kg8wjdgra" data-title="MySQL语句 ｜ 条件函数IF/CASE/COALESCE的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-MySQL语句 | MD5()的使用" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2024/01/30/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20MD5()%E7%9A%84%E4%BD%BF%E7%94%A8/" class="article-date">
@@ -127,7 +181,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/30/MySQL%E8%AF%AD%E5%8F%A5%20|%20MD5()%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="cls0f3nbm0009e39khvx092ln" data-title="MySQL语句 | MD5()的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/30/MySQL%E8%AF%AD%E5%8F%A5%20|%20MD5()%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="cls1tamjj0004il9kdmfvet8d" data-title="MySQL语句 | MD5()的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -176,7 +230,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20FIELD()%E4%B8%8EORDER%20BY()%E7%9B%B8%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/" data-id="cls0f3nbl0007e39kbxq2cad1" data-title="MySQL语句 ｜ FIELD()与ORDER BY()相结合实现对结果的自定义排序" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20FIELD()%E4%B8%8EORDER%20BY()%E7%9B%B8%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/" data-id="cls1tamjj0008il9kbhlwdtr7" data-title="MySQL语句 ｜ FIELD()与ORDER BY()相结合实现对结果的自定义排序" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -296,7 +350,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/" data-id="cls0f3nbk0003e39k0mcr409x" data-title="MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/" data-id="cls1tamjj0005il9k6kkgd69p" data-title="MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -345,7 +399,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/17/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8WITH%E5%AD%90%E5%8F%A5%E5%92%8C%E4%B8%B4%E6%97%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%92%8C%E7%AD%9B%E9%80%89/" data-id="cls0f3nbl0005e39ke3tg4j8x" data-title="MySQL语句 | 使用WITH子句和临时表达式进行数据分析和筛选" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/17/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8WITH%E5%AD%90%E5%8F%A5%E5%92%8C%E4%B8%B4%E6%97%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%92%8C%E7%AD%9B%E9%80%89/" data-id="cls1tamjj0006il9k2yp03u30" data-title="MySQL语句 | 使用WITH子句和临时表达式进行数据分析和筛选" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -402,7 +456,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/" data-id="cls0f3nbm0008e39k3o7e994i" data-title="MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/" data-id="cls1tamjk0009il9kaeghai2o" data-title="MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -482,7 +536,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/15/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8DATE_FORMAT()%E5%AF%B9%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E6%8C%89%E6%97%A5%E3%80%81%E5%91%A8%E3%80%81%E6%9C%88%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/" data-id="cls0f3nbl0004e39kcn22amh9" data-title="MySQL语句 | 使用DATE_FORMAT()对查询结果按日、周、月分组统计" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/15/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8DATE_FORMAT()%E5%AF%B9%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E6%8C%89%E6%97%A5%E3%80%81%E5%91%A8%E3%80%81%E6%9C%88%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/" data-id="cls1tamjj0007il9kbrzmgn8f" data-title="MySQL语句 | 使用DATE_FORMAT()对查询结果按日、周、月分组统计" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -551,7 +605,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/14/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8UNION%E5%92%8CUNION%20ALL%E5%90%88%E5%B9%B6%E5%A4%9A%E6%AC%A1%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C/" data-id="cls0f3nbn000be39keykeaiw7" data-title="MySQL语句｜使用UNION和UNION ALL合并多次查询结果" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/14/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8UNION%E5%92%8CUNION%20ALL%E5%90%88%E5%B9%B6%E5%A4%9A%E6%AC%A1%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C/" data-id="cls1tamjl000cil9k66wz07s9" data-title="MySQL语句｜使用UNION和UNION ALL合并多次查询结果" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -608,7 +662,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/" data-id="cls0f3nbm000ae39k3ont03j3" data-title="MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/" data-id="cls1tamjk000ail9k8435h5jm" data-title="MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -668,59 +722,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/" data-id="cls0f3nbk0002e39k5lzgdcta" data-title="MySQL语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-线程 ｜死锁条件及实现" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/" class="article-date">
-  <time class="dt-published" datetime="2024-01-08T13:34:08.024Z" itemprop="datePublished">2024-01-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/">线程｜死锁条件及实现</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>死锁（Deadlock）是指两个或多个进程在执行过程中因争夺资源而造成的一种互相等待的现象<br>死锁通常发生在多任务系统中，其中进程通过竞争有限的资源来完成任务<br>死锁通常涉及互斥、持有和等待三个条件。</p>
-<h1 id="死锁的原因"><a href="#死锁的原因" class="headerlink" title="死锁的原因"></a>死锁的原因</h1><ul>
-<li>互斥条件（Mutual Exclusion）： 资源一次只能被一个进程使用，其他进程必须等待</li>
-<li>占有且等待（Hold and Wait）： 进程在请求新的资源时保持对已分配资源的占有</li>
-<li>不可抢占（No Preemption）： 已分配的资源不能被强行抢占，只能在进程主动释放时才能被其他进程获取</li>
-<li>循环等待（Circular Wait）： 进程之间形成一个循环等待资源的关系</li>
-</ul>
-<h1 id="如何避免死锁："><a href="#如何避免死锁：" class="headerlink" title="如何避免死锁："></a>如何避免死锁：</h1><ul>
-<li>破坏互斥条件： 允许多个进程同时访问某些资源，如读取文件</li>
-<li>破坏占有且等待： 进程在执行之前一次性获取所有需要的资源，或者在执行过程中释放已经占有的资源并重新请求</li>
-<li>破坏不可抢占： 允许操作系统在适当的时候抢占资源</li>
-<li>破坏循环等待： 引入资源层次结构，强制进程按照顺序请求资源，防止循环等待的发生</li>
-</ul>
-<h1 id="实现一个简单的死锁"><a href="#实现一个简单的死锁" class="headerlink" title="实现一个简单的死锁"></a>实现一个简单的死锁</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DeadlockExample</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Resource</span> &#123;</span><br><span class="line">        <span class="comment">// 用于演示的两个资源</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">Object</span> <span class="variable">resource1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">Object</span> <span class="variable">resource2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">method1</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (resource1) &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;Thread &quot;</span> + Thread.currentThread().getId() + <span class="string">&quot; acquired resource1&quot;</span>);</span><br><span class="line">                <span class="comment">// 模拟一些操作</span></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Thread.sleep(<span class="number">100</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">synchronized</span> (resource2) &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;Thread &quot;</span> + Thread.currentThread().getId() + <span class="string">&quot; acquired resource2&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">method2</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (resource2) &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;Thread &quot;</span> + Thread.currentThread().getId() + <span class="string">&quot; acquired resource2&quot;</span>);</span><br><span class="line">                <span class="comment">// 模拟一些操作</span></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Thread.sleep(<span class="number">100</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">synchronized</span> (resource1) &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;Thread &quot;</span> + Thread.currentThread().getId() + <span class="string">&quot; acquired resource1&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="type">Resource</span> <span class="variable">resource</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Resource</span>();</span><br><span class="line"></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">thread1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; resource.method1());</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">thread2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; resource.method2());</span><br><span class="line"></span><br><span class="line">        thread1.start();</span><br><span class="line">        thread2.start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 等待两个线程结束</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            thread1.join();</span><br><span class="line">            thread2.join();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/" data-id="cls0f3nbn000fe39kcjyr9kml" data-title="线程｜死锁条件及实现" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/" data-id="cls1tamji0003il9kf5ce8ufv" data-title="MySQL语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -768,6 +770,10 @@
       <ul>
         
           <li>
+            <a href="/2024/01/31/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0IF/CASE/COALESCE%E7%9A%84%E4%BD%BF%E7%94%A8/">MySQL语句 ｜ 条件函数IF/CASE/COALESCE的使用</a>
+          </li>
+        
+          <li>
             <a href="/2024/01/30/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20MD5()%E7%9A%84%E4%BD%BF%E7%94%A8/">MySQL语句 | MD5()的使用</a>
           </li>
         
@@ -781,10 +787,6 @@
         
           <li>
             <a href="/2024/01/17/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8WITH%E5%AD%90%E5%8F%A5%E5%92%8C%E4%B8%B4%E6%97%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%92%8C%E7%AD%9B%E9%80%89/">MySQL语句 | 使用WITH子句和临时表达式进行数据分析和筛选</a>
-          </li>
-        
-          <li>
-            <a href="/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/">MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON</a>
           </li>
         
       </ul>
