@@ -73,6 +73,66 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-MySQL语句｜条件语句 IFNULL 和 COALESCE 的区别" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/02/02/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%20IFNULL%20%E5%92%8C%20COALESCE%20%E7%9A%84%E5%8C%BA%E5%88%AB/" class="article-date">
+  <time class="dt-published" datetime="2024-02-02T15:16:15.626Z" itemprop="datePublished">2024-02-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/02/02/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%20IFNULL%20%E5%92%8C%20COALESCE%20%E7%9A%84%E5%8C%BA%E5%88%AB/">MySQL语句 ｜条件语句 IFNULL 和 COALESCE 的区别</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>在MySQL中，<code>IFNULL</code>和<code>COALESCE</code>都是用来处理<code>NULL</code>值的函数，但它们之间存在一些重要的差异。</p>
+<h1 id="函数定义"><a href="#函数定义" class="headerlink" title="函数定义"></a>函数定义</h1><ul>
+<li><code>IFNULL(expr1, expr2)</code>: 如果<code>expr1</code>为<code>NULL</code>，则返回<code>expr2</code>，否则返回<code>expr1</code>。</li>
+<li><code>COALESCE(value1, value2, ..., valueN)</code>: 返回参数列表中的第一个非<code>NULL</code>值。</li>
+</ul>
+<h1 id="参数数量"><a href="#参数数量" class="headerlink" title="参数数量"></a>参数数量</h1><ul>
+<li><code>IFNULL</code>接受两个参数。</li>
+<li><code>COALESCE</code>可以接受任意数量的参数。</li>
+</ul>
+<h1 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h1><ul>
+<li>当你知道有两个可能的值时，可以使用<code>IFNULL</code>。</li>
+<li>当处理一个值的列表，并希望返回第一个有效的值时，可以使用<code>COALESCE</code>。</li>
+</ul>
+<h1 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> IFNULL(<span class="keyword">NULL</span>, <span class="string">&#x27;backup_value&#x27;</span>) <span class="keyword">AS</span> IFNULL_Result;  <span class="comment">-- 结果: backup_value</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COALESCE</span>(<span class="keyword">NULL</span>, <span class="string">&#x27;backup_value&#x27;</span>) <span class="keyword">AS</span> COALESCE_Result;  <span class="comment">-- 结果: backup_value</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> IFNULL(<span class="string">&#x27;not_null_value&#x27;</span>, <span class="string">&#x27;backup_value&#x27;</span>) <span class="keyword">AS</span> IFNULL_Result;  <span class="comment">-- 结果: not_null_value</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COALESCE</span>(<span class="string">&#x27;not_null_value&#x27;</span>, <span class="string">&#x27;backup_value&#x27;</span>) <span class="keyword">AS</span> COALESCE_Result;  <span class="comment">-- 结果: not_null_value</span></span><br></pre></td></tr></table></figure>
+<p>当多个可能值的时候：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COALESCE</span>(<span class="keyword">NULL</span>, <span class="keyword">NULL</span>, <span class="string">&#x27;third_value&#x27;</span>, <span class="string">&#x27;fourth_value&#x27;</span>) <span class="keyword">AS</span> COALESCE_Result;  <span class="comment">-- 结果: third_value</span></span><br></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li><code>IFNULL</code>只检查第一个参数是否为<code> NULL</code>，而<code>COALESCE</code>会检查所有参数。</li>
+<li>对于只有两个参数的情况，<code>IFNULL(expr1, expr2</code>)和<code>COALESCE(expr1, expr2)</code>有相同的效果。</li>
+<li>在某些场景下，可能想使用多个备选值，而不仅仅是两个，这时<code>COALESCE</code>会更有用。<br>简言之，如果只关心第一个参数是否为 <code>NULL</code>，并为其提供一个备选值，那么可以使用<code>IFNULL</code>。而r若想从多个值中选择第一个非 <code>NULL</code> 的值，那么应该使用<code>COALESCE</code>。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2024/02/02/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%20IFNULL%20%E5%92%8C%20COALESCE%20%E7%9A%84%E5%8C%BA%E5%88%AB/" data-id="cls4sgytk000dea9kghinei5l" data-title="MySQL语句 ｜条件语句 IFNULL 和 COALESCE 的区别" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-MySQL语句 ｜ 条件函数IF/CASE/COALESCE的使用" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2024/01/31/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0IF/CASE/COALESCE%E7%9A%84%E4%BD%BF%E7%94%A8/" class="article-date">
@@ -115,7 +175,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/31/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0IF/CASE/COALESCE%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="cls1tn1k6000hm79kbc408ihq" data-title="MySQL语句 ｜ 条件函数IF/CASE/COALESCE的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/31/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0IF/CASE/COALESCE%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="cls4sgytl000jea9kezhd9par" data-title="MySQL语句 ｜ 条件函数IF/CASE/COALESCE的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -181,7 +241,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/30/MySQL%E8%AF%AD%E5%8F%A5%20|%20MD5()%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="cls1tn1k20003m79k58hac8m0" data-title="MySQL语句 | MD5()的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/30/MySQL%E8%AF%AD%E5%8F%A5%20|%20MD5()%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="cls4sgyth0004ea9kfx0q83hb" data-title="MySQL语句 | MD5()的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -230,7 +290,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20FIELD()%E4%B8%8EORDER%20BY()%E7%9B%B8%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/" data-id="cls1tn1k30006m79k8ntq4tsa" data-title="MySQL语句 ｜ FIELD()与ORDER BY()相结合实现对结果的自定义排序" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20FIELD()%E4%B8%8EORDER%20BY()%E7%9B%B8%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/" data-id="cls4sgyti0008ea9k4bjlh506" data-title="MySQL语句 ｜ FIELD()与ORDER BY()相结合实现对结果的自定义排序" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -350,7 +410,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/" data-id="cls1tn1k30004m79kcq6w4fvt" data-title="MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/" data-id="cls4sgyth0005ea9k1xq81m79" data-title="MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -399,7 +459,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/17/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8WITH%E5%AD%90%E5%8F%A5%E5%92%8C%E4%B8%B4%E6%97%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%92%8C%E7%AD%9B%E9%80%89/" data-id="cls1tn1k6000fm79khvofh5bh" data-title="MySQL语句 | 使用WITH子句和临时表达式进行数据分析和筛选" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/17/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8WITH%E5%AD%90%E5%8F%A5%E5%92%8C%E4%B8%B4%E6%97%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%92%8C%E7%AD%9B%E9%80%89/" data-id="cls4sgyti0007ea9k5w06ggt3" data-title="MySQL语句 | 使用WITH子句和临时表达式进行数据分析和筛选" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -456,7 +516,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/" data-id="cls1tn1k30005m79k1h1vahqp" data-title="MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/" data-id="cls4sgyti0009ea9k1tob6qbp" data-title="MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -536,7 +596,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/15/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8DATE_FORMAT()%E5%AF%B9%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E6%8C%89%E6%97%A5%E3%80%81%E5%91%A8%E3%80%81%E6%9C%88%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/" data-id="cls1tn1k5000cm79kguzn2d54" data-title="MySQL语句 | 使用DATE_FORMAT()对查询结果按日、周、月分组统计" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/15/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8DATE_FORMAT()%E5%AF%B9%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E6%8C%89%E6%97%A5%E3%80%81%E5%91%A8%E3%80%81%E6%9C%88%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/" data-id="cls4sgyth0006ea9kf0g1bc6a" data-title="MySQL语句 | 使用DATE_FORMAT()对查询结果按日、周、月分组统计" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -605,7 +665,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/14/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8UNION%E5%92%8CUNION%20ALL%E5%90%88%E5%B9%B6%E5%A4%9A%E6%AC%A1%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C/" data-id="cls1tn1k40009m79k0htj6o22" data-title="MySQL语句｜使用UNION和UNION ALL合并多次查询结果" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/14/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8UNION%E5%92%8CUNION%20ALL%E5%90%88%E5%B9%B6%E5%A4%9A%E6%AC%A1%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C/" data-id="cls4sgytj000bea9kec7c92mp" data-title="MySQL语句｜使用UNION和UNION ALL合并多次查询结果" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -662,67 +722,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/" data-id="cls1tn1k40008m79k51zt4mak" data-title="MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-MySQL 语句 ｜ 使用GROUP BY获取每个组的最大和最小值记录" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/" class="article-date">
-  <time class="dt-published" datetime="2024-01-09T13:35:47.440Z" itemprop="datePublished">2024-01-09</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/">MySQL语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>在 MySQL 中，可以使用 GROUP BY 语句结合聚合函数和子查询来获取每个组中的最大和最小值对应的记录</p>
-<h1 id="举个通用的例子"><a href="#举个通用的例子" class="headerlink" title="举个通用的例子"></a>举个通用的例子</h1><p>假设有一个名为 your_table 的表，其中包含两列：group_column 和 value_column<br>要分别获取每个组中的最大和最小值对应的记录，可使用两条独立的 SQL 查询</p>
-<p><strong>获取最大值的记录</strong>：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> t1.<span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> your_table t1</span><br><span class="line"><span class="keyword">JOIN</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> group_column, <span class="built_in">MAX</span>(value_column) <span class="keyword">AS</span> max_value</span><br><span class="line">    <span class="keyword">FROM</span> your_table</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> group_column</span><br><span class="line">) t2 <span class="keyword">ON</span> t1.group_column <span class="operator">=</span> t2.group_column <span class="keyword">AND</span> t1.value_column <span class="operator">=</span> t2.max_value;</span><br></pre></td></tr></table></figure>
-<p><strong>获取最小值的记录</strong>：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> t1.<span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> your_table t1</span><br><span class="line"><span class="keyword">JOIN</span> (</span><br><span class="line"><span class="keyword">SELECT</span> group_column, <span class="built_in">MIN</span>(value_column) <span class="keyword">AS</span> min_value</span><br><span class="line"><span class="keyword">FROM</span> your_table</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> group_column</span><br><span class="line">) t2 <span class="keyword">ON</span> t1.group_column <span class="operator">=</span> t2.group_column <span class="keyword">AND</span> t1.value_column <span class="operator">=</span> t2.min_value;</span><br></pre></td></tr></table></figure>
-<p>这两个查询分别使用了子查询来获取每个组的最大和最小值，然后通过连接操作获取相应的记录。可根据自己的实际需求和表结构调整表名和列名</p>
-<h1 id="举个实际的例子"><a href="#举个实际的例子" class="headerlink" title="举个实际的例子"></a>举个实际的例子</h1><p>假设有一个名为 employees 的表，记录了不同部门员工的信息，包括部门名 (department)、员工名 (employee_name) 和工资 (salary)。现在要分别获取每个部门中工资最高和最低的员工信息</p>
-<p><strong>employees 表格：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+------------+---------------+--------+</span><br><span class="line">| id | department | employee_name | salary |</span><br><span class="line">+----+------------+---------------+--------+</span><br><span class="line">| 1  | HR         | Alice         | 50000  |</span><br><span class="line">| 2  | HR         | Bob           | 55000  |</span><br><span class="line">| 3  | IT         | Charlie       | 60000  |</span><br><span class="line">| 4  | IT         | David         | 62000  |</span><br><span class="line">| 5  | Sales      | Emily         | 70000  |</span><br><span class="line">| 6  | Sales      | Frank         | 68000  |</span><br><span class="line">+----+------------+---------------+--------+</span><br></pre></td></tr></table></figure>
-
-<p><strong>获取每个部门中工资最高的员工：</strong></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> e1.<span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> employees e1</span><br><span class="line"><span class="keyword">JOIN</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> department, <span class="built_in">MAX</span>(salary) <span class="keyword">AS</span> max_salary</span><br><span class="line">    <span class="keyword">FROM</span> employees</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> department</span><br><span class="line">) e2 <span class="keyword">ON</span> e1.department <span class="operator">=</span> e2.department <span class="keyword">AND</span> e1.salary <span class="operator">=</span> e2.max_salary;</span><br></pre></td></tr></table></figure>
-
-<p>这将返回每个部门中工资最高的员工记录：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+----+------------+---------------+--------+</span><br><span class="line">| id | department | employee_name | salary |</span><br><span class="line">+----+------------+---------------+--------+</span><br><span class="line">| 2  | HR         | Bob           | 55000  |</span><br><span class="line">| 4  | IT         | David         | 62000  |</span><br><span class="line">| 5  | Sales      | Emily         | 70000  |</span><br><span class="line">+----+------------+---------------+--------+</span><br></pre></td></tr></table></figure>
-
-<p><strong>获取每个部门中工资最低的员工：</strong></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> e1.<span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> employees e1</span><br><span class="line"><span class="keyword">JOIN</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> department, <span class="built_in">MIN</span>(salary) <span class="keyword">AS</span> min_salary</span><br><span class="line">    <span class="keyword">FROM</span> employees</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> department</span><br><span class="line">) e2 <span class="keyword">ON</span> e1.department <span class="operator">=</span> e2.department <span class="keyword">AND</span> e1.salary <span class="operator">=</span> e2.min_salary;</span><br></pre></td></tr></table></figure>
-
-<p>这将返回每个部门中工资最低的员工记录：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+----+------------+---------------+--------+</span><br><span class="line">| id | department | employee_name | salary |</span><br><span class="line">+----+------------+---------------+--------+</span><br><span class="line">| 1  | HR         | Alice         | 50000  |</span><br><span class="line">| 3  | IT         | Charlie       | 60000  |</span><br><span class="line">| 6  | Sales      | Frank         | 68000  |</span><br><span class="line">+----+------------+---------------+--------+</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/" data-id="cls1tn1k40007m79k1kruc5h8" data-title="MySQL语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/" data-id="cls4sgytj000aea9kf07lgeki" data-title="MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -757,7 +757,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">一月 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">十二月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">十一月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">二月 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">一月 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">十二月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">十一月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a></li></ul>
     </div>
   </div>
 
@@ -768,6 +768,10 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2024/02/02/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%20IFNULL%20%E5%92%8C%20COALESCE%20%E7%9A%84%E5%8C%BA%E5%88%AB/">MySQL语句 ｜条件语句 IFNULL 和 COALESCE 的区别</a>
+          </li>
         
           <li>
             <a href="/2024/01/31/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0IF/CASE/COALESCE%E7%9A%84%E4%BD%BF%E7%94%A8/">MySQL语句 ｜ 条件函数IF/CASE/COALESCE的使用</a>
@@ -783,10 +787,6 @@
         
           <li>
             <a href="/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/">MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理</a>
-          </li>
-        
-          <li>
-            <a href="/2024/01/17/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8WITH%E5%AD%90%E5%8F%A5%E5%92%8C%E4%B8%B4%E6%97%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%92%8C%E7%AD%9B%E9%80%89/">MySQL语句 | 使用WITH子句和临时表达式进行数据分析和筛选</a>
           </li>
         
       </ul>
