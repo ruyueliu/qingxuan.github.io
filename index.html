@@ -73,6 +73,94 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-MySQL语句 ｜ 删除指令deleted和truncate在使用中的异同" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/02/05/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%88%A0%E9%99%A4%E6%8C%87%E4%BB%A4deleted%E5%92%8Ctruncate%E5%9C%A8%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%BC%82%E5%90%8C/" class="article-date">
+  <time class="dt-published" datetime="2024-02-05T14:36:33.575Z" itemprop="datePublished">2024-02-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/02/05/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%88%A0%E9%99%A4%E6%8C%87%E4%BB%A4deleted%E5%92%8Ctruncate%E5%9C%A8%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%BC%82%E5%90%8C/">MySQL语句 ｜ 删除指令deleted和truncate在使用中的异同</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>在MySQL中，<code>DELETE</code> 和 <code>TRUNCATE</code> 是两种不同的数据操作命令，虽然都能起到删除数据的作用，但是功能和影响均有所不同。</p>
+<h1 id="理论"><a href="#理论" class="headerlink" title="理论"></a>理论</h1><ol>
+<li><strong>功能</strong>：</li>
+</ol>
+<ul>
+<li><code>DELETE</code> 用于从表中删除特定的行，通常基于特定的条件。</li>
+<li><code>TRUNCATE</code> 用于删除表中的所有数据，但保留表的结构。</li>
+</ul>
+<ol start="2">
+<li><strong>事务性</strong>：</li>
+</ol>
+<ul>
+<li><code>DELETE</code> 是DML（数据操纵语言）命令，因此可以在事务中使用，并且可以通过 <code>ROLLBACK</code> 撤消删除操作。</li>
+<li><code>TRUNCATE</code> 是DDL（数据定义语言）命令，不能在事务中使用，也无法通过 <code>ROLLBACK</code> 撤消删除操作。</li>
+</ul>
+<ol start="3">
+<li><strong>性能</strong>：</li>
+</ol>
+<ul>
+<li>删除大量数据时可能较慢，特别是如果表有索引，删除过程可能需要更新索引，因此相对较慢。</li>
+<li><code>TRUNCATE</code> 的性能通常比 <code>DELETE</code> 更好，特别是在删除大量数据时，因为它不记录删除的每一行，而是直接释放存储空间。</li>
+</ul>
+<ol start="4">
+<li><strong>影响</strong>：</li>
+</ol>
+<ul>
+<li><code>DELETE</code> 仅删除满足条件的行，不影响表的结构。但是，它会记录删除的每一行，因此可能会增加事务日志的大小。</li>
+<li><code>TRUNCATE</code> 删除表中的所有行，但是保留表的结构，包括索引、约束等。它将表的自增长计数器重置为初始值。</li>
+</ul>
+<ol start="5">
+<li><strong>总结</strong>：</li>
+</ol>
+<ul>
+<li><code>DELETE</code> 是DML命令，适合用于删除特定行，支持条件删除，并且可以在事务中使用，但是它比较慢且增加了事务日志的大小。</li>
+<li><code>TRUNCATE</code> 是DDL命令，用于删除表中的所有数据，性能通常比 <code>DELETE</code> 更好，但是无法撤销操作，且会重置自增长计数器。</li>
+</ul>
+<h1 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h1><p>假设有一个名为 <code>employees</code> 的表，其中包含员工的信息，包括 <code>id</code>、<code>name</code> 和 <code>salary</code>。现在需要删除这个表内的数据，并比较使用 <code>DELETE</code> 和 <code>TRUNCATE</code> 的效果。</p>
+<ol>
+<li><strong>使用 DELETE</strong>：<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 删除表中薪资低于 3000 的员工记录</span></span><br><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> salary <span class="operator">&lt;</span> <span class="number">3000</span>;</span><br></pre></td></tr></table></figure>
+在这种情况下，<code>DELETE</code> 将删除所有薪资低于 3000 的员工记录。如果表中有许多匹配的行，则 <code>DELETE</code> 将逐行删除这些行。这可能需要一些时间，特别是如果表很大。</li>
+<li><strong>使用 TRUNCATE</strong>：<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 清空整个表</span></span><br><span class="line"><span class="keyword">TRUNCATE</span> <span class="keyword">TABLE</span> employees;</span><br></pre></td></tr></table></figure>
+<code>TRUNCATE</code> 将清空整个表，即删除表中的所有行，但保留表的结构。在执行 <code>TRUNCATE</code> 后，表中的自增长计数器将重置为初始值，而且不会触发触发器。</li>
+<li><strong>对比</strong>：</li>
+</ol>
+<ul>
+<li>使用 <code>DELETE</code> 时，我们可以根据条件选择性地删除行，而 <code>TRUNCATE</code> 则是将整个表清空。</li>
+<li><code>DELETE</code> 是 DML 操作，可以在事务中使用，可以撤消，但可能比较慢。</li>
+<li><code>TRUNCATE</code> 是 DDL 操作，不可回滚，性能通常比 <code>DELETE</code> 更好。</li>
+</ul>
+<p>因此，如果需要精确控制删除的行或者需要保留表的结构，可以使用 <code>DELETE</code>。如果只是需要快速清空整个表而不关心数据内容，可以考虑使用 <code>TRUNCATE</code>。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2024/02/05/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%88%A0%E9%99%A4%E6%8C%87%E4%BB%A4deleted%E5%92%8Ctruncate%E5%9C%A8%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%BC%82%E5%90%8C/" data-id="cls91dt7k0009509k5qd6e63a" data-title="MySQL语句 ｜ 删除指令deleted和truncate在使用中的异同" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-MySQL语句｜条件语句 IFNULL 和 COALESCE 的区别" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2024/02/02/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%20IFNULL%20%E5%92%8C%20COALESCE%20%E7%9A%84%E5%8C%BA%E5%88%AB/" class="article-date">
@@ -121,7 +209,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/02/02/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%20IFNULL%20%E5%92%8C%20COALESCE%20%E7%9A%84%E5%8C%BA%E5%88%AB/" data-id="cls4sgytk000dea9kghinei5l" data-title="MySQL语句｜条件语句 IFNULL 和 COALESCE 的区别" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/02/02/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%20IFNULL%20%E5%92%8C%20COALESCE%20%E7%9A%84%E5%8C%BA%E5%88%AB/" data-id="cls91dt7l000d509kenky7v0u" data-title="MySQL语句｜条件语句 IFNULL 和 COALESCE 的区别" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -175,7 +263,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/31/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0IF/CASE/COALESCE%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="cls4sgytl000jea9kezhd9par" data-title="MySQL语句 ｜ 条件函数IF/CASE/COALESCE的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/31/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0IF/CASE/COALESCE%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="cls91dt7m000j509k0hb62d9m" data-title="MySQL语句 ｜ 条件函数IF/CASE/COALESCE的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -241,7 +329,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/30/MySQL%E8%AF%AD%E5%8F%A5%20|%20MD5()%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="cls4sgyth0004ea9kfx0q83hb" data-title="MySQL语句 | MD5()的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/30/MySQL%E8%AF%AD%E5%8F%A5%20|%20MD5()%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="cls91dt7i0005509k23yyg0kk" data-title="MySQL语句 | MD5()的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -290,7 +378,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20FIELD()%E4%B8%8EORDER%20BY()%E7%9B%B8%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/" data-id="cls4sgyti0008ea9k4bjlh506" data-title="MySQL语句 ｜ FIELD()与ORDER BY()相结合实现对结果的自定义排序" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20FIELD()%E4%B8%8EORDER%20BY()%E7%9B%B8%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/" data-id="cls91dt7j0008509kcro87szu" data-title="MySQL语句 ｜ FIELD()与ORDER BY()相结合实现对结果的自定义排序" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -410,7 +498,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/" data-id="cls4sgyth0005ea9k1xq81m79" data-title="MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/" data-id="cls91dt7i0004509k4evf4qcz" data-title="MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -459,7 +547,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/17/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8WITH%E5%AD%90%E5%8F%A5%E5%92%8C%E4%B8%B4%E6%97%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%92%8C%E7%AD%9B%E9%80%89/" data-id="cls4sgyti0007ea9k5w06ggt3" data-title="MySQL语句 | 使用WITH子句和临时表达式进行数据分析和筛选" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/17/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8WITH%E5%AD%90%E5%8F%A5%E5%92%8C%E4%B8%B4%E6%97%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%92%8C%E7%AD%9B%E9%80%89/" data-id="cls91dt7j0007509kepbc3p8z" data-title="MySQL语句 | 使用WITH子句和临时表达式进行数据分析和筛选" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -516,7 +604,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/" data-id="cls4sgyti0009ea9k1tob6qbp" data-title="MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/" data-id="cls91dt7k000a509k9fi9fvxs" data-title="MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -596,7 +684,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/15/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8DATE_FORMAT()%E5%AF%B9%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E6%8C%89%E6%97%A5%E3%80%81%E5%91%A8%E3%80%81%E6%9C%88%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/" data-id="cls4sgyth0006ea9kf0g1bc6a" data-title="MySQL语句 | 使用DATE_FORMAT()对查询结果按日、周、月分组统计" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/15/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8DATE_FORMAT()%E5%AF%B9%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E6%8C%89%E6%97%A5%E3%80%81%E5%91%A8%E3%80%81%E6%9C%88%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/" data-id="cls91dt7j0006509k86nbce9w" data-title="MySQL语句 | 使用DATE_FORMAT()对查询结果按日、周、月分组统计" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -665,64 +753,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/14/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8UNION%E5%92%8CUNION%20ALL%E5%90%88%E5%B9%B6%E5%A4%9A%E6%AC%A1%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C/" data-id="cls4sgytj000bea9kec7c92mp" data-title="MySQL语句｜使用UNION和UNION ALL合并多次查询结果" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/" class="article-date">
-  <time class="dt-published" datetime="2024-01-10T14:04:05.730Z" itemprop="datePublished">2024-01-10</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/">MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>在MySQL中，可以使用<code>GROUP_CONCAT</code>函数将查询到的一列数据合并为一个字符串</p>
-<h1 id="举个通用的例子"><a href="#举个通用的例子" class="headerlink" title="举个通用的例子"></a>举个通用的例子</h1><p>假设有一个表 <code>example_table</code>，其中包含一个列 <code>column_to_concat</code>，若将这一列的数据合并为一个字符串，可使用如下查询：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> GROUP_CONCAT(column_to_concat SEPARATOR <span class="string">&#x27;, &#x27;</span>) <span class="keyword">AS</span> concatenated_string</span><br><span class="line"><span class="keyword">FROM</span> example_table;</span><br></pre></td></tr></table></figure>
-
-<p>在这个例子中，<code>column_to_concat</code>是要合并的列的名称，<code>SEPARATOR</code>是用于分隔合并后值的字符串，这里使用的是逗号和空格，可根据需要选择合适的分隔符。</p>
-<p>如果需要根据某个条件进行合并，可使用 <code>GROUP BY</code> 子句。</p>
-<p>假设有一个表 <code>example_table</code> 包含两列 <code>group_column</code> 和 <code>column_to_concat</code>，可按照 <code>group_column</code> 进行分组并合并数据：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> group_column, GROUP_CONCAT(column_to_concat SEPARATOR <span class="string">&#x27;, &#x27;</span>) <span class="keyword">AS</span> concatenated_string</span><br><span class="line"><span class="keyword">FROM</span> example_table</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> group_column;</span><br></pre></td></tr></table></figure>
-<p>这将返回每个 <code>group_column</code> 值对应的合并后的字符串。</p>
-<h1 id="举个实际的例子"><a href="#举个实际的例子" class="headerlink" title="举个实际的例子"></a>举个实际的例子</h1><p>假设有一个名为 <code>employees</code> 的表，其中包含员工的信息，其中包括 <code>department</code> 列和 <code>employee_name</code> 列。现在，需要按照部门将员工姓名合并为一个字符串。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> employees (</span><br><span class="line">    id <span class="type">INT</span> <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    department <span class="type">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">    employee_name <span class="type">VARCHAR</span>(<span class="number">50</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> employees (id, department, employee_name) <span class="keyword">VALUES</span></span><br><span class="line">(<span class="number">1</span>, <span class="string">&#x27;HR&#x27;</span>, <span class="string">&#x27;Alice&#x27;</span>),</span><br><span class="line">(<span class="number">2</span>, <span class="string">&#x27;HR&#x27;</span>, <span class="string">&#x27;Bob&#x27;</span>),</span><br><span class="line">(<span class="number">3</span>, <span class="string">&#x27;IT&#x27;</span>, <span class="string">&#x27;Charlie&#x27;</span>),</span><br><span class="line">(<span class="number">4</span>, <span class="string">&#x27;IT&#x27;</span>, <span class="string">&#x27;David&#x27;</span>),</span><br><span class="line">(<span class="number">5</span>, <span class="string">&#x27;IT&#x27;</span>, <span class="string">&#x27;Eve&#x27;</span>);</span><br></pre></td></tr></table></figure>
-
-<p>现在，使用 <code>GROUP_CONCAT</code> 将每个部门的员工姓名合并为一个字符串：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> department, GROUP_CONCAT(employee_name SEPARATOR <span class="string">&#x27;, &#x27;</span>) <span class="keyword">AS</span> employee_list</span><br><span class="line"><span class="keyword">FROM</span> employees</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> department;</span><br></pre></td></tr></table></figure>
-
-<p>这将返回一个结果集，其中包含每个部门及其相应的员工姓名合并后的字符串：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+------------+---------------------+</span><br><span class="line">| department | employee_list       |</span><br><span class="line">+------------+---------------------+</span><br><span class="line">| HR         | Alice, Bob          |</span><br><span class="line">| IT         | Charlie, David, Eve |</span><br><span class="line">+------------+---------------------+</span><br></pre></td></tr></table></figure>
-
-<p>在这个例子中，<code>GROUP BY department</code> 用于按照部门分组，并使用 <code>GROUP_CONCAT(employee_name SEPARATOR &#39;, &#39;)</code> 将每个部门的员工姓名合并为一个逗号分隔的字符串。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/" data-id="cls4sgytj000aea9kf07lgeki" data-title="MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/14/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8UNION%E5%92%8CUNION%20ALL%E5%90%88%E5%B9%B6%E5%A4%9A%E6%AC%A1%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C/" data-id="cls91dt7k000c509ka96z5ta5" data-title="MySQL语句｜使用UNION和UNION ALL合并多次查询结果" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -738,7 +769,7 @@
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">下一页 &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">下一页 &raquo;</a>
   </nav>
 
 </section>
@@ -770,6 +801,10 @@
       <ul>
         
           <li>
+            <a href="/2024/02/05/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%88%A0%E9%99%A4%E6%8C%87%E4%BB%A4deleted%E5%92%8Ctruncate%E5%9C%A8%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%BC%82%E5%90%8C/">MySQL语句 ｜ 删除指令deleted和truncate在使用中的异同</a>
+          </li>
+        
+          <li>
             <a href="/2024/02/02/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%20IFNULL%20%E5%92%8C%20COALESCE%20%E7%9A%84%E5%8C%BA%E5%88%AB/">MySQL语句｜条件语句 IFNULL 和 COALESCE 的区别</a>
           </li>
         
@@ -783,10 +818,6 @@
         
           <li>
             <a href="/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20FIELD()%E4%B8%8EORDER%20BY()%E7%9B%B8%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/">MySQL语句 ｜ FIELD()与ORDER BY()相结合实现对结果的自定义排序</a>
-          </li>
-        
-          <li>
-            <a href="/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/">MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理</a>
           </li>
         
       </ul>
