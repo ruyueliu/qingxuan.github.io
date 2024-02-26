@@ -73,6 +73,75 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-MySQL语句｜使用UNION和UNION ALL合并多次查询结果" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/01/14/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8UNION%E5%92%8CUNION%20ALL%E5%90%88%E5%B9%B6%E5%A4%9A%E6%AC%A1%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C/" class="article-date">
+  <time class="dt-published" datetime="2024-01-14T06:33:29.233Z" itemprop="datePublished">2024-01-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/01/14/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8UNION%E5%92%8CUNION%20ALL%E5%90%88%E5%B9%B6%E5%A4%9A%E6%AC%A1%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C/">MySQL语句｜使用UNION和UNION ALL合并多次查询结果</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>在MySQL中，<code>UNION</code> 和 <code>UNION ALL</code> 是用于合并两个或多个 SELECT 语句的结果集的操作符。<code>UNION</code> 会去除结果集中的重复行，返回唯一的行，而 <code>UNION ALL</code>  会返回所有的行，包括重复行。</p>
+<h1 id="举个通用的例子"><a href="#举个通用的例子" class="headerlink" title="举个通用的例子"></a>举个通用的例子</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> column1, column2, ...</span><br><span class="line"><span class="keyword">FROM</span> table1</span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">condition</span></span><br><span class="line"><span class="keyword">UNION</span></span><br><span class="line"><span class="keyword">SELECT</span> column1, column2, ...</span><br><span class="line"><span class="keyword">FROM</span> table2</span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">condition</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>SELECT column1, column2, ...</code>: 指定要查询的列。</li>
+<li><code>FROM table</code>: 指定要查询的表。</li>
+<li><code>WHERE condition</code>: 指定筛选条件（可选）。</li>
+</ul>
+<p><strong>注意事项：</strong></p>
+<ul>
+<li><code>UNION</code> 连接的两个 SELECT 语句必须包含相同数量和类型的列，列的顺序也必须相同。</li>
+<li>默认情况下，<code>UNION</code> 会去除重复的行。如果要包含重复的行，可以使用 <code>UNION ALL</code>。</li>
+<li>使用 <code>UNION</code> 或 <code>UNION ALL</code> 时，结果集的列名是由第一个 <code>SELECT</code> 语句中的列名决定的，因此要确保两个 <code>SELECT</code> 语句中的列名和类型相匹配。</li>
+</ul>
+<h1 id="举个实际的例子"><a href="#举个实际的例子" class="headerlink" title="举个实际的例子"></a>举个实际的例子</h1><p>假设有两个表 <code>employees1</code> 和 <code>employees2</code>，包含相同的列结构和部分重复数据，然后使用 <code>UNION</code> 和 <code>UNION ALL</code> 进行查询和合并。</p>
+<p><strong>创建两个表并插入一些数据</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 创建 employees1 表</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> employees1 (</span><br><span class="line">    employee_id <span class="type">INT</span>,</span><br><span class="line">    first_name <span class="type">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">    last_name <span class="type">VARCHAR</span>(<span class="number">50</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 插入数据到 employees1 表</span></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> employees1 <span class="keyword">VALUES</span></span><br><span class="line">(<span class="number">1</span>, <span class="string">&#x27;John&#x27;</span>, <span class="string">&#x27;Doe&#x27;</span>),</span><br><span class="line">(<span class="number">2</span>, <span class="string">&#x27;Jane&#x27;</span>, <span class="string">&#x27;Smith&#x27;</span>),</span><br><span class="line">(<span class="number">3</span>, <span class="string">&#x27;Bob&#x27;</span>, <span class="string">&#x27;Johnson&#x27;</span>),</span><br><span class="line">(<span class="number">4</span>, <span class="string">&#x27;Alice&#x27;</span>, <span class="string">&#x27;Doe&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 创建 employees2 表</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> employees2 (</span><br><span class="line">    employee_id <span class="type">INT</span>,</span><br><span class="line">    first_name <span class="type">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">    last_name <span class="type">VARCHAR</span>(<span class="number">50</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 插入数据到 employees2 表，包含一些与 employees1 表重复的数据</span></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> employees2 <span class="keyword">VALUES</span></span><br><span class="line">(<span class="number">3</span>, <span class="string">&#x27;Bob&#x27;</span>, <span class="string">&#x27;Johnson&#x27;</span>),</span><br><span class="line">(<span class="number">4</span>, <span class="string">&#x27;Alice&#x27;</span>, <span class="string">&#x27;Doe&#x27;</span>),</span><br><span class="line">(<span class="number">5</span>, <span class="string">&#x27;Eva&#x27;</span>, <span class="string">&#x27;Williams&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用 <code>UNION</code> 合并这两个表的数据：</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 使用 UNION 合并，去除重复行</span></span><br><span class="line"><span class="keyword">SELECT</span> employee_id, first_name, last_name</span><br><span class="line"><span class="keyword">FROM</span> employees1</span><br><span class="line"><span class="keyword">UNION</span></span><br><span class="line"><span class="keyword">SELECT</span> employee_id, first_name, last_name</span><br><span class="line"><span class="keyword">FROM</span> employees2;</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+-------------+------------+-----------+</span><br><span class="line">| employee_id | first_name | last_name |</span><br><span class="line">+-------------+------------+-----------+</span><br><span class="line">| 1           | John       | Doe       |</span><br><span class="line">| 2           | Jane       | Smith     |</span><br><span class="line">| 3           | Bob        | Johnson   |</span><br><span class="line">| 4           | Alice      | Doe       |</span><br><span class="line">| 5           | Eva        | Williams  |</span><br><span class="line">+-------------+------------+-----------+</span><br></pre></td></tr></table></figure>
+<p>可以看到，<code>UNION</code> 自动去除了重复的行。</p>
+<p><strong>使用 <code>UNION ALL</code> 合并这两个表的数据：</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 使用 UNION ALL 合并，包含重复行</span></span><br><span class="line"><span class="keyword">SELECT</span> employee_id, first_name, last_name</span><br><span class="line"><span class="keyword">FROM</span> employees1</span><br><span class="line"><span class="keyword">UNION</span> <span class="keyword">ALL</span></span><br><span class="line"><span class="keyword">SELECT</span> employee_id, first_name, last_name</span><br><span class="line"><span class="keyword">FROM</span> employees2;</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">+-------------+------------+-----------+</span><br><span class="line">| employee_id | first_name | last_name |</span><br><span class="line">+-------------+------------+-----------+</span><br><span class="line">| 1           | John       | Doe       |</span><br><span class="line">| 2           | Jane       | Smith     |</span><br><span class="line">| 3           | Bob        | Johnson   |</span><br><span class="line">| 4           | Alice      | Doe       |</span><br><span class="line">| 3           | Bob        | Johnson   |</span><br><span class="line">| 4           | Alice      | Doe       |</span><br><span class="line">| 5           | Eva        | Williams  |</span><br><span class="line">+-------------+------------+-----------+</span><br></pre></td></tr></table></figure>
+<p>可以看到</p>
+<ul>
+<li><code>UNION ALL</code> 保留了所有行，包括重复的行。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2024/01/14/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8UNION%E5%92%8CUNION%20ALL%E5%90%88%E5%B9%B6%E5%A4%9A%E6%AC%A1%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C/" data-id="clt33y8xy000cqh9kdv0yeybv" data-title="MySQL语句｜使用UNION和UNION ALL合并多次查询结果" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/" class="article-date">
@@ -118,7 +187,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/" data-id="cls91dt7k000b509k8tw2c7jo" data-title="MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/10/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E4%BD%BF%E7%94%A8GROUP_CONCAT%E5%90%88%E5%B9%B6%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%97/" data-id="clt33y8xx000bqh9k5vpt0olz" data-title="MySQL语句｜使用GROUP_CONCAT合并查询结果中的数据列" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -178,7 +247,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/" data-id="cls91dt7i0003509kbilh2fd2" data-title="MySQL语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/09/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E4%BD%BF%E7%94%A8GROUP%20BY%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC%E8%AE%B0%E5%BD%95/" data-id="clt33y8xv0003qh9kg0eqauf7" data-title="MySQL语句｜使用MySQL中的GROUP BY获取每个组的最大和最小值记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -230,7 +299,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/" data-id="cls91dt7l000e509k9pf06wpi" data-title="线程｜死锁条件及实现" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/08/%E7%BA%BF%E7%A8%8B%20%EF%BD%9C%E6%AD%BB%E9%94%81%E6%9D%A1%E4%BB%B6%E5%8F%8A%E5%AE%9E%E7%8E%B0/" data-id="clt33y8xy000fqh9k559aew26" data-title="线程｜死锁条件及实现" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -289,7 +358,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/04/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20find_in_set()/" data-id="cls91dt7g0001509kgjzr531o" data-title="MySQL 语句 ｜ find_in_set()" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/04/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20find_in_set()/" data-id="clt33y8xu0001qh9k6psd50gw" data-title="MySQL 语句 ｜ find_in_set()" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -344,7 +413,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/12/12/%E7%BA%BF%E7%A8%8B%EF%BD%9C%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B%EF%BC%9F/" data-id="cls91dt7l000f509k5taohyjl" data-title="线程｜如何实现守护线程？" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/12/12/%E7%BA%BF%E7%A8%8B%EF%BD%9C%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B%EF%BC%9F/" data-id="clt33y8xy000gqh9k0cp86rvs" data-title="线程｜如何实现守护线程？" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -394,7 +463,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20[%22%22]%20%E9%94%99%E8%AF%AF/" data-id="cls91dt7l000i509kapgbh6bo" data-title="问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/11/15/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%8A%A5%20Failed%20to%20parse%20date%20[%22%22]%20%E9%94%99%E8%AF%AF/" data-id="clt33y8xz000jqh9ka4yz6443" data-title="问题复盘｜在使用 Gson 时，报 Failed to parse date [&#34;&#34;] 错误" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -439,7 +508,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/11/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMySQL%20%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95%E4%B8%AD%E6%98%8E%E6%98%8E%E6%9C%89%E5%80%BC%EF%BC%8C%E4%BD%BF%E7%94%A8%20concat()%20%E5%90%8E%E5%BE%97%E5%88%B0%E7%9A%84%E5%8D%B4%E4%B8%80%E7%9B%B4%E6%98%AF%20null/" data-id="cls91dt7l000g509kaxpfg5u1" data-title="问题复盘｜MySQL 数据记录中明明有值，使用 concat() 后得到的却一直是 null" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/11/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMySQL%20%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95%E4%B8%AD%E6%98%8E%E6%98%8E%E6%9C%89%E5%80%BC%EF%BC%8C%E4%BD%BF%E7%94%A8%20concat()%20%E5%90%8E%E5%BE%97%E5%88%B0%E7%9A%84%E5%8D%B4%E4%B8%80%E7%9B%B4%E6%98%AF%20null/" data-id="clt33y8xz000hqh9ka5612p7f" data-title="问题复盘｜MySQL 数据记录中明明有值，使用 concat() 后得到的却一直是 null" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -483,7 +552,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/10/08/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/" data-id="cls91dt7b0000509k2ossd70b" data-title="MongoDB｜MongoTemplate多条件查询" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/10/08/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/" data-id="clt33y8xr0000qh9kba987ieu" data-title="MongoDB｜MongoTemplate多条件查询" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -528,53 +597,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/09/20/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20order%20by%201,2/" data-id="cls91dt7h0002509kcbllario" data-title="MySQL 语句｜order by 1,2" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/" class="article-date">
-  <time class="dt-published" datetime="2023-09-19T13:27:51.171Z" itemprop="datePublished">2023-09-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/">问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h1><p>有一个根据create_time排序的分页接口，在第二页会出现第一页出现过的重复记录</p>
-<h1 id="排查过程"><a href="#排查过程" class="headerlink" title="排查过程"></a>排查过程</h1><p>首先怀疑接口入参处理有问题，结果没问题</p>
-<p>然后怀疑 sql 的入参有问题，发现也没有问题</p>
-<p>再看有没有新数据进来，也没有</p>
-<p>最后想到，这批数据是利用脚本跑出，难免会有create_time重复的数据，通过 group by create_time 后验证了这一猜想</p>
-<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>用具有唯一性的主键 id 替换掉 create_time，问题解决</p>
-<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>当 order by 字段不唯一时，会出现数据排序不稳定的情况，然后再用 limit 分页就会出现不同页存在数据重复的现象</p>
-<p>我不是第一个踩此坑的，肯定也不会是最后一个踩此坑的，简单记录，帮助有缘人</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/" data-id="cls91dt7l000h509kfqen8l7n" data-title="问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/09/20/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20order%20by%201,2/" data-id="clt33y8xv0002qh9khslj150x" data-title="MySQL 语句｜order by 1,2" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -622,6 +645,10 @@
       <ul>
         
           <li>
+            <a href="/2024/02/26/%E5%B9%82%E7%AD%89%E5%8F%8A%E5%B9%82%E7%AD%89%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/">幂等及幂等实现方案</a>
+          </li>
+        
+          <li>
             <a href="/2024/02/05/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%88%A0%E9%99%A4%E6%8C%87%E4%BB%A4deleted%E5%92%8Ctruncate%E5%9C%A8%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%BC%82%E5%90%8C/">MySQL语句 ｜ 删除指令deleted和truncate在使用中的异同</a>
           </li>
         
@@ -635,10 +662,6 @@
         
           <li>
             <a href="/2024/01/30/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20MD5()%E7%9A%84%E4%BD%BF%E7%94%A8/">MySQL语句 | MD5()的使用</a>
-          </li>
-        
-          <li>
-            <a href="/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20FIELD()%E4%B8%8EORDER%20BY()%E7%9B%B8%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/">MySQL语句 ｜ FIELD()与ORDER BY()相结合实现对结果的自定义排序</a>
           </li>
         
       </ul>
