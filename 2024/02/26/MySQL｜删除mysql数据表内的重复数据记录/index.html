@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>MySQL｜删除mysql数据表内的重复数据记录 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="删除数据表内重复数据的常规顺序是：创建备份、确定重复记录、编写删除语句 方法一: 借助 inner join123DELETE t1 FROM table t1INNER JOIN table t2 WHERE t1.id &lt; t2.id AND t1.column1 &#x3D; t2.column1;   table是表名，id是表的唯一标识符，column1是想要根据其删除重复记录的列。这条SQ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL｜删除mysql数据表内的重复数据记录">
+<meta property="og:url" content="http://qingxuan.com/2024/02/26/MySQL%EF%BD%9C%E5%88%A0%E9%99%A4mysql%E6%95%B0%E6%8D%AE%E8%A1%A8%E5%86%85%E7%9A%84%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="删除数据表内重复数据的常规顺序是：创建备份、确定重复记录、编写删除语句 方法一: 借助 inner join123DELETE t1 FROM table t1INNER JOIN table t2 WHERE t1.id &lt; t2.id AND t1.column1 &#x3D; t2.column1;   table是表名，id是表的唯一标识符，column1是想要根据其删除重复记录的列。这条SQ">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-02-26T15:44:16.581Z">
+<meta property="article:modified_time" content="2024-02-26T15:44:38.907Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://qingxuan.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-MySQL｜删除mysql数据表内的重复数据记录" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/02/26/MySQL%EF%BD%9C%E5%88%A0%E9%99%A4mysql%E6%95%B0%E6%8D%AE%E8%A1%A8%E5%86%85%E7%9A%84%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95/" class="article-date">
+  <time class="dt-published" datetime="2024-02-26T15:44:16.581Z" itemprop="datePublished">2024-02-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      MySQL｜删除mysql数据表内的重复数据记录
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>删除数据表内重复数据的常规顺序是：创建备份、确定重复记录、编写删除语句</p>
+<h1 id="方法一-借助-inner-join"><a href="#方法一-借助-inner-join" class="headerlink" title="方法一: 借助 inner join"></a>方法一: 借助 inner join</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DELETE</span> t1 <span class="keyword">FROM</span> <span class="keyword">table</span> t1</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> <span class="keyword">table</span> t2 </span><br><span class="line"><span class="keyword">WHERE</span> t1.id <span class="operator">&lt;</span> t2.id <span class="keyword">AND</span> t1.column1 <span class="operator">=</span> t2.column1;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>table</code>是表名，<code>id</code>是表的唯一标识符，<code>column1</code>是想要根据其删除重复记录的列。这条SQL语句会删除<code>column1</code>列中具有相同值的所有记录，除了<code>id</code>最大的那一条记录。</li>
+<li>工作方式是，它会为表中的每个重复的<code>column1</code>值找到<code>id</code>值最小的记录，并将其删除。这样，只有<code>id</code>值最大的记录会被保留下来。</li>
+</ul>
+<p><strong>注：在执行操作之前，务必备份数据，以防万一。</strong></p>
+<h1 id="方法二-借助-group-by"><a href="#方法二-借助-group-by" class="headerlink" title="方法二: 借助 group by"></a>方法二: 借助 group by</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> your_table</span><br><span class="line"><span class="keyword">WHERE</span> id <span class="keyword">NOT</span> <span class="keyword">IN</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="built_in">MAX</span>(id)</span><br><span class="line">    <span class="keyword">FROM</span> your_table</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> column1, column2, ... <span class="comment">/* 列出用于判断重复的列 */</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>这条语句会保留每组重复记录中的最大的 <code>id</code>，并删除其他重复记录。<code>column1</code>, <code>column2</code> 为用来判断重复的列名。</li>
+</ul>
+<p><strong>注：在执行操作之前，务必备份数据，以防万一。</strong></p>
+<h1 id="方法三：借助-临时表"><a href="#方法三：借助-临时表" class="headerlink" title="方法三：借助 临时表"></a>方法三：借助 临时表</h1><p>如果数据量很大，删除重复数据可以采用创建临时表的方式，效率更高。<br>步骤：</p>
+<ol>
+<li><p>创建一个新的临时表，并将去重后的数据插入到新表中。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> new_table <span class="keyword">AS</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> old_table</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> column_to_be_deduplicated;</span><br></pre></td></tr></table></figure>
+<p>在这里，<code>new_table</code> 是新创建的临时表的名字，<code>old_table</code> 是原来的表名，<code>column_to_be_deduplicated</code> 是需要去重的列名。</p>
+</li>
+<li><p>删除原来的表&#x2F;修改原来的表名</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> old_table;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RENAME <span class="keyword">TABLE</span> old_table <span class="keyword">TO</span> old_table_bak;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将新的临时表重命名为原来的表名。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RENAME <span class="keyword">TABLE</span> new_table <span class="keyword">TO</span> old_table;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<ul>
+<li>这种方式是先将去重后的数据插入到一个新的临时表，然后删除旧的表&#x2F;修改旧表的名字，最后将临时表重命名为旧表的名字，好处是在处理大量数据时，效率会更高。</li>
+<li>在第二步的时候不建议采用直接删除旧表的方式，凡是涉及到数据变动的，均需万分谨慎。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2024/02/26/MySQL%EF%BD%9C%E5%88%A0%E9%99%A4mysql%E6%95%B0%E6%8D%AE%E8%A1%A8%E5%86%85%E7%9A%84%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95/" data-id="clt340onk0000rq9k8m89e3ga" data-title="MySQL｜删除mysql数据表内的重复数据记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2024/02/26/%E5%B9%82%E7%AD%89%E5%8F%8A%E5%B9%82%E7%AD%89%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">幂等及幂等实现方案</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">二月 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">一月 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">十二月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">十一月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/02/26/MySQL%EF%BD%9C%E5%88%A0%E9%99%A4mysql%E6%95%B0%E6%8D%AE%E8%A1%A8%E5%86%85%E7%9A%84%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95/">MySQL｜删除mysql数据表内的重复数据记录</a>
+          </li>
+        
+          <li>
+            <a href="/2024/02/26/%E5%B9%82%E7%AD%89%E5%8F%8A%E5%B9%82%E7%AD%89%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/">幂等及幂等实现方案</a>
+          </li>
+        
+          <li>
+            <a href="/2024/02/05/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%88%A0%E9%99%A4%E6%8C%87%E4%BB%A4deleted%E5%92%8Ctruncate%E5%9C%A8%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%BC%82%E5%90%8C/">MySQL语句 ｜ 删除指令deleted和truncate在使用中的异同</a>
+          </li>
+        
+          <li>
+            <a href="/2024/02/02/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%20IFNULL%20%E5%92%8C%20COALESCE%20%E7%9A%84%E5%8C%BA%E5%88%AB/">MySQL语句｜条件语句 IFNULL 和 COALESCE 的区别</a>
+          </li>
+        
+          <li>
+            <a href="/2024/01/31/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0IF/CASE/COALESCE%E7%9A%84%E4%BD%BF%E7%94%A8/">MySQL语句 ｜ 条件函数IF/CASE/COALESCE的使用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
