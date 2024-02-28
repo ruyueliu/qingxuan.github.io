@@ -73,6 +73,50 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-MongoDB｜MongoTemplate多条件查询" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/10/08/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/" class="article-date">
+  <time class="dt-published" datetime="2023-10-08T14:18:30.788Z" itemprop="datePublished">2023-10-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/10/08/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/">MongoDB｜MongoTemplate多条件查询</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="MongoTemplate查询"><a href="#MongoTemplate查询" class="headerlink" title="MongoTemplate查询"></a>MongoTemplate查询</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Resource</span></span><br><span class="line"><span class="keyword">private</span> MongoTemplate mongoTemplate;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> &lt;T&gt; List&lt;T&gt; <span class="title function_">getDataList</span><span class="params">(String param1, Long param2, Class&lt;T&gt; clazz)</span> &#123;</span><br><span class="line">    <span class="comment">// 构建query</span></span><br><span class="line">    <span class="type">Query</span> <span class="variable">query</span> <span class="operator">=</span> constructQuery(param1, param2);</span><br><span class="line">    <span class="comment">// 查询</span></span><br><span class="line">    <span class="keyword">return</span> mongoTemplate.find(query, clazz);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="关系且"><a href="#关系且" class="headerlink" title="关系且"></a>关系且</h2><p>构建 Query</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Query <span class="title function_">constructQuery</span><span class="params">(String param1, String param2, String param3)</span> &#123;</span><br><span class="line">    <span class="type">Query</span> <span class="variable">query</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Query</span>();</span><br><span class="line">    <span class="keyword">if</span>(!Strings.isBlank(param1))&#123;</span><br><span class="line">        query.addCriteria(Criteria.where(<span class="string">&quot;field1&quot;</span>).is(param1));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!Strings.isBlank(param2))&#123;</span><br><span class="line">        query.addCriteria(Criteria.where(<span class="string">&quot;field2&quot;</span>).is(param2));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!Strings.isBlank(param3))&#123;</span><br><span class="line">        query.addCriteria(Criteria.where(<span class="string">&quot;field3&quot;</span>).is(param3));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> query;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="关系或"><a href="#关系或" class="headerlink" title="关系或"></a>关系或</h2><p>构建 Query</p>
+<p>将所有的查询条件添加到一个 List<Criteria> 中，然后将其转换为一个数组，并将数组传递给 Criteria.orOperator 方法。这样，所有的查询条件将被组合成一个或条件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Query <span class="title function_">constructQuery</span><span class="params">(String param1, String param2, String param3)</span> &#123;</span><br><span class="line">        List&lt;Criteria&gt; criteriaList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        <span class="keyword">if</span>(!Strings.isBlank(param1))&#123;</span><br><span class="line">            criteriaList.add(Criteria.where(<span class="string">&quot;field1&quot;</span>).is(param1));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!Strings.isBlank(param2))&#123;</span><br><span class="line">            criteriaList.add(Criteria.where(<span class="string">&quot;field2&quot;</span>).is(param2));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!Strings.isBlank(param3))&#123;</span><br><span class="line">            criteriaList.add(Criteria.where(<span class="string">&quot;field3&quot;</span>).is(param3));</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        Criteria[] criteriaArray = <span class="keyword">new</span> <span class="title class_">Criteria</span>[criteriaList.size()];</span><br><span class="line">        criteriaList.toArray(criteriaArray);</span><br><span class="line">        </span><br><span class="line">        <span class="type">Criteria</span> <span class="variable">orCriteria</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Criteria</span>().orOperator(criteriaArray);</span><br><span class="line">        <span class="type">Query</span> <span class="variable">query</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Query</span>(orCriteria);</span><br><span class="line">        <span class="keyword">return</span> query;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2023/10/08/MongoDB%EF%BD%9CMongoTemplate%E5%A4%9A%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2/" data-id="clt5vjrzx0000fm9keq8636wz" data-title="MongoDB｜MongoTemplate多条件查询" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-MySQL 语句 ｜ order by 1,2" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2023/09/20/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20order%20by%201,2/" class="article-date">
@@ -106,7 +150,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/09/20/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20order%20by%201,2/" data-id="clt33y8xv0002qh9khslj150x" data-title="MySQL 语句｜order by 1,2" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/09/20/MySQL%20%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20order%20by%201,2/" data-id="clt5vjs000002fm9k8usi6d8n" data-title="MySQL 语句｜order by 1,2" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -152,7 +196,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/" data-id="clt33y8xz000iqh9k7ybj0oce" data-title="问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/09/19/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9CMybatis%20%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E6%97%B6%E7%AC%AC%E4%BA%8C%E9%A1%B5%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E7%AC%AC%E4%B8%80%E9%A1%B5%E5%87%BA%E7%8E%B0%E8%BF%87%E7%9A%84%E6%95%B0%E6%8D%AE/" data-id="clt5vjs06000jfm9k28678f37" data-title="问题复盘｜Mybatis 分页查询时第二页中出现了第一页出现过的数据" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -209,7 +253,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2023/09/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%95%B0%E5%AD%97%E8%A2%AB%E8%87%AA%E5%8A%A8%E8%BD%AC%E4%B8%BA%20double%20%E7%B1%BB%E5%9E%8B/" data-id="clt33y8xz000kqh9k1e7tfoun" data-title="问题复盘｜在使用 Gson 时，数字被自动转为 double 类型" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2023/09/13/%E9%97%AE%E9%A2%98%E5%A4%8D%E7%9B%98%EF%BD%9C%E5%9C%A8%E4%BD%BF%E7%94%A8%20Gson%20%E6%97%B6%EF%BC%8C%E6%95%B0%E5%AD%97%E8%A2%AB%E8%87%AA%E5%8A%A8%E8%BD%AC%E4%B8%BA%20double%20%E7%B1%BB%E5%9E%8B/" data-id="clt5vjs07000lfm9k2sed8d7v" data-title="问题复盘｜在使用 Gson 时，数字被自动转为 double 类型" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -257,6 +301,10 @@
       <ul>
         
           <li>
+            <a href="/2024/02/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BD%9C%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/">设计模式｜策略模式</a>
+          </li>
+        
+          <li>
             <a href="/2024/02/26/MySQL%EF%BD%9C%E5%88%A0%E9%99%A4mysql%E6%95%B0%E6%8D%AE%E8%A1%A8%E5%86%85%E7%9A%84%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95/">MySQL｜删除mysql数据表内的重复数据记录</a>
           </li>
         
@@ -270,10 +318,6 @@
         
           <li>
             <a href="/2024/02/02/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%20IFNULL%20%E5%92%8C%20COALESCE%20%E7%9A%84%E5%8C%BA%E5%88%AB/">MySQL语句｜条件语句 IFNULL 和 COALESCE 的区别</a>
-          </li>
-        
-          <li>
-            <a href="/2024/01/31/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0IF/CASE/COALESCE%E7%9A%84%E4%BD%BF%E7%94%A8/">MySQL语句 ｜ 条件函数IF/CASE/COALESCE的使用</a>
           </li>
         
       </ul>

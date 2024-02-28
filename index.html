@@ -73,6 +73,97 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-设计模式/设计模式｜策略模式" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/02/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BD%9C%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" class="article-date">
+  <time class="dt-published" datetime="2024-02-28T14:09:08.310Z" itemprop="datePublished">2024-02-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/02/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BD%9C%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/">设计模式｜策略模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>策略模式（Strategy Pattern）是一种行为设计模式，它允许在运行时选择算法的行为。它定义了一系列算法，将每个算法封装起来，并且使它们可以互相替换。策略模式可以使算法独立于使用它的客户端而变化。</p>
+<h2 id="策略模式的结构"><a href="#策略模式的结构" class="headerlink" title="策略模式的结构"></a>策略模式的结构</h2><p>策略模式包括以下结构：</p>
+<ul>
+<li><p><strong>Context（上下文）</strong>：上下文是持有一个策略引用的类。上下文将客户端的请求委派给策略对象，客户端通过上下文来与策略进行交互。</p>
+</li>
+<li><p><strong>Strategy（策略）</strong>：策略是一个接口或抽象类，定义所有支持的算法的公共接口。它使得算法可以相互替换，而不影响使用算法的客户端。</p>
+</li>
+<li><p><strong>ConcreteStrategy（具体策略）</strong>：具体策略实现了策略接口，提供了算法的具体实现。</p>
+</li>
+</ul>
+<h2 id="策略模式的使用场景"><a href="#策略模式的使用场景" class="headerlink" title="策略模式的使用场景"></a>策略模式的使用场景</h2><p>策略模式在以下情况下可以被考虑使用：</p>
+<ul>
+<li><p><strong>算法需要灵活变化</strong>：当系统中某个算法的实现经常变化，并且希望在运行时能够灵活选择不同算法时，策略模式就能够胜任这个任务。</p>
+</li>
+<li><p><strong>避免使用条件语句</strong>：当一个类有多个行为，而这些行为在代码中通过条件语句进行切换时，策略模式可以避免使用大量的条件语句，提高代码的可读性和可维护性。</p>
+</li>
+<li><p><strong>相同行为的多种实现</strong>：当一个类的某个行为有多种不同的实现方式，可以使用策略模式来封装这些实现，使得可以在运行时动态切换。</p>
+</li>
+<li><p><strong>算法独立于客户端</strong>：当算法涉及的数据不应该被客户端暴露，或者算法的实现对客户端无关紧要时，使用策略模式可以保持算法的封装性。</p>
+</li>
+<li><p><strong>系统有许多类，而它们之间只有一些区别</strong>：当一系列类仅仅是行为有所不同，可以使用策略模式来避免大量的相似类的产生。</p>
+</li>
+<li><p><strong>支持开放&#x2F;封闭原则</strong>：策略模式支持对算法的独立扩展，使得新增的算法不需要修改现有的代码，符合开放&#x2F;封闭原则。</p>
+</li>
+<li><p><strong>需要在运行时动态选择算法</strong>：当需要在运行时动态地选择算法时，策略模式是一个很好的选择，因为它允许客户端在不修改代码的情况下切换算法。</p>
+</li>
+</ul>
+<p>总的来说，策略模式适用于<strong>需要在运行时选择算法</strong>的场景，以及<strong>希望将算法的实现与调用方解耦</strong>的情况。</p>
+<h2 id="策略模式的优缺点"><a href="#策略模式的优缺点" class="headerlink" title="策略模式的优缺点"></a>策略模式的优缺点</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li><p><strong>算法的独立性</strong>：通过将算法封装在独立的策略类中，可以使得它们易于切换、理解和扩展，而不会影响到上下文。</p>
+</li>
+<li><p><strong>避免条件语句</strong>：策略模式可以避免大量的条件语句，使代码更加清晰、易于维护。</p>
+</li>
+<li><p><strong>增强了对象的封装性</strong>：每个具体策略都是一个独立的类，策略模式有助于避免使用复杂的条件逻辑，并且使得每个策略的实现可以更加独立。</p>
+</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li><p><strong>增加类的数量</strong>：引入策略模式会增加系统中类的数量，每个具体策略都需要一个单独的类，这可能会导致类的数量增多，增加了系统的复杂度和理解难度。</p>
+</li>
+<li><p><strong>客户端必须了解所有的策略</strong>：在使用策略模式时，客户端必须了解所有可用的策略，并且决定使用哪一个策略。这可能会增加客户端的复杂性。</p>
+</li>
+<li><p><strong>增加对象之间的通信开销</strong>：在策略模式中，上下文对象和具体策略对象之间需要进行通信，这可能会增加对象之间的通信开销，特别是在需要频繁切换策略的情况下。</p>
+</li>
+<li><p><strong>选择正确的策略</strong>：选择正确的策略可能会带来一定的复杂性。如果策略选择不当，可能会导致性能下降或者产生错误的结果。</p>
+</li>
+<li><p><strong>可能导致类爆炸</strong>：如果系统中有大量的策略，可能会导致类的爆炸，增加维护和理解的复杂度。</p>
+</li>
+</ul>
+<p>尽管策略模式存在一些缺点，但在很多情况下，这些缺点都可以通过合理的设计和权衡来解决。在需要根据不同的情况选择不同的算法时，策略模式仍然是一个非常有用的设计模式。</p>
+<h2 id="策略模式的示例"><a href="#策略模式的示例" class="headerlink" title="策略模式的示例"></a>策略模式的示例</h2><p>假设有一个电商平台，根据不同的支付方式（策略），计算订单的最终价格。我们可以通过策略模式来实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义策略接口</span></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">PaymentStrategy</span> &#123;</span><br><span class="line">    <span class="type">double</span> <span class="title function_">calculate</span><span class="params">(<span class="type">double</span> amount)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 具体策略实现</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CardPaymentStrategy</span> <span class="keyword">implements</span> <span class="title class_">PaymentStrategy</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">double</span> <span class="title function_">calculate</span><span class="params">(<span class="type">double</span> amount)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> amount * <span class="number">0.98</span>; <span class="comment">// 2% discount for card payment</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PayPalPaymentStrategy</span> <span class="keyword">implements</span> <span class="title class_">PaymentStrategy</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">double</span> <span class="title function_">calculate</span><span class="params">(<span class="type">double</span> amount)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> amount * <span class="number">0.95</span>; <span class="comment">// 5% discount for PayPal payment</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 上下文</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ShoppingCart</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> PaymentStrategy paymentStrategy;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setPaymentStrategy</span><span class="params">(PaymentStrategy paymentStrategy)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.paymentStrategy = paymentStrategy;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">double</span> <span class="title function_">checkout</span><span class="params">(<span class="type">double</span> amount)</span> &#123;</span><br><span class="line">        <span class="comment">// 计算最终价格</span></span><br><span class="line">        <span class="keyword">return</span> paymentStrategy.calculate(amount);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">ShoppingCart</span> <span class="variable">cart</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ShoppingCart</span>();</span><br><span class="line">        cart.setPaymentStrategy(<span class="keyword">new</span> <span class="title class_">PayPalPaymentStrategy</span>()); <span class="comment">// 选择 PayPal 支付方式</span></span><br><span class="line">        <span class="type">double</span> <span class="variable">amount</span> <span class="operator">=</span> <span class="number">100</span>;</span><br><span class="line">        <span class="type">double</span> <span class="variable">finalAmount</span> <span class="operator">=</span> cart.checkout(amount);</span><br><span class="line">        System.out.println(<span class="string">&quot;Final amount after payment: &quot;</span> + finalAmount);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这个示例中，通过将不同的支付方式封装在不同的策略类中，客户端（即购物车）可以根据需要选择不同的支付方式，而不需要修改购物车的代码。这样使得系统更加灵活和可扩展。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2024/02/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BD%9C%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" data-id="clt5vjs08000nfm9k3pqn22t3" data-title="设计模式｜策略模式" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-MySQL｜删除mysql数据表内的重复数据记录" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2024/02/26/MySQL%EF%BD%9C%E5%88%A0%E9%99%A4mysql%E6%95%B0%E6%8D%AE%E8%A1%A8%E5%86%85%E7%9A%84%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95/" class="article-date">
@@ -130,7 +221,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/02/26/MySQL%EF%BD%9C%E5%88%A0%E9%99%A4mysql%E6%95%B0%E6%8D%AE%E8%A1%A8%E5%86%85%E7%9A%84%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95/" data-id="clt340onk0000rq9k8m89e3ga" data-title="MySQL｜删除mysql数据表内的重复数据记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/02/26/MySQL%EF%BD%9C%E5%88%A0%E9%99%A4mysql%E6%95%B0%E6%8D%AE%E8%A1%A8%E5%86%85%E7%9A%84%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95/" data-id="clt5vjs05000efm9kd3lt1sj2" data-title="MySQL｜删除mysql数据表内的重复数据记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -199,7 +290,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/02/26/%E5%B9%82%E7%AD%89%E5%8F%8A%E5%B9%82%E7%AD%89%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/" data-id="clt33y8xy000eqh9kbphydqzt" data-title="幂等及幂等实现方案" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/02/26/%E5%B9%82%E7%AD%89%E5%8F%8A%E5%B9%82%E7%AD%89%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/" data-id="clt5vjs06000ffm9kdc35bkif" data-title="幂等及幂等实现方案" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -287,7 +378,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/02/05/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%88%A0%E9%99%A4%E6%8C%87%E4%BB%A4deleted%E5%92%8Ctruncate%E5%9C%A8%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%BC%82%E5%90%8C/" data-id="clt33y8xx0009qh9kfls85naz" data-title="MySQL语句 ｜ 删除指令deleted和truncate在使用中的异同" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/02/05/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%88%A0%E9%99%A4%E6%8C%87%E4%BB%A4deleted%E5%92%8Ctruncate%E5%9C%A8%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%BC%82%E5%90%8C/" data-id="clt5vjs040009fm9kel6l1ko8" data-title="MySQL语句 ｜ 删除指令deleted和truncate在使用中的异同" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -347,7 +438,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/02/02/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%20IFNULL%20%E5%92%8C%20COALESCE%20%E7%9A%84%E5%8C%BA%E5%88%AB/" data-id="clt33y8xy000dqh9k8izz22zp" data-title="MySQL语句｜条件语句 IFNULL 和 COALESCE 的区别" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/02/02/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%20IFNULL%20%E5%92%8C%20COALESCE%20%E7%9A%84%E5%8C%BA%E5%88%AB/" data-id="clt5vjs05000dfm9k21635y9e" data-title="MySQL语句｜条件语句 IFNULL 和 COALESCE 的区别" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -401,7 +492,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/31/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0IF/CASE/COALESCE%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="clt33y8xz000lqh9k4uf25o3c" data-title="MySQL语句 ｜ 条件函数IF/CASE/COALESCE的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/31/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0IF/CASE/COALESCE%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="clt5vjs07000mfm9kbyxv7kx2" data-title="MySQL语句 ｜ 条件函数IF/CASE/COALESCE的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -467,7 +558,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/30/MySQL%E8%AF%AD%E5%8F%A5%20|%20MD5()%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="clt33y8xv0004qh9kffvu91rr" data-title="MySQL语句 | MD5()的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/30/MySQL%E8%AF%AD%E5%8F%A5%20|%20MD5()%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="clt5vjs030004fm9kekmj8xsh" data-title="MySQL语句 | MD5()的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -516,7 +607,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20FIELD()%E4%B8%8EORDER%20BY()%E7%9B%B8%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/" data-id="clt33y8xw0008qh9k8vxe8dbs" data-title="MySQL语句 ｜ FIELD()与ORDER BY()相结合实现对结果的自定义排序" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20FIELD()%E4%B8%8EORDER%20BY()%E7%9B%B8%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/" data-id="clt5vjs040008fm9kfekj3isj" data-title="MySQL语句 ｜ FIELD()与ORDER BY()相结合实现对结果的自定义排序" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -636,7 +727,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/" data-id="clt33y8xw0005qh9k808dfers" data-title="MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/" data-id="clt5vjs030005fm9kbrcs1pum" data-title="MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -685,64 +776,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/17/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8WITH%E5%AD%90%E5%8F%A5%E5%92%8C%E4%B8%B4%E6%97%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%92%8C%E7%AD%9B%E9%80%89/" data-id="clt33y8xw0007qh9kg5nre2dx" data-title="MySQL语句 | 使用WITH子句和临时表达式进行数据分析和筛选" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/" class="article-date">
-  <time class="dt-published" datetime="2024-01-16T13:38:28.620Z" itemprop="datePublished">2024-01-16</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/">MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>MySQL提供了一系列的JSON函数来处理JSON数据，包括从JSON字符串中提取值和将表中字段值合并为JSON等。</p>
-<h1 id="在MySQL中解析JSON"><a href="#在MySQL中解析JSON" class="headerlink" title="在MySQL中解析JSON"></a>在MySQL中解析JSON</h1><p>可使用<code>JSON_EXTRACT</code>函数提取JSON字符串中指定字段的值，使用<code>JSON_UNQUOTE</code>函数去除提取的字符串值周围的引号，以得到原始的非引号包裹的值。</p>
-<p><strong>举个例子</strong></p>
-<p>假设你有一个包含JSON数据的表 <code>my_table</code>：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> my_table (</span><br><span class="line">    id <span class="type">INT</span> <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    json_data JSON</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> my_table (id, json_data) <span class="keyword">VALUES</span></span><br><span class="line">(<span class="number">1</span>, <span class="string">&#x27;&#123;&quot;name&quot;: &quot;John&quot;, &quot;age&quot;: 25, &quot;city&quot;: &quot;New York&quot;&#125;&#x27;</span>),</span><br><span class="line">(<span class="number">2</span>, <span class="string">&#x27;&#123;&quot;name&quot;: &quot;Alice&quot;, &quot;age&quot;: 30, &quot;city&quot;: &quot;Los Angeles&quot;&#125;&#x27;</span>);</span><br></pre></td></tr></table></figure>
-<p>使用JSON函数从<code>json_data</code>字段中提取数据：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 提取name字段的值</span></span><br><span class="line"><span class="keyword">SELECT</span> id, JSON_UNQUOTE(JSON_EXTRACT(json_data, <span class="string">&#x27;$.name&#x27;</span>)) <span class="keyword">AS</span> name</span><br><span class="line"><span class="keyword">FROM</span> my_table;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 提取age字段的值</span></span><br><span class="line"><span class="keyword">SELECT</span> id, JSON_EXTRACT(json_data, <span class="string">&#x27;$.age&#x27;</span>) <span class="keyword">AS</span> age</span><br><span class="line"><span class="keyword">FROM</span> my_table;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 提取city字段的值</span></span><br><span class="line"><span class="keyword">SELECT</span> id, JSON_UNQUOTE(JSON_EXTRACT(json_data, <span class="string">&#x27;$.city&#x27;</span>)) <span class="keyword">AS</span> city</span><br><span class="line"><span class="keyword">FROM</span> my_table;</span><br></pre></td></tr></table></figure>
-<p>如果MySQL版本较新（MySQL 8.0及以上），可使用<code>-&gt;</code>运算符来进行JSON字段的访问：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 提取name字段的值</span></span><br><span class="line"><span class="keyword">SELECT</span> id, json_data<span class="operator">-</span><span class="operator">&gt;</span><span class="string">&#x27;$.name&#x27;</span> <span class="keyword">AS</span> name</span><br><span class="line"><span class="keyword">FROM</span> my_table;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 提取age字段的值</span></span><br><span class="line"><span class="keyword">SELECT</span> id, json_data<span class="operator">-</span><span class="operator">&gt;</span><span class="string">&#x27;$.age&#x27;</span> <span class="keyword">AS</span> age</span><br><span class="line"><span class="keyword">FROM</span> my_table;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 提取city字段的值</span></span><br><span class="line"><span class="keyword">SELECT</span> id, json_data<span class="operator">-</span><span class="operator">&gt;</span><span class="string">&#x27;$.city&#x27;</span> <span class="keyword">AS</span> city</span><br><span class="line"><span class="keyword">FROM</span> my_table;</span><br></pre></td></tr></table></figure>
-<p>上面例子展示了如何从JSON字符串中提取值的基本方法，在实际应用中可按需结合其他JSON函数来执行更复杂的操作。</p>
-<h1 id="将表中字段值合并为JSON"><a href="#将表中字段值合并为JSON" class="headerlink" title="将表中字段值合并为JSON"></a>将表中字段值合并为JSON</h1><p>可使用<code>JSON_OBJECT</code>函数将查询到的字段值合并为JSON字符串。</p>
-<p><strong>举个例子</strong></p>
-<p>假设你有一个包含个人信息的表<code>person</code>：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> person (</span><br><span class="line">    id <span class="type">INT</span> <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">    age <span class="type">INT</span>,</span><br><span class="line">    city <span class="type">VARCHAR</span>(<span class="number">50</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> person (id, name, age, city) <span class="keyword">VALUES</span></span><br><span class="line">(<span class="number">1</span>, <span class="string">&#x27;John&#x27;</span>, <span class="number">25</span>, <span class="string">&#x27;New York&#x27;</span>),</span><br><span class="line">(<span class="number">2</span>, <span class="string">&#x27;Alice&#x27;</span>, <span class="number">30</span>, <span class="string">&#x27;Los Angeles&#x27;</span>);</span><br></pre></td></tr></table></figure>
-<p>可使用<code>JSON_OBJECT</code>函数来将表中的字段转换为JSON字符串：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 将id、name、age、city字段合并为JSON字符串</span></span><br><span class="line"><span class="keyword">SELECT</span> id, <span class="built_in">JSON_OBJECT</span>(<span class="string">&#x27;name&#x27;</span>, name, <span class="string">&#x27;age&#x27;</span>, age, <span class="string">&#x27;city&#x27;</span>, city) <span class="keyword">AS</span> json_data</span><br><span class="line"><span class="keyword">FROM</span> person;</span><br></pre></td></tr></table></figure>
-<p>上述查询将返回一个包含JSON字符串的结果集，其中每行都包含一个由<code>id</code>、<code>name</code>、<code>age</code>、<code>city</code>字段构成的JSON对象。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+----+---------------------------------------------+</span><br><span class="line">| id | json_data                                   |</span><br><span class="line">+----+---------------------------------------------+</span><br><span class="line">|  1 | &#123;&quot;name&quot;: &quot;John&quot;, &quot;age&quot;: 25, &quot;city&quot;: &quot;New York&quot;&#125; |</span><br><span class="line">|  2 | &#123;&quot;name&quot;: &quot;Alice&quot;, &quot;age&quot;: 30, &quot;city&quot;: &quot;Los Angeles&quot;&#125; |</span><br><span class="line">+----+---------------------------------------------+</span><br></pre></td></tr></table></figure>
-<p>在实际应用中，可按需调整字段和JSON对象的构建方式。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/16/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%9C%A8MySQL%E4%B8%AD%E8%A7%A3%E6%9E%90JSON%E6%88%96%E5%B0%86%E8%A1%A8%E4%B8%AD%E5%AD%97%E6%AE%B5%E5%80%BC%E5%90%88%E5%B9%B6%E4%B8%BAJSON/" data-id="clt33y8xx000aqh9kc7p19mbv" data-title="MySQL语句 ｜ 在MySQL中解析JSON或将表中字段值合并为JSON" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/17/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8WITH%E5%AD%90%E5%8F%A5%E5%92%8C%E4%B8%B4%E6%97%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%92%8C%E7%AD%9B%E9%80%89/" data-id="clt5vjs040007fm9k6xj5521d" data-title="MySQL语句 | 使用WITH子句和临时表达式进行数据分析和筛选" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -790,6 +824,10 @@
       <ul>
         
           <li>
+            <a href="/2024/02/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BD%9C%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/">设计模式｜策略模式</a>
+          </li>
+        
+          <li>
             <a href="/2024/02/26/MySQL%EF%BD%9C%E5%88%A0%E9%99%A4mysql%E6%95%B0%E6%8D%AE%E8%A1%A8%E5%86%85%E7%9A%84%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95/">MySQL｜删除mysql数据表内的重复数据记录</a>
           </li>
         
@@ -803,10 +841,6 @@
         
           <li>
             <a href="/2024/02/02/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%20IFNULL%20%E5%92%8C%20COALESCE%20%E7%9A%84%E5%8C%BA%E5%88%AB/">MySQL语句｜条件语句 IFNULL 和 COALESCE 的区别</a>
-          </li>
-        
-          <li>
-            <a href="/2024/01/31/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0IF/CASE/COALESCE%E7%9A%84%E4%BD%BF%E7%94%A8/">MySQL语句 ｜ 条件函数IF/CASE/COALESCE的使用</a>
           </li>
         
       </ul>
