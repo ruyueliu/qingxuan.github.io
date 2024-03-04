@@ -73,6 +73,182 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-消息中间件/消息中间件｜初识消息队列" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/03/04/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6%EF%BD%9C%E5%88%9D%E8%AF%86%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" class="article-date">
+  <time class="dt-published" datetime="2024-03-04T14:17:58.804Z" itemprop="datePublished">2024-03-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/03/04/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6%EF%BD%9C%E5%88%9D%E8%AF%86%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息中间件｜初识消息队列</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="消息队列是什么？"><a href="#消息队列是什么？" class="headerlink" title="消息队列是什么？"></a>消息队列是什么？</h1><ul>
+<li>消息队列（Message Queue）是一种用于在软件系统之间传递消息的通信机制。其本质是一个保存数据的队列，它通常被用于解耦不同组件或模块之间的通信，以实现异步通信、提高系统的可伸缩性和可靠性。</li>
+<li>消息中间件是利用高效可靠的消息传递机制进行与平台无关的数据交流，并基于数据通信来进行分布式系统的构建。</li>
+<li>消息中间件是分布式系统中重要的组件，主要解决应用解耦、异步消息、流量削峰等问题，实现高性能、高可用、可伸缩和最终一致性的系统架构。目前常见的消息队列系统包括<code>Apache Kafka</code>、<code>RabbitMQ</code>、<code>RocketMQ</code>、<code>ActiveMQ</code>等。</li>
+</ul>
+<h1 id="消息队列关键概念"><a href="#消息队列关键概念" class="headerlink" title="消息队列关键概念"></a>消息队列关键概念</h1><ul>
+<li><strong>消息生产者（Producer）</strong>：负责产生消息并将其发送到消息队列中。</li>
+<li><strong>消息队列（Message Queue）</strong>：用于存储消息的缓冲区或中介。消息队列可以是内存中的数据结构，也可以是持久化的存储系统。</li>
+<li><strong>消息消费者（Consumer）</strong>：从消息队列中获取消息，并进行相应的处理。消费者负责处理消息的逻辑，通常是异步地从队列中拉取消息。</li>
+<li><strong>消息</strong>：要在系统中传递的数据单元。消息可以是任何形式的数据，如文本、<code>JSON</code>、<code>XML</code> 等。</li>
+</ul>
+<h1 id="消息队列优点"><a href="#消息队列优点" class="headerlink" title="消息队列优点"></a>消息队列优点</h1><ul>
+<li><strong>解耦性</strong>：生产者和消费者之间通过消息队列进行通信，彼此不需要直接连接，降低了耦合度。</li>
+<li><strong>异步通信</strong>：生产者和消费者可以独立运行，不需要等待对方的响应。</li>
+<li><strong>增强系统可靠性</strong>：即使一个组件或模块不可用，消息仍然可以被存储在队列中，待组件恢复后继续处理。</li>
+<li><strong>缓冲能力</strong>：消息队列可以作为缓冲，处理高峰时段的突发流量，以及平滑系统的负载。</li>
+</ul>
+<h1 id="消息队列的应用场景"><a href="#消息队列的应用场景" class="headerlink" title="消息队列的应用场景"></a>消息队列的应用场景</h1><h2 id="异步处理"><a href="#异步处理" class="headerlink" title="异步处理"></a>异步处理</h2><p>将一些非核心的业务流程以异步并行的方式执行，从而减少请求响应时间，提高系统吞吐量。</p>
+<h2 id="应用解耦"><a href="#应用解耦" class="headerlink" title="应用解耦"></a>应用解耦</h2><p>就是接触应用系统之间的耦合依赖，通过消息队列，使每个应用系统不必受其他系统影响，可以更独立自主。</p>
+<h2 id="流量削峰"><a href="#流量削峰" class="headerlink" title="流量削峰"></a>流量削峰</h2><p>流量削峰一般在秒杀和团抢活动中使用广泛，在应用前端加入消息队列，秒杀业务处理系统根据消息队列中的请求信息，再做后续处理。</p>
+<h2 id="消息通讯"><a href="#消息通讯" class="headerlink" title="消息通讯"></a>消息通讯</h2><p>消息通讯是指应用间的数据通信。消息队列一般都内置了高效的通信机制，因此可以用在纯的消息通讯。比如实现点对点消息队列，或者聊天室等对点通讯。</p>
+<h1 id="常用消息队列中间件的对比"><a href="#常用消息队列中间件的对比" class="headerlink" title="常用消息队列中间件的对比"></a>常用消息队列中间件的对比</h1><p>目前常见的消息队列系统包括 <code>Apache Kafka</code>、<code>RabbitMQ</code>、<code>RocketMQ</code>、<code>ActiveMQ</code>等，选择合适的消息队列取决于应用的需求、性能要求以及可用的基础设施。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>kafka</th>
+<th>RabbitMQ</th>
+<th>RocketMQ</th>
+<th>ActiveMQ</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>资料文档</td>
+<td>中等</td>
+<td>多</td>
+<td>少</td>
+<td>多</td>
+</tr>
+<tr>
+<td>开发语言</td>
+<td>Scala</td>
+<td>Eriang</td>
+<td>Java</td>
+<td>Java</td>
+</tr>
+<tr>
+<td>支持协议</td>
+<td>自定义（基于TCP）</td>
+<td>AMQP</td>
+<td>自定义</td>
+<td>OpenWire、STOMP、RESR、XMPP、AMQP</td>
+</tr>
+<tr>
+<td>消息存储</td>
+<td>内存、磁盘、数据库；支持大量堆积</td>
+<td>内存、磁盘；支持少量堆积</td>
+<td>磁盘；支持大量堆积</td>
+<td>内存，磁盘，数据库；支持少量堆积</td>
+</tr>
+<tr>
+<td>消息事务</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>负载均衡</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>可基于zk实现负载均衡</td>
+</tr>
+<tr>
+<td>集群管理</td>
+<td>leader-slave</td>
+<td>支持简单集群</td>
+<td>master-slave</td>
+<td>支持简单集群</td>
+</tr>
+<tr>
+<td>管理界面</td>
+<td>一般</td>
+<td>好</td>
+<td>很好</td>
+<td>一般</td>
+</tr>
+<tr>
+<td>可用性</td>
+<td>非常高</td>
+<td>高</td>
+<td>非常高</td>
+<td>高</td>
+</tr>
+<tr>
+<td>吞吐TPS</td>
+<td>极大</td>
+<td>比较大</td>
+<td>大</td>
+<td>比较大</td>
+</tr>
+<tr>
+<td>顺序消息</td>
+<td>支持</td>
+<td>不支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>消息确认</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>消息回调</td>
+<td>支持指定分区offset位置回调</td>
+<td>不支持</td>
+<td>支持指定时间点的回调</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>消息重试</td>
+<td>不支持</td>
+<td>不支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>并发度</td>
+<td>高</td>
+<td>极高</td>
+<td>高</td>
+<td>高</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2024/03/04/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6%EF%BD%9C%E5%88%9D%E8%AF%86%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" data-id="cltd12k41000mgj9k82iigx9y" data-title="消息中间件｜初识消息队列" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-设计模式/设计模式｜策略模式" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2024/02/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BD%9C%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" class="article-date">
@@ -152,7 +328,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/02/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BD%9C%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" data-id="clt5vjs08000nfm9k3pqn22t3" data-title="设计模式｜策略模式" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/02/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BD%9C%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" data-id="cltd12k41000ngj9k8dew0s4k" data-title="设计模式｜策略模式" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -221,7 +397,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/02/26/MySQL%EF%BD%9C%E5%88%A0%E9%99%A4mysql%E6%95%B0%E6%8D%AE%E8%A1%A8%E5%86%85%E7%9A%84%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95/" data-id="clt5vjs05000efm9kd3lt1sj2" data-title="MySQL｜删除mysql数据表内的重复数据记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/02/26/MySQL%EF%BD%9C%E5%88%A0%E9%99%A4mysql%E6%95%B0%E6%8D%AE%E8%A1%A8%E5%86%85%E7%9A%84%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95/" data-id="cltd12k40000egj9k37270bih" data-title="MySQL｜删除mysql数据表内的重复数据记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -290,7 +466,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/02/26/%E5%B9%82%E7%AD%89%E5%8F%8A%E5%B9%82%E7%AD%89%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/" data-id="clt5vjs06000ffm9kdc35bkif" data-title="幂等及幂等实现方案" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/02/26/%E5%B9%82%E7%AD%89%E5%8F%8A%E5%B9%82%E7%AD%89%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/" data-id="cltd12k40000fgj9k4t8004cl" data-title="幂等及幂等实现方案" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -378,7 +554,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/02/05/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%88%A0%E9%99%A4%E6%8C%87%E4%BB%A4deleted%E5%92%8Ctruncate%E5%9C%A8%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%BC%82%E5%90%8C/" data-id="clt5vjs040009fm9kel6l1ko8" data-title="MySQL语句 ｜ 删除指令deleted和truncate在使用中的异同" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/02/05/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%88%A0%E9%99%A4%E6%8C%87%E4%BB%A4deleted%E5%92%8Ctruncate%E5%9C%A8%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%BC%82%E5%90%8C/" data-id="cltd12k3z0009gj9k96g8hena" data-title="MySQL语句 ｜ 删除指令deleted和truncate在使用中的异同" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -438,7 +614,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/02/02/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%20IFNULL%20%E5%92%8C%20COALESCE%20%E7%9A%84%E5%8C%BA%E5%88%AB/" data-id="clt5vjs05000dfm9k21635y9e" data-title="MySQL语句｜条件语句 IFNULL 和 COALESCE 的区别" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/02/02/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%20IFNULL%20%E5%92%8C%20COALESCE%20%E7%9A%84%E5%8C%BA%E5%88%AB/" data-id="cltd12k40000dgj9k6okfdel4" data-title="MySQL语句｜条件语句 IFNULL 和 COALESCE 的区别" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -492,7 +668,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/31/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0IF/CASE/COALESCE%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="clt5vjs07000mfm9kbyxv7kx2" data-title="MySQL语句 ｜ 条件函数IF/CASE/COALESCE的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/31/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0IF/CASE/COALESCE%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="cltd12k42000ogj9k6b1x5pc9" data-title="MySQL语句 ｜ 条件函数IF/CASE/COALESCE的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -558,7 +734,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/30/MySQL%E8%AF%AD%E5%8F%A5%20|%20MD5()%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="clt5vjs030004fm9kekmj8xsh" data-title="MySQL语句 | MD5()的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/30/MySQL%E8%AF%AD%E5%8F%A5%20|%20MD5()%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="cltd12k3x0004gj9kbp3leiq7" data-title="MySQL语句 | MD5()的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -607,7 +783,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20FIELD()%E4%B8%8EORDER%20BY()%E7%9B%B8%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/" data-id="clt5vjs040008fm9kfekj3isj" data-title="MySQL语句 ｜ FIELD()与ORDER BY()相结合实现对结果的自定义排序" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20FIELD()%E4%B8%8EORDER%20BY()%E7%9B%B8%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/" data-id="cltd12k3y0008gj9kfw6d3w0l" data-title="MySQL语句 ｜ FIELD()与ORDER BY()相结合实现对结果的自定义排序" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -727,56 +903,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/" data-id="clt5vjs030005fm9kbrcs1pum" data-title="MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-MySQL语句 | 使用WITH子句和临时表达式进行数据分析和筛选" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2024/01/17/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8WITH%E5%AD%90%E5%8F%A5%E5%92%8C%E4%B8%B4%E6%97%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%92%8C%E7%AD%9B%E9%80%89/" class="article-date">
-  <time class="dt-published" datetime="2024-01-17T14:36:15.726Z" itemprop="datePublished">2024-01-17</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2024/01/17/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8WITH%E5%AD%90%E5%8F%A5%E5%92%8C%E4%B8%B4%E6%97%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%92%8C%E7%AD%9B%E9%80%89/">MySQL语句 | 使用WITH子句和临时表达式进行数据分析和筛选</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>MySQL支持使用<code>WITH</code>创建临时表达式，通常称为”Common Table Expressions”（CTE）。CTE 通常用于较复杂的查询，为复杂查询提供了一种更清晰、模块化的方式，以提高复杂查询的可读性和易维护性。</p>
-<h1 id="举个通用的例子"><a href="#举个通用的例子" class="headerlink" title="举个通用的例子"></a>举个通用的例子</h1><p><code>my_cte</code>是一个临时表达式，它包含了从<code>my_table</code>中选择满足某个条件的列，然后，在查询的其余部分中引用这个临时表达式</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> my_cte <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> </span><br><span class="line">        column1,</span><br><span class="line">        column2</span><br><span class="line">    <span class="keyword">FROM</span> </span><br><span class="line">        my_table</span><br><span class="line">    <span class="keyword">WHERE</span> </span><br><span class="line">        <span class="keyword">condition</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> </span><br><span class="line">    my_cte</span><br><span class="line"><span class="keyword">WHERE</span> </span><br><span class="line">    column1 <span class="operator">&gt;</span> <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
-<p><code>WITH</code>子句定义的CTE只在查询执行期间存在，不会在数据库中永久存储。<br>在使用时，需确保自己的MySQL版本支持<code>WITH</code>语句，因为不同的MySQL版本可能对此支持程度有所不同。</p>
-<h1 id="举个实际的例子"><a href="#举个实际的例子" class="headerlink" title="举个实际的例子"></a>举个实际的例子</h1><p>假设有一个包含员工信息的表<code>employee</code>：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> employee (</span><br><span class="line">    emp_id <span class="type">INT</span>,</span><br><span class="line">    emp_name <span class="type">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">    emp_salary <span class="type">DECIMAL</span>(<span class="number">10</span>, <span class="number">2</span>),</span><br><span class="line">    department_id <span class="type">INT</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee <span class="keyword">VALUES</span></span><br><span class="line">(<span class="number">1</span>, <span class="string">&#x27;John Doe&#x27;</span>, <span class="number">50000.00</span>, <span class="number">1</span>),</span><br><span class="line">(<span class="number">2</span>, <span class="string">&#x27;Jane Smith&#x27;</span>, <span class="number">60000.00</span>, <span class="number">2</span>),</span><br><span class="line">(<span class="number">3</span>, <span class="string">&#x27;Bob Johnson&#x27;</span>, <span class="number">75000.00</span>, <span class="number">1</span>),</span><br><span class="line">(<span class="number">4</span>, <span class="string">&#x27;Alice Williams&#x27;</span>, <span class="number">80000.00</span>, <span class="number">2</span>);</span><br></pre></td></tr></table></figure>
-
-<p>现在，需要计算每个部门的平均工资，并只选择部门平均工资高于整体平均工资的部门员工记录，可以使用<code>WITH</code>子句来实现：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> department_avg_salary <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span></span><br><span class="line">        department_id,</span><br><span class="line">        <span class="built_in">AVG</span>(emp_salary) <span class="keyword">AS</span> avg_salary</span><br><span class="line">    <span class="keyword">FROM</span></span><br><span class="line">        employee</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span></span><br><span class="line">        department_id</span><br><span class="line">)</span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">    e.emp_id,</span><br><span class="line">    e.emp_name,</span><br><span class="line">    e.emp_salary,</span><br><span class="line">    e.department_id</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">    employee e</span><br><span class="line"><span class="keyword">JOIN</span></span><br><span class="line">    department_avg_salary d <span class="keyword">ON</span> e.department_id <span class="operator">=</span> d.department_id</span><br><span class="line"><span class="keyword">WHERE</span></span><br><span class="line">    d.avg_salary <span class="operator">&gt;</span> (<span class="keyword">SELECT</span> <span class="built_in">AVG</span>(emp_salary) <span class="keyword">FROM</span> employee);</span><br></pre></td></tr></table></figure>
-<p>在上述例子中，<code>department_avg_salary</code>是一个CTE，它计算每个部门的平均工资。然后，通过<code>JOIN</code>将<code>employee</code>表与这个临时表连接，并在最后的<code>WHERE</code>子句中过滤出部门平均工资高于整体平均工资的记录，输出结果将是符合条件的员工记录</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+--------+----------------+------------+---------------+</span><br><span class="line">| emp_id | emp_name       | emp_salary | department_id |</span><br><span class="line">+--------+----------------+------------+---------------+</span><br><span class="line">|      3 | Bob Johnson    |   75000.00 |             1 |</span><br><span class="line">|      4 | Alice Williams |   80000.00 |             2 |</span><br><span class="line">+--------+----------------+------------+---------------+</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/17/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8WITH%E5%AD%90%E5%8F%A5%E5%92%8C%E4%B8%B4%E6%97%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%92%8C%E7%AD%9B%E9%80%89/" data-id="clt5vjs040007fm9k6xj5521d" data-title="MySQL语句 | 使用WITH子句和临时表达式进行数据分析和筛选" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/" data-id="cltd12k3y0005gj9k9yk8h9gz" data-title="MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -811,7 +938,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">二月 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">一月 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">十二月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">十一月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">三月 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">二月 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">一月 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">十二月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">十一月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a></li></ul>
     </div>
   </div>
 
@@ -822,6 +949,10 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2024/03/04/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6%EF%BD%9C%E5%88%9D%E8%AF%86%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息中间件｜初识消息队列</a>
+          </li>
         
           <li>
             <a href="/2024/02/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BD%9C%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/">设计模式｜策略模式</a>
@@ -837,10 +968,6 @@
         
           <li>
             <a href="/2024/02/05/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%88%A0%E9%99%A4%E6%8C%87%E4%BB%A4deleted%E5%92%8Ctruncate%E5%9C%A8%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%BC%82%E5%90%8C/">MySQL语句 ｜ 删除指令deleted和truncate在使用中的异同</a>
-          </li>
-        
-          <li>
-            <a href="/2024/02/02/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%20IFNULL%20%E5%92%8C%20COALESCE%20%E7%9A%84%E5%8C%BA%E5%88%AB/">MySQL语句｜条件语句 IFNULL 和 COALESCE 的区别</a>
           </li>
         
       </ul>
