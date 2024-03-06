@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Kafka｜处理 Kafka 消息丢失的有效措施 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="消息丢失是 Kafka 系统中一个严重的问题，可能会发生在生产者、Broker 或消费者任何方面。今天我们来讨论一些可能导致消息丢失的场景以及如何解决。 消息丢失场景生产者端 异步发送消息：如果生产者配置为异步发送消息，并且在发送消息后立即关闭或退出，那么可能会导致部分消息尚未完全发送就丢失。 发送失败且不重试：如果生产者在发送消息时发生错误，并且没有配置重试机制，或者重试次数已经耗尽，那么消息可">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kafka｜处理 Kafka 消息丢失的有效措施">
+<meta property="og:url" content="http://qingxuan.com/2024/03/06/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/Kafka%EF%BD%9C%E5%A4%84%E7%90%86%20Kafka%20%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1%E7%9A%84%E6%9C%89%E6%95%88%E6%8E%AA%E6%96%BD/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="消息丢失是 Kafka 系统中一个严重的问题，可能会发生在生产者、Broker 或消费者任何方面。今天我们来讨论一些可能导致消息丢失的场景以及如何解决。 消息丢失场景生产者端 异步发送消息：如果生产者配置为异步发送消息，并且在发送消息后立即关闭或退出，那么可能会导致部分消息尚未完全发送就丢失。 发送失败且不重试：如果生产者在发送消息时发生错误，并且没有配置重试机制，或者重试次数已经耗尽，那么消息可">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-03-06T14:20:12.990Z">
+<meta property="article:modified_time" content="2024-03-06T14:21:10.293Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://qingxuan.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-消息中间件/Kafka｜处理 Kafka 消息丢失的有效措施" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/03/06/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/Kafka%EF%BD%9C%E5%A4%84%E7%90%86%20Kafka%20%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1%E7%9A%84%E6%9C%89%E6%95%88%E6%8E%AA%E6%96%BD/" class="article-date">
+  <time class="dt-published" datetime="2024-03-06T14:20:12.990Z" itemprop="datePublished">2024-03-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Kafka｜处理 Kafka 消息丢失的有效措施
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>消息丢失是 Kafka 系统中一个严重的问题，可能会发生在生产者、Broker 或消费者任何方面。今天我们来讨论一些可能导致消息丢失的场景以及如何解决。</p>
+<h2 id="消息丢失场景"><a href="#消息丢失场景" class="headerlink" title="消息丢失场景"></a>消息丢失场景</h2><h3 id="生产者端"><a href="#生产者端" class="headerlink" title="生产者端"></a>生产者端</h3><ul>
+<li><strong>异步发送消息</strong>：如果生产者配置为异步发送消息，并且在发送消息后立即关闭或退出，那么可能会导致部分消息尚未完全发送就丢失。</li>
+<li><strong>发送失败且不重试</strong>：如果生产者在发送消息时发生错误，并且没有配置重试机制，或者重试次数已经耗尽，那么消息可能会丢失。</li>
+<li><strong>未处理异常</strong>：如果生产者在消息发送过程中发生了未捕获的异常，并且没有合适的异常处理机制，可能导致消息丢失。</li>
+</ul>
+<h3 id="Kafka-Broker"><a href="#Kafka-Broker" class="headerlink" title="Kafka Broker"></a>Kafka Broker</h3><ul>
+<li><strong>数据写入失败</strong>：如果 Kafka Broker 在将消息写入到磁盘时发生故障或者存储空间不足，可能会导致消息丢失。</li>
+<li><strong>消息丢失</strong>：在某些异常情况下，如硬件故障、网络故障等，可能导致正在传输的消息丢失。</li>
+<li><strong>ISR 问题</strong>：如果 ISR 中的所有副本都失败，并且没有足够的副本可用于消息的复制，可能会导致消息丢失。</li>
+<li><strong>Leader Broker宕机</strong>：触发选举过程，集群选举了一个落后Leader太多的broker作为Leader，那么落后的那些消息就会丢失了。</li>
+<li>Kafka为了提升性能，使用页缓存机制，讲消息写入页缓存而非直接持久化至磁盘，才用了异步批量刷盘机制，也就是说，按照一定的消息量和时间间隔去刷盘，刷盘的动作由操作系统来调度的，如果刷盘之前Broker宕机啦，重启后在页缓存的这部分消息则会丢失。</li>
+</ul>
+<h3 id="消费者端"><a href="#消费者端" class="headerlink" title="消费者端"></a>消费者端</h3><ul>
+<li><strong>消息处理失败</strong>：如果消费者在处理消息时发生错误，并且没有合适的错误处理机制，可能会导致消息丢失。</li>
+<li><strong>偏移量提交失败</strong>：如果消费者在处理完消息后未能正确提交偏移量，那么在下一次重启时，可能会重复消费已经处理过的消息，从而导致消息重复或丢失。</li>
+<li><strong>消费者组 rebalance</strong>：当消费者组发生 rebalance 时，正在处理的消息可能会丢失，因为 Kafka 会重新分配分区给消费者。</li>
+</ul>
+<h2 id="如何防止消息丢失"><a href="#如何防止消息丢失" class="headerlink" title="如何防止消息丢失"></a>如何防止消息丢失</h2><p>消息丢失可能发生在生产者、Broker 和消费者的任何环节，通过合理配置和实施相应的措施，可以最大程度地减少消息丢失的风险。</p>
+<h3 id="生产者端-1"><a href="#生产者端-1" class="headerlink" title="生产者端"></a>生产者端</h3><ul>
+<li><strong>回调机制</strong>：不要使用producer.send(msg)，而要使用producer.send(msg,callback)。</li>
+<li><strong>消息确认机制</strong>：生产者可以选择使用消息确认机制来确保消息已经成功发送到 Kafka 集群。这包括三种确认模式：<ul>
+<li><strong>acks&#x3D;0</strong>：生产者不会等待任何确认，直接发送下一条消息。</li>
+<li><strong>acks&#x3D;1</strong>：生产者会等待 leader 副本确认消息后再发送下一条消息。</li>
+<li><strong>acks&#x3D;all</strong>：生产者会等待所有 ISR（In-Sync Replicas，同步副本）确认消息后再发送下一条消息。</li>
+</ul>
+</li>
+<li><strong>重试机制</strong>：生产者可以配置重试机制来应对发送失败的情况。通过配置重试次数和重试间隔，可以确保消息在发生失败时有机会重新发送。 eg：设置retries &#x3D; 3，当出现网络的瞬时抖动时，消息发送可能会失败，此时配置了retries &gt; 0 的 Producer 能够自动重试消息发送，避免消息丢失。</li>
+</ul>
+<h3 id="Kafka-Broker-端"><a href="#Kafka-Broker-端" class="headerlink" title="Kafka Broker 端"></a>Kafka Broker 端</h3><ul>
+<li><strong>副本机制</strong>：Kafka 使用副本机制来确保数据的容错性和可靠性。每个分区的数据会被复制到多个 Broker 上，这些副本中的一个被选为 leader，负责处理读写请求，其他副本则作为 follower。如果 leader 副本失效，Kafka 会从 follower 中选举出新的 leader。</li>
+<li><strong>ISR 配置</strong>：Kafka 使用 ISR（In-Sync Replicas）列表来跟踪已经复制到所有副本的消息。只有在 ISR 中的副本确认了消息后，生产者才会认为消息已经成功发送。通过配置 ISR 的大小，可以控制消息的持久性和可靠性。</li>
+</ul>
+<h3 id="消费者端-1"><a href="#消费者端-1" class="headerlink" title="消费者端"></a>消费者端</h3><ul>
+<li><strong>自动提交偏移量</strong>：消费者可以选择自动提交偏移量或手动提交偏移量来跟踪已经消费的消息。在自动提交偏移量的情况下，Kafka 会定期自动提交已经处理的偏移量，确保即使消费者发生故障，也不会丢失已经处理的消息。</li>
+<li><strong>消息处理保证</strong>：消费者应该实现消息处理的幂等性，即使消息处理失败或发生重试，也不会对系统产生副作用。这可以通过在处理消息时记录处理状态和实现幂等性操作来实现。</li>
+</ul>
+<p>通过合理地配置生产者、Broker 和消费者，并实现相关的消息确认、重试和偏移量提交机制，可以有效地防止消息在 Kafka 系统中的丢失。此外，定期监控 Kafka 集群的状态和健康情况，及时发现并处理潜在的问题也是保证消息不丢失的重要措施之一。</p>
+<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><h3 id="如何实现消费端的重试功能？"><a href="#如何实现消费端的重试功能？" class="headerlink" title="如何实现消费端的重试功能？"></a>如何实现消费端的重试功能？</h3><ol>
+<li><strong>使用消费者组（Consumer Group）</strong>：Kafka 的消费者可以组成消费者组，每个消费者组中的消费者可以并行地处理主题中的消息。这意味着如果一个消费者发生故障或者需要重试，其他消费者仍然可以继续处理消息。</li>
+<li><strong>设定适当的重试策略</strong>：在消费者端实现重试功能时，需要定义一个合适的重试策略。这包括重试次数、重试间隔、以及可能的最大延迟时间等参数。通常情况下，重试次数应该是有限的，避免无限制地重试造成系统资源的浪费。</li>
+<li><strong>记录处理状态</strong>：消费者在处理消息时，应该记录处理状态，以便在需要重试时能够回滚到正确的状态。这可以通过在消费者端记录已处理消息的偏移量（offset）来实现。</li>
+<li><strong>使用消息的元数据</strong>：Kafka 提供了消息的元数据，包括消息的偏移量、分区信息等。消费者可以利用这些元数据来确定重试的起始点，确保不会重复处理已经成功处理过的消息。</li>
+<li><strong>实现幂等性操作</strong>：在处理消息时，尽量使操作具有幂等性，即使消息重试多次，也不会导致状态发生变化或者副作用产生。这可以降低重试时的副作用，避免产生意外结果。</li>
+<li><strong>监控和报警机制</strong>：实现一个监控和报警机制，用于监视消费者的重试行为和重试次数。及时发现并处理消费者的重试问题，可以提高系统的稳定性和可靠性。</li>
+</ol>
+<p>实现消费端重试功能需要考虑诸多因素，包括重试策略、消息处理状态、幂等性操作等。通过合理地设计和实现，可以提高消费者对消息处理的可靠性和稳定性。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2024/03/06/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/Kafka%EF%BD%9C%E5%A4%84%E7%90%86%20Kafka%20%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1%E7%9A%84%E6%9C%89%E6%95%88%E6%8E%AA%E6%96%BD/" data-id="cltfw206d000nyj9k8nje51ax" data-title="Kafka｜处理 Kafka 消息丢失的有效措施" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2024/03/06/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/Kafka%EF%BD%9C%E5%A4%84%E7%90%86%20Kafka%20%E6%B6%88%E6%81%AF%E9%87%8D%E5%A4%8D%E7%9A%84%E6%9C%89%E6%95%88%E6%8E%AA%E6%96%BD/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前一篇</strong>
+      <div class="article-nav-title">
+        
+          Kafka｜处理 Kafka 消息重复的有效措施
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/03/04/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6%EF%BD%9C%E5%88%9D%E8%AF%86%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">消息中间件｜初识消息队列</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">三月 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">二月 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">一月 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">十二月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">十一月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/03/06/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/Kafka%EF%BD%9C%E5%A4%84%E7%90%86%20Kafka%20%E6%B6%88%E6%81%AF%E9%87%8D%E5%A4%8D%E7%9A%84%E6%9C%89%E6%95%88%E6%8E%AA%E6%96%BD/">Kafka｜处理 Kafka 消息重复的有效措施</a>
+          </li>
+        
+          <li>
+            <a href="/2024/03/06/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/Kafka%EF%BD%9C%E5%A4%84%E7%90%86%20Kafka%20%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1%E7%9A%84%E6%9C%89%E6%95%88%E6%8E%AA%E6%96%BD/">Kafka｜处理 Kafka 消息丢失的有效措施</a>
+          </li>
+        
+          <li>
+            <a href="/2024/03/04/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6%EF%BD%9C%E5%88%9D%E8%AF%86%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息中间件｜初识消息队列</a>
+          </li>
+        
+          <li>
+            <a href="/2024/02/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BD%9C%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/">设计模式｜策略模式</a>
+          </li>
+        
+          <li>
+            <a href="/2024/02/26/MySQL%EF%BD%9C%E5%88%A0%E9%99%A4mysql%E6%95%B0%E6%8D%AE%E8%A1%A8%E5%86%85%E7%9A%84%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95/">MySQL｜删除mysql数据表内的重复数据记录</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

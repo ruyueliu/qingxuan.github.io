@@ -73,6 +73,153 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-消息中间件/Kafka｜处理 Kafka 消息重复的有效措施" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/03/06/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/Kafka%EF%BD%9C%E5%A4%84%E7%90%86%20Kafka%20%E6%B6%88%E6%81%AF%E9%87%8D%E5%A4%8D%E7%9A%84%E6%9C%89%E6%95%88%E6%8E%AA%E6%96%BD/" class="article-date">
+  <time class="dt-published" datetime="2024-03-06T14:21:33.462Z" itemprop="datePublished">2024-03-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/03/06/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/Kafka%EF%BD%9C%E5%A4%84%E7%90%86%20Kafka%20%E6%B6%88%E6%81%AF%E9%87%8D%E5%A4%8D%E7%9A%84%E6%9C%89%E6%95%88%E6%8E%AA%E6%96%BD/">Kafka｜处理 Kafka 消息重复的有效措施</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>消息重复是 Kafka 系统中另一个常见的问题，可能发生在生产者、Broker 或消费者三个方面。下面我们来讨论一些可能导致消息重复的场景以及如何处理。</p>
+<h2 id="消息重复场景"><a href="#消息重复场景" class="headerlink" title="消息重复场景"></a>消息重复场景</h2><h3 id="生产者端"><a href="#生产者端" class="headerlink" title="生产者端"></a>生产者端</h3><ul>
+<li><strong>重试机制导致消息重复</strong>：如果生产者在发送消息时发生错误，并且配置了重试机制，重试成功后可能会导致消息被发送多次，从而导致消息重复。</li>
+<li><strong>消息发送成功但响应失败</strong>：在某些情况下，生产者可能会成功将消息发送到 Kafka，但是由于网络问题或其他原因，无法接收到成功响应，这可能会导致生产者误以为消息发送失败而重新发送消息。</li>
+</ul>
+<h3 id="Kafka-Broker"><a href="#Kafka-Broker" class="headerlink" title="Kafka Broker"></a>Kafka Broker</h3><ul>
+<li><strong>消费者组 rebalance</strong>：当消费者组发生 rebalance 时，可能会导致一些消息被多个消费者重复消费。这是因为在 rebalance 过程中，某些分区可能会被重新分配给其他消费者。</li>
+<li><strong>偏移量提交失败</strong>：如果消费者在处理完消息后未能正确提交偏移量，那么在下一次重启时，可能会重复消费已经处理过的消息，从而导致消息重复。</li>
+</ul>
+<h3 id="消费者端"><a href="#消费者端" class="headerlink" title="消费者端"></a>消费者端</h3><ul>
+<li><strong>消费者失败并重新加入消费组</strong>：当消费者失败并重新加入消费组时，它可能会从上次提交的偏移量开始消费消息，这可能导致重复消费消息的情况发生。</li>
+</ul>
+<h2 id="如何防止消息重复"><a href="#如何防止消息重复" class="headerlink" title="如何防止消息重复"></a>如何防止消息重复</h2><p>为了处理消息重复的问题，可以采取以下一些措施：</p>
+<ul>
+<li><p><strong>幂等性操作</strong>：生产者和消费者应该实现消息处理的幂等性，即使消息重复消费或发送，也不会对系统产生副作用。这可以通过为消息分配唯一的标识符，并在处理消息时检查标识符来实现。</p>
+</li>
+<li><p><strong>消息去重</strong>：消费者可以在处理消息时维护一个已处理消息的记录，并在接收到新消息时先检查这个记录，确保不会处理重复的消息。</p>
+</li>
+<li><p><strong>偏移量管理</strong>：消费者应该及时提交偏移量，确保在消费消息时记录消费位置。这可以防止消费者重复消费已经处理过的消息。</p>
+</li>
+<li><p><strong>使用事务</strong>：在某些情况下，可以使用 Kafka 提供的事务机制来确保消息的一致性和可靠性。事务机制可以在生产者端保证消息的原子性，从而避免重复发送消息。</p>
+</li>
+</ul>
+<p>消息重复可能在生产者、Broker 和消费者的任何环节发生。通过合理配置和实施相应的措施，可以最大程度地减少消息重复的风险。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2024/03/06/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/Kafka%EF%BD%9C%E5%A4%84%E7%90%86%20Kafka%20%E6%B6%88%E6%81%AF%E9%87%8D%E5%A4%8D%E7%9A%84%E6%9C%89%E6%95%88%E6%8E%AA%E6%96%BD/" data-id="cltfw206c000lyj9k8vw93c6b" data-title="Kafka｜处理 Kafka 消息重复的有效措施" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-消息中间件/Kafka｜处理 Kafka 消息丢失的有效措施" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/03/06/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/Kafka%EF%BD%9C%E5%A4%84%E7%90%86%20Kafka%20%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1%E7%9A%84%E6%9C%89%E6%95%88%E6%8E%AA%E6%96%BD/" class="article-date">
+  <time class="dt-published" datetime="2024-03-06T14:20:12.990Z" itemprop="datePublished">2024-03-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/03/06/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/Kafka%EF%BD%9C%E5%A4%84%E7%90%86%20Kafka%20%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1%E7%9A%84%E6%9C%89%E6%95%88%E6%8E%AA%E6%96%BD/">Kafka｜处理 Kafka 消息丢失的有效措施</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>消息丢失是 Kafka 系统中一个严重的问题，可能会发生在生产者、Broker 或消费者任何方面。今天我们来讨论一些可能导致消息丢失的场景以及如何解决。</p>
+<h2 id="消息丢失场景"><a href="#消息丢失场景" class="headerlink" title="消息丢失场景"></a>消息丢失场景</h2><h3 id="生产者端"><a href="#生产者端" class="headerlink" title="生产者端"></a>生产者端</h3><ul>
+<li><strong>异步发送消息</strong>：如果生产者配置为异步发送消息，并且在发送消息后立即关闭或退出，那么可能会导致部分消息尚未完全发送就丢失。</li>
+<li><strong>发送失败且不重试</strong>：如果生产者在发送消息时发生错误，并且没有配置重试机制，或者重试次数已经耗尽，那么消息可能会丢失。</li>
+<li><strong>未处理异常</strong>：如果生产者在消息发送过程中发生了未捕获的异常，并且没有合适的异常处理机制，可能导致消息丢失。</li>
+</ul>
+<h3 id="Kafka-Broker"><a href="#Kafka-Broker" class="headerlink" title="Kafka Broker"></a>Kafka Broker</h3><ul>
+<li><strong>数据写入失败</strong>：如果 Kafka Broker 在将消息写入到磁盘时发生故障或者存储空间不足，可能会导致消息丢失。</li>
+<li><strong>消息丢失</strong>：在某些异常情况下，如硬件故障、网络故障等，可能导致正在传输的消息丢失。</li>
+<li><strong>ISR 问题</strong>：如果 ISR 中的所有副本都失败，并且没有足够的副本可用于消息的复制，可能会导致消息丢失。</li>
+<li><strong>Leader Broker宕机</strong>：触发选举过程，集群选举了一个落后Leader太多的broker作为Leader，那么落后的那些消息就会丢失了。</li>
+<li>Kafka为了提升性能，使用页缓存机制，讲消息写入页缓存而非直接持久化至磁盘，才用了异步批量刷盘机制，也就是说，按照一定的消息量和时间间隔去刷盘，刷盘的动作由操作系统来调度的，如果刷盘之前Broker宕机啦，重启后在页缓存的这部分消息则会丢失。</li>
+</ul>
+<h3 id="消费者端"><a href="#消费者端" class="headerlink" title="消费者端"></a>消费者端</h3><ul>
+<li><strong>消息处理失败</strong>：如果消费者在处理消息时发生错误，并且没有合适的错误处理机制，可能会导致消息丢失。</li>
+<li><strong>偏移量提交失败</strong>：如果消费者在处理完消息后未能正确提交偏移量，那么在下一次重启时，可能会重复消费已经处理过的消息，从而导致消息重复或丢失。</li>
+<li><strong>消费者组 rebalance</strong>：当消费者组发生 rebalance 时，正在处理的消息可能会丢失，因为 Kafka 会重新分配分区给消费者。</li>
+</ul>
+<h2 id="如何防止消息丢失"><a href="#如何防止消息丢失" class="headerlink" title="如何防止消息丢失"></a>如何防止消息丢失</h2><p>消息丢失可能发生在生产者、Broker 和消费者的任何环节，通过合理配置和实施相应的措施，可以最大程度地减少消息丢失的风险。</p>
+<h3 id="生产者端-1"><a href="#生产者端-1" class="headerlink" title="生产者端"></a>生产者端</h3><ul>
+<li><strong>回调机制</strong>：不要使用producer.send(msg)，而要使用producer.send(msg,callback)。</li>
+<li><strong>消息确认机制</strong>：生产者可以选择使用消息确认机制来确保消息已经成功发送到 Kafka 集群。这包括三种确认模式：<ul>
+<li><strong>acks&#x3D;0</strong>：生产者不会等待任何确认，直接发送下一条消息。</li>
+<li><strong>acks&#x3D;1</strong>：生产者会等待 leader 副本确认消息后再发送下一条消息。</li>
+<li><strong>acks&#x3D;all</strong>：生产者会等待所有 ISR（In-Sync Replicas，同步副本）确认消息后再发送下一条消息。</li>
+</ul>
+</li>
+<li><strong>重试机制</strong>：生产者可以配置重试机制来应对发送失败的情况。通过配置重试次数和重试间隔，可以确保消息在发生失败时有机会重新发送。 eg：设置retries &#x3D; 3，当出现网络的瞬时抖动时，消息发送可能会失败，此时配置了retries &gt; 0 的 Producer 能够自动重试消息发送，避免消息丢失。</li>
+</ul>
+<h3 id="Kafka-Broker-端"><a href="#Kafka-Broker-端" class="headerlink" title="Kafka Broker 端"></a>Kafka Broker 端</h3><ul>
+<li><strong>副本机制</strong>：Kafka 使用副本机制来确保数据的容错性和可靠性。每个分区的数据会被复制到多个 Broker 上，这些副本中的一个被选为 leader，负责处理读写请求，其他副本则作为 follower。如果 leader 副本失效，Kafka 会从 follower 中选举出新的 leader。</li>
+<li><strong>ISR 配置</strong>：Kafka 使用 ISR（In-Sync Replicas）列表来跟踪已经复制到所有副本的消息。只有在 ISR 中的副本确认了消息后，生产者才会认为消息已经成功发送。通过配置 ISR 的大小，可以控制消息的持久性和可靠性。</li>
+</ul>
+<h3 id="消费者端-1"><a href="#消费者端-1" class="headerlink" title="消费者端"></a>消费者端</h3><ul>
+<li><strong>自动提交偏移量</strong>：消费者可以选择自动提交偏移量或手动提交偏移量来跟踪已经消费的消息。在自动提交偏移量的情况下，Kafka 会定期自动提交已经处理的偏移量，确保即使消费者发生故障，也不会丢失已经处理的消息。</li>
+<li><strong>消息处理保证</strong>：消费者应该实现消息处理的幂等性，即使消息处理失败或发生重试，也不会对系统产生副作用。这可以通过在处理消息时记录处理状态和实现幂等性操作来实现。</li>
+</ul>
+<p>通过合理地配置生产者、Broker 和消费者，并实现相关的消息确认、重试和偏移量提交机制，可以有效地防止消息在 Kafka 系统中的丢失。此外，定期监控 Kafka 集群的状态和健康情况，及时发现并处理潜在的问题也是保证消息不丢失的重要措施之一。</p>
+<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><h3 id="如何实现消费端的重试功能？"><a href="#如何实现消费端的重试功能？" class="headerlink" title="如何实现消费端的重试功能？"></a>如何实现消费端的重试功能？</h3><ol>
+<li><strong>使用消费者组（Consumer Group）</strong>：Kafka 的消费者可以组成消费者组，每个消费者组中的消费者可以并行地处理主题中的消息。这意味着如果一个消费者发生故障或者需要重试，其他消费者仍然可以继续处理消息。</li>
+<li><strong>设定适当的重试策略</strong>：在消费者端实现重试功能时，需要定义一个合适的重试策略。这包括重试次数、重试间隔、以及可能的最大延迟时间等参数。通常情况下，重试次数应该是有限的，避免无限制地重试造成系统资源的浪费。</li>
+<li><strong>记录处理状态</strong>：消费者在处理消息时，应该记录处理状态，以便在需要重试时能够回滚到正确的状态。这可以通过在消费者端记录已处理消息的偏移量（offset）来实现。</li>
+<li><strong>使用消息的元数据</strong>：Kafka 提供了消息的元数据，包括消息的偏移量、分区信息等。消费者可以利用这些元数据来确定重试的起始点，确保不会重复处理已经成功处理过的消息。</li>
+<li><strong>实现幂等性操作</strong>：在处理消息时，尽量使操作具有幂等性，即使消息重试多次，也不会导致状态发生变化或者副作用产生。这可以降低重试时的副作用，避免产生意外结果。</li>
+<li><strong>监控和报警机制</strong>：实现一个监控和报警机制，用于监视消费者的重试行为和重试次数。及时发现并处理消费者的重试问题，可以提高系统的稳定性和可靠性。</li>
+</ol>
+<p>实现消费端重试功能需要考虑诸多因素，包括重试策略、消息处理状态、幂等性操作等。通过合理地设计和实现，可以提高消费者对消息处理的可靠性和稳定性。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://qingxuan.com/2024/03/06/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/Kafka%EF%BD%9C%E5%A4%84%E7%90%86%20Kafka%20%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1%E7%9A%84%E6%9C%89%E6%95%88%E6%8E%AA%E6%96%BD/" data-id="cltfw206d000nyj9k8nje51ax" data-title="Kafka｜处理 Kafka 消息丢失的有效措施" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-消息中间件/消息中间件｜初识消息队列" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2024/03/04/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6%EF%BD%9C%E5%88%9D%E8%AF%86%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" class="article-date">
@@ -237,7 +384,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/03/04/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6%EF%BD%9C%E5%88%9D%E8%AF%86%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" data-id="cltd12k41000mgj9k82iigx9y" data-title="消息中间件｜初识消息队列" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/03/04/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6%EF%BD%9C%E5%88%9D%E8%AF%86%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" data-id="cltfw206c000myj9kcch54kcd" data-title="消息中间件｜初识消息队列" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -328,7 +475,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/02/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BD%9C%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" data-id="cltd12k41000ngj9k8dew0s4k" data-title="设计模式｜策略模式" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/02/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BD%9C%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" data-id="cltfw206d000oyj9k82b45umj" data-title="设计模式｜策略模式" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -397,7 +544,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/02/26/MySQL%EF%BD%9C%E5%88%A0%E9%99%A4mysql%E6%95%B0%E6%8D%AE%E8%A1%A8%E5%86%85%E7%9A%84%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95/" data-id="cltd12k40000egj9k37270bih" data-title="MySQL｜删除mysql数据表内的重复数据记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/02/26/MySQL%EF%BD%9C%E5%88%A0%E9%99%A4mysql%E6%95%B0%E6%8D%AE%E8%A1%A8%E5%86%85%E7%9A%84%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95/" data-id="cltfw206b000dyj9k9spm5gyi" data-title="MySQL｜删除mysql数据表内的重复数据记录" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -466,7 +613,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/02/26/%E5%B9%82%E7%AD%89%E5%8F%8A%E5%B9%82%E7%AD%89%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/" data-id="cltd12k40000fgj9k4t8004cl" data-title="幂等及幂等实现方案" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/02/26/%E5%B9%82%E7%AD%89%E5%8F%8A%E5%B9%82%E7%AD%89%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/" data-id="cltfw206b000fyj9k9tpiawys" data-title="幂等及幂等实现方案" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -554,7 +701,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/02/05/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%88%A0%E9%99%A4%E6%8C%87%E4%BB%A4deleted%E5%92%8Ctruncate%E5%9C%A8%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%BC%82%E5%90%8C/" data-id="cltd12k3z0009gj9k96g8hena" data-title="MySQL语句 ｜ 删除指令deleted和truncate在使用中的异同" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/02/05/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%88%A0%E9%99%A4%E6%8C%87%E4%BB%A4deleted%E5%92%8Ctruncate%E5%9C%A8%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%BC%82%E5%90%8C/" data-id="cltfw20690008yj9k6chncn7r" data-title="MySQL语句 ｜ 删除指令deleted和truncate在使用中的异同" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -614,7 +761,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/02/02/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%20IFNULL%20%E5%92%8C%20COALESCE%20%E7%9A%84%E5%8C%BA%E5%88%AB/" data-id="cltd12k40000dgj9k6okfdel4" data-title="MySQL语句｜条件语句 IFNULL 和 COALESCE 的区别" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/02/02/MySQL%E8%AF%AD%E5%8F%A5%EF%BD%9C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%20IFNULL%20%E5%92%8C%20COALESCE%20%E7%9A%84%E5%8C%BA%E5%88%AB/" data-id="cltfw206a000cyj9kgzukbc6f" data-title="MySQL语句｜条件语句 IFNULL 和 COALESCE 的区别" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -668,7 +815,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/31/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0IF/CASE/COALESCE%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="cltd12k42000ogj9k6b1x5pc9" data-title="MySQL语句 ｜ 条件函数IF/CASE/COALESCE的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/31/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E6%9D%A1%E4%BB%B6%E5%87%BD%E6%95%B0IF/CASE/COALESCE%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="cltfw206d000pyj9k225h1r1n" data-title="MySQL语句 ｜ 条件函数IF/CASE/COALESCE的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -734,176 +881,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/30/MySQL%E8%AF%AD%E5%8F%A5%20|%20MD5()%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="cltd12k3x0004gj9kbp3leiq7" data-title="MySQL语句 | MD5()的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-MySQL语句 ｜ FIELD()与ORDER BY()相结合实现对结果的自定义排序" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20FIELD()%E4%B8%8EORDER%20BY()%E7%9B%B8%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/" class="article-date">
-  <time class="dt-published" datetime="2024-01-23T14:07:27.823Z" itemprop="datePublished">2024-01-23</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20FIELD()%E4%B8%8EORDER%20BY()%E7%9B%B8%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/">MySQL语句 ｜ FIELD()与ORDER BY()相结合实现对结果的自定义排序</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>在MySQL中，可将<code>FIELD()</code>与<code>ORDER BY()</code>结合使用，实现对查询结果的自定义规则排序。</p>
-<h1 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h1><p>假设有一个名为<code>your_table</code>的表，包含名为<code>your_column</code>的列，希望按照列<code>your_column</code>的值的特定顺序进行排序：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> your_table</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> FIELD(your_column, <span class="string">&#x27;value1&#x27;</span>, <span class="string">&#x27;value2&#x27;</span>, <span class="string">&#x27;value3&#x27;</span>);</span><br></pre></td></tr></table></figure>
-<p><code>FIELD()</code>函数中列出的值决定了排序的顺序，可根据实际情况调整这些值。</p>
-<h1 id="举个实际的例子"><a href="#举个实际的例子" class="headerlink" title="举个实际的例子"></a>举个实际的例子</h1><p>假设有一个名为<code>fruits</code>的表，其中包含以下数据：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+----+---------+</span><br><span class="line">| id | fruit   |</span><br><span class="line">+----+---------+</span><br><span class="line">| 1  | banana  |</span><br><span class="line">| 2  | apple   |</span><br><span class="line">| 3  | orange  |</span><br><span class="line">| 4  | banana  |</span><br><span class="line">| 5  | apple   |</span><br><span class="line">+----+---------+</span><br></pre></td></tr></table></figure>
-<p>需按照特定顺序（’apple’，’orange’，’banana’）对这些水果进行排序：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> fruits</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> FIELD(fruit, <span class="string">&#x27;apple&#x27;</span>, <span class="string">&#x27;orange&#x27;</span>, <span class="string">&#x27;banana&#x27;</span>);</span><br></pre></td></tr></table></figure>
-<p>输出将会如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+----+---------+</span><br><span class="line">| id | fruit   |</span><br><span class="line">+----+---------+</span><br><span class="line">| 2  | apple   |</span><br><span class="line">| 5  | apple   |</span><br><span class="line">| 3  | orange  |</span><br><span class="line">| 1  | banana  |</span><br><span class="line">| 4  | banana  |</span><br><span class="line">+----+---------+</span><br></pre></td></tr></table></figure>
-<p>以上查询通过<code>FIELD()</code>函数实现了根据自定义规则对结果进行排序。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20FIELD()%E4%B8%8EORDER%20BY()%E7%9B%B8%E7%BB%93%E5%90%88%E5%AE%9E%E7%8E%B0%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%92%E5%BA%8F/" data-id="cltd12k3y0008gj9kfw6d3w0l" data-title="MySQL语句 ｜ FIELD()与ORDER BY()相结合实现对结果的自定义排序" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/" class="article-date">
-  <time class="dt-published" datetime="2024-01-23T13:21:59.310Z" itemprop="datePublished">2024-01-23</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20%7C%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/">MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>在MySQL中，<code>BETWEEN</code>是一个用于过滤范围的条件操作符，可以用来筛选在指定范围内（左闭右闭）的数据。</p>
-<h1 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> column_name(s)</span><br><span class="line"><span class="keyword">FROM</span> table_name</span><br><span class="line"><span class="keyword">WHERE</span> column_name <span class="keyword">BETWEEN</span> value1 <span class="keyword">AND</span> value2;</span><br></pre></td></tr></table></figure>
-<p>其中，<code>column_name</code>是要筛选的列名，<code>table_name</code>是表名，<code>value1</code>和<code>value2</code>是范围的边界值。<br><code>BETWEEN</code>是包含边界值的，满足条件的行将包括等于<code>value1</code>和<code>value2</code>的行。<br>若需排除边界值，则可使用比较运算符，例如<code>&gt;</code>和<code>&lt;</code>。</p>
-<h1 id="举个实际例子"><a href="#举个实际例子" class="headerlink" title="举个实际例子"></a>举个实际例子</h1><p>假设有如下的 <code>orders</code> 表：</p>
-<table>
-<thead>
-<tr>
-<th>order_id</th>
-<th>amount</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1</td>
-<td>80</td>
-</tr>
-<tr>
-<td>2</td>
-<td>150</td>
-</tr>
-<tr>
-<td>3</td>
-<td>300</td>
-</tr>
-<tr>
-<td>4</td>
-<td>500</td>
-</tr>
-<tr>
-<td>5</td>
-<td>600</td>
-</tr>
-<tr>
-<td>6</td>
-<td>100</td>
-</tr>
-</tbody></table>
-<p>获取订单金额在100到500之间的订单：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> order_id, amount</span><br><span class="line"><span class="keyword">FROM</span> orders</span><br><span class="line"><span class="keyword">WHERE</span> amount <span class="keyword">BETWEEN</span> <span class="number">100</span> <span class="keyword">AND</span> <span class="number">500</span>;</span><br></pre></td></tr></table></figure>
-<p>输出为：</p>
-<table>
-<thead>
-<tr>
-<th>order_id</th>
-<th>amount</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2</td>
-<td>150</td>
-</tr>
-<tr>
-<td>3</td>
-<td>300</td>
-</tr>
-<tr>
-<td>4</td>
-<td>500</td>
-</tr>
-<tr>
-<td>6</td>
-<td>100</td>
-</tr>
-</tbody></table>
-<p>若需订单金额在100到500之间但不包括100和500本身的订单，则可使用以下查询：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> order_id, amount</span><br><span class="line"><span class="keyword">FROM</span> orders</span><br><span class="line"><span class="keyword">WHERE</span> amount <span class="operator">&gt;</span> <span class="number">100</span> <span class="keyword">AND</span> amount <span class="operator">&lt;</span> <span class="number">500</span>;</span><br></pre></td></tr></table></figure>
-<p>输出为：</p>
-<table>
-<thead>
-<tr>
-<th>order_id</th>
-<th>amount</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2</td>
-<td>150</td>
-</tr>
-<tr>
-<td>3</td>
-<td>300</td>
-</tr>
-</tbody></table>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://qingxuan.com/2024/01/23/MySQL%E8%AF%AD%E5%8F%A5%20|%20%E4%BD%BF%E7%94%A8BETWEEN%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%9C%E8%BF%87%E6%BB%A4%E5%8F%8ABETWEEN%E5%AF%B9%E8%BE%B9%E7%95%8C%E5%80%BC%E7%9A%84%E5%A4%84%E7%90%86/" data-id="cltd12k3y0005gj9k9yk8h9gz" data-title="MySQL语句 | 使用BETWEEN对数据结果过滤及BETWEEN对边界值的处理" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://qingxuan.com/2024/01/30/MySQL%E8%AF%AD%E5%8F%A5%20|%20MD5()%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="cltfw20680004yj9k0yncdrgi" data-title="MySQL语句 | MD5()的使用" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -951,6 +929,14 @@
       <ul>
         
           <li>
+            <a href="/2024/03/06/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/Kafka%EF%BD%9C%E5%A4%84%E7%90%86%20Kafka%20%E6%B6%88%E6%81%AF%E9%87%8D%E5%A4%8D%E7%9A%84%E6%9C%89%E6%95%88%E6%8E%AA%E6%96%BD/">Kafka｜处理 Kafka 消息重复的有效措施</a>
+          </li>
+        
+          <li>
+            <a href="/2024/03/06/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/Kafka%EF%BD%9C%E5%A4%84%E7%90%86%20Kafka%20%E6%B6%88%E6%81%AF%E4%B8%A2%E5%A4%B1%E7%9A%84%E6%9C%89%E6%95%88%E6%8E%AA%E6%96%BD/">Kafka｜处理 Kafka 消息丢失的有效措施</a>
+          </li>
+        
+          <li>
             <a href="/2024/03/04/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6%EF%BD%9C%E5%88%9D%E8%AF%86%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息中间件｜初识消息队列</a>
           </li>
         
@@ -960,14 +946,6 @@
         
           <li>
             <a href="/2024/02/26/MySQL%EF%BD%9C%E5%88%A0%E9%99%A4mysql%E6%95%B0%E6%8D%AE%E8%A1%A8%E5%86%85%E7%9A%84%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95/">MySQL｜删除mysql数据表内的重复数据记录</a>
-          </li>
-        
-          <li>
-            <a href="/2024/02/26/%E5%B9%82%E7%AD%89%E5%8F%8A%E5%B9%82%E7%AD%89%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/">幂等及幂等实现方案</a>
-          </li>
-        
-          <li>
-            <a href="/2024/02/05/MySQL%E8%AF%AD%E5%8F%A5%20%EF%BD%9C%20%E5%88%A0%E9%99%A4%E6%8C%87%E4%BB%A4deleted%E5%92%8Ctruncate%E5%9C%A8%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%BC%82%E5%90%8C/">MySQL语句 ｜ 删除指令deleted和truncate在使用中的异同</a>
           </li>
         
       </ul>
